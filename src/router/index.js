@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import Inicio from '@/components/Inicio'
+import Descritiva from '@/views/Descritiva'
 
 Vue.use(Router)
 
@@ -9,7 +9,7 @@ const routes = [
     {
         name: 'inicio',
         path: '/',
-        component: Inicio
+        component: Descritiva
     }
 ]
 

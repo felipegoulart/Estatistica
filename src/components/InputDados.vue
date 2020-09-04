@@ -19,7 +19,7 @@
 
       <input type="text" name="Variavel" id="variavel" placeholder="Nome da Variavel">
 
-      <select v-model="entradaDados.tipoVar">
+      <select v-model="dadosEntrada.tipoVar">
         <option disabled> Selecione o Tipo de Variável</option>
         <option>Qualitativa Nominal</option>
         <option>Qualitativa Ordinal</option>
@@ -27,7 +27,7 @@
         <option>Quantitativa Continua</option>
       </select>
 
-      <select name="calculo" v-model="entradaDados.tipoCalc">
+      <select name="calculo" v-model="dadosEntrada.tipoCalc">
         <option disabled>Selecione o Tipo de Calculo</option>
         <option value="amostra">Amostra</option>
         <option value="populacao">População</option>
@@ -37,6 +37,7 @@
     </form>
 
   </div>
+  
 </template>
 
 <script>
@@ -45,12 +46,14 @@ export default {
     return {
       dadosManual: '',
       dadosArq: '',
-      entradaDados: {
+
+      dadosEntrada: {
         vetorVariaveis: [null],
         nomeVar: null,
         tipoVar: 'Selecione o Tipo de Variável',
         tipoCalc: 'Selecione o Tipo de Calculo',
       },
+
       tipoEntrada: '',
     }
   },
@@ -61,7 +64,7 @@ export default {
 
         reader.onload = () => {
           this.dadosArq = reader.result.split('\n')
-          this.entradaDados.vetorVariaveis = this.dadosArq.filter(dado => dado !== '')
+          this.dadosEntrada.vetorVariaveis = this.dadosArq.filter(dado => dado !== '')
         }
         reader.readAsText(arquivo)
       },
