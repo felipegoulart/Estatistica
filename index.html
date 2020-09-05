@@ -1,12 +1,100 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./src/styles/style.css">
-    <title>Document</title>
+    <title>Descritiva</title>
 </head>
 <body>
-    Trabalho Estatistica
+    <section class="conteudo">
+        <form autocomplete="off">
+            <div class="divBotoes">
+                <button type="button" id="btnManual" class="botoesTipo" onclick="exibirFormManual()">Manual</button>
+                <button type="button" id="btnArquivo" class="botoesTipo" onclick="exibirFormArquivo()">Arquivo</button>
+            </div>
+            <div class="formularios esconder">
+                <div class="formManual esconder">
+                    
+                    <div class="inputs">
+                        <label for="nomeVariavel" class="labelValores">
+                            Nome da Variável
+                        </label>
+                        <input type="text" 
+                        name="nomeVariavel"
+                        id="nomeVariavel"
+                        class="inputValores"
+                        placeholder="Variável"
+                        >
+                    </div>
+                    
+                    <div class="inputs">
+                        <label for="valores">
+                            Valores
+                        </label>
+                        <input 
+                            name="valores"
+                            id="valores"
+                            class="inputValores"
+                            placeholder="Separe por ,"
+                            >
+                        </div>
+                    </div>
+                
+                <div class="formArquivo esconder">
+                    <input type="file" name="inputArquivo" id="inputArquivo" accept=".csv">
+                </div>
+                <div class="tiposVariaveis">
+
+                    <fieldset>
+                        <legend>Qualitativa</legend>
+                        <input type="radio"
+                             name="tipoVariavel"
+                             id="nominal"
+                             checked>
+                        <label for="nominal">
+                            Nominal
+                        </label>
+    
+                        <input type="radio"
+                             name="tipoVariavel"
+                             id="ordinal">
+                        <label for="ordinal">
+                            Ordinal
+                        </label>
+                    </fieldset>
+                    
+                    <fieldset>
+                        <legend>Quantitativa</legend>
+                        <input type="radio"
+                                name="tipoVariavel"
+                                id="discreta">
+                        <label for="discreta">
+                            Discreta
+                        </label>
+    
+                        <input type="radio"
+                                name="tipoVariavel"
+                                id="continua">
+                        <label for="continua">
+                            Contínua
+                        </label>
+                    </fieldset>
+
+                    <select name="tipoCalculo" id="tipoCalculo">
+                        <option value="amostra" selected>Amostra</option>
+                        <option value="populacao">População</option>
+                    </select>
+                </div>
+
+                <div class="divBotoes btnInferior">
+                    <button type="reset" class="btnLimpar">Limpar</button>
+                    <button type="button" id="calcular">Calcular</button>
+                </div>
+            </div>
+        </form>
+
+    </section>
+    <script src="./src/scripts/script.js"></script>
 </body>
 </html>
