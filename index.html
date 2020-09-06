@@ -24,8 +24,9 @@
                         name="nomeVariavel"
                         id="nomeVariavel"
                         class="inputValores"
-                        placeholder="Variável"
-                        >
+                        placeholder="Variável">
+                        <small data-js="inputNome" class="erro"></small>
+
                     </div>
                     
                     <div class="inputs">
@@ -36,21 +37,22 @@
                             name="valores"
                             id="valores"
                             class="inputValores"
-                            placeholder="Separe por ,"
-                            >
+                            placeholder="Separe por ,">
+                            <small data-js="inputValor" class="erro"></small>
                         </div>
                     </div>
                 
                 <div class="formArquivo esconder">
                     <input type="file" name="inputArquivo" id="inputArquivo" accept=".csv">
                 </div>
-                <div class="tiposVariaveis">
 
+                <div class="tiposVariaveis">
                     <fieldset>
                         <legend>Qualitativa</legend>
                         <input type="radio"
                              name="tipoVariavel"
                              id="nominal"
+                             value="nominal"
                              checked>
                         <label for="nominal">
                             Nominal
@@ -58,7 +60,8 @@
     
                         <input type="radio"
                              name="tipoVariavel"
-                             id="ordinal">
+                             id="ordinal"
+                             value="ordinal">
                         <label for="ordinal">
                             Ordinal
                         </label>
@@ -68,14 +71,16 @@
                         <legend>Quantitativa</legend>
                         <input type="radio"
                                 name="tipoVariavel"
-                                id="discreta">
+                                id="discreta"
+                                value="discreta">
                         <label for="discreta">
                             Discreta
                         </label>
     
                         <input type="radio"
                                 name="tipoVariavel"
-                                id="continua">
+                                id="continua"
+                                value="continua">
                         <label for="continua">
                             Contínua
                         </label>
