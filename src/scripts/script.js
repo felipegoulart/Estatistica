@@ -11,7 +11,13 @@ const btnCalcular = document.querySelector('#calcular')
 
 let formAtivado = false
 let tipoForm
-let dadosEntrada = {}
+
+const dadosEntrada = {
+    nome: '',
+    valores: '',
+    tipoVar: '',
+    tipoCalc: '',
+}
 
 // Ativar formulário para inserção de dados
 function ativaForm() {
@@ -72,16 +78,19 @@ btnCalcular.addEventListener('click', () => {
             }
             break
         case 'arquivo':
-            let arrayDadosArquivo
-            let reader = new FileReader()
-
-            console.log(arrayDadosArquivo);
-            reader.onload = () => {
-                arrayDadosArquivo = reader.result.split('\n')
-                return arrayDadosArquivo
+            
+            const capturaDadosArquivo = async () => {
+                const pegaDadosArquivo = await inputArquivo.files[0].text()
+                const dadosTemp = pegaDadosArquivo.split('\n').filter(dado => dado != '')
+                
+                dadosEntrada.nome = dadosTemp.shift()
+                dadosEntrada.valores = dadosTemp
             }
-            reader.readAsText(inputArquivo.files[0])
-            console.log();
+            capturaDadosArquivo()
+
+            dadosEntrada.tipoVar = document.querySelector
+                    ('input[name="tipoVariavel"]:checked').value
+            dadosEntrada.tipoCalc = document.querySelector('#tipoCalculo').value
             break
         default: 
             alert('Algo de errado não está certo')
