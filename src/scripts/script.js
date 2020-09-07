@@ -15,9 +15,10 @@ let tipoForm
 
 const dados = {
     nome: '',
-    valores: '',
+    vetorValores: '',
     tipoVar: '',
     tipoCalc: '',
+    valoresAgrupados: {},
 }
 
 // Ativar formulário para inserção de dados
@@ -79,12 +80,13 @@ btnCalcular.addEventListener('click', () => {
                 textoErroValor.innerText = 'Preencha os VALORES'
             } else {
                 dados.nome = inputNome.value.trim()
-                dados.valores = inputValores.value.trim().split(',')
+                dados.vetorValores = inputValores.value.trim().split(',')
                 dados.tipoVar = document.querySelector
                     ('input[name="tipoVariavel"]:checked').value
                 dados.tipoCalc = document.querySelector('#tipoCalculo').value
             }
             break
+
         case 'arquivo':
             
             const capturaDadosArquivo = async () => {
@@ -92,7 +94,7 @@ btnCalcular.addEventListener('click', () => {
                 const dadosTemp = pegaDadosArquivo.split('\n').filter(dado => dado != '')
                 
                 dados.nome = dadosTemp.shift()
-                dados.valores = dadosTemp
+                dados.vetorValores = dadosTemp
             }
             capturaDadosArquivo()
 
@@ -104,10 +106,68 @@ btnCalcular.addEventListener('click', () => {
             alert('Algo de errado não está certo')
     }
 
-
-
+    const defineValores = (dados) => {
+        if (dados.tipoVar == 'continua'){        
+            const calculaIntervalo = valores => {
+                valores.sort()
+                const menor = valores[0], maior = valores[valores.length -1]
+                let amplitude = maior - menor
+            
+                const j = Math.trunc(valores.length ** 0.5)
+                const i = j -1
+                const k = j +1
+            
+                do {
+                    amplitude++
+                    if(amplitude % i == 0) {
+                        return [i, amplitude / i]
+                    }
+                    else if(amplitude % i == 0) {
+                        return [j, amplitude / j]
+                    }
+                    else if(amplitude % i == 0) {
+                        return [k, amplitude / k]
+                    }
+                } while (amplitude < maior)
+            }
     
+            const [linhas, intervalo] = calculaIntervalo(dados.vetorValores)
+    
+            const separaIntervalo = (linha, intervalo, dados) => {
+                let inicio = null
+                let fim = null
+                dados.vetorValores.sort()
+            
+                for(let i = 0; i < linha; i++ ) {
+                    !inicio ? inicio = dados.vetorValores[0] : inicio = fim
+                    fim = inicio + intervalo
+            
+                    const nomeAtributo = `${inicio} |--- ${fim}`
+            
+                    dados.vetorValores.filter(elemento => {
+                        if(elemento >= inicio && elemento < fim) {
+                            !dados.valoresAgrupados[nomeAtributo] ? dados.valoresAgrupados[nomeAtributo] = 1
+                                : dados.valoresAgrupados[nomeAtributo] += 1
+                            console.log(elemento);
+                        }
+                    })
+                }
+            }
+            
+            separaIntervalo(linhas, intervalo, dados)
+        }
+        else{
+            dados.vetorValores.filter(elemento => {
+                dados.valoresAgrupados[elemento] ? dados.valoresAgrupados[elemento] += 1
+                    : dados.valoresAgrupados[elemento] = 1
+            })
+        } 
+    }
+
     const criaTabela = (dadosTratados) => {
+
+        defineValores(dados)
+
         const tabela = document.createElement('tabel')
         const variavel = document.createElement('th')
         const freqSimples = document.createElement('th')
@@ -133,58 +193,9 @@ btnCalcular.addEventListener('click', () => {
         }
 
         sectionTabela.appendChild(tabela)
+        sectionTabela.classList.contains('esconder') ?
+            sectionTabela.classList.remove('esconder') : null
     }
 
-    criaTabela(dadosTratados)
+    criaTabela(dados.valoresAgrupados)
 })
-
-const calculaContinua = valores => {
-    valores.sort()
-    const menor = valores[0], maior = valores[valores.length -1]
-    let amplitude = maior - menor
-
-    const j = Math.trunc(valores.length ** 0.5)
-    const i = j -1
-    const k = j +1
-
-    do {
-        amplitude++
-        if(amplitude % i == 0) {
-            return [i, amplitude / i]
-        }
-        else if(amplitude % i == 0) {
-            return [j, amplitude / j]
-        }
-        else if(amplitude % i == 0) {
-            return [k, amplitude / k]
-        }
-    } while (amplitude < maior)
-}
-
-let vetor  = [20,27,28,32,40,46,52,37,35,31,25,22,36,37,33,42,43,44,31,38]
-
-const [linhas, intervalo] = calculaContinua(vetor)
-
-let objeto = {}
-
-const separaIntervalo = (lin, interv, vet, obj) => {
-    let inicio = null
-    let fim = null
-    vet.sort()
-
-    for(let i = 0; i < lin; i++ ) {
-        !inicio ? inicio = vet[0] : inicio = fim
-        fim = inicio + interv
-
-        const nomeAtributo = `${inicio} |--- ${fim}`
-
-        vet.filter(elemento => {
-            if(elemento >= inicio && elemento < fim) {
-                !obj[nomeAtributo] ? obj[nomeAtributo] = 1 : obj[nomeAtributo] += 1
-                console.log(elemento);
-            }
-        })
-    }
-}
-separaIntervalo(linhas, intervalo, vetor, objeto)
-console.log(objeto);
