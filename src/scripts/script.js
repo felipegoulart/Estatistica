@@ -2,6 +2,7 @@ const formManual = document.querySelector('.formManual')
 const formArquivo = document.querySelector('.formArquivo')
 const textoErroNome = document.querySelector('[data-js=inputNome]')
 const textoErroValor = document.querySelector('[data-js=inputValor]')
+const sectionTabela = document.querySelector('.sectionTabela')
 
 const inputNome = document.querySelector('#nomeVariavel')
 const inputValores = document.querySelector('#valores')
@@ -12,7 +13,7 @@ const btnCalcular = document.querySelector('#calcular')
 let formAtivado = false
 let tipoForm
 
-const dadosEntrada = {
+const dados = {
     nome: '',
     valores: '',
     tipoVar: '',
@@ -59,22 +60,29 @@ inputValores.addEventListener('change', () => {
 })
 
 btnCalcular.addEventListener('click', () => {
+    let dadosTratados = {
+        'Ensino Médio': 3,
+        'Ensino Superior': 3,
+        'Ensino Fundamental': 4
+    }
     switch (tipoForm) {
         case 'manual':
             if(!inputNome.value.trim()) {
                 inputNome.classList.add('erro')
+                inputNome.focus()
                 textoErroNome.classList.add('erro')
                 textoErroNome.innerText = 'Preencha o NOME'
             } else if (!inputValores.value.trim()) {
                 inputValores.classList.add('erro')
+                inputValores.focus()
                 textoErroValor.classList.add('erro')
                 textoErroValor.innerText = 'Preencha os VALORES'
             } else {
-                dadosEntrada.nome = inputNome.value.trim()
-                dadosEntrada.valores = inputValores.value.trim().split(',')
-                dadosEntrada.tipoVar = document.querySelector
+                dados.nome = inputNome.value.trim()
+                dados.valores = inputValores.value.trim().split(',')
+                dados.tipoVar = document.querySelector
                     ('input[name="tipoVariavel"]:checked').value
-                dadosEntrada.tipoCalc = document.querySelector('#tipoCalculo').value
+                dados.tipoCalc = document.querySelector('#tipoCalculo').value
             }
             break
         case 'arquivo':
@@ -83,16 +91,100 @@ btnCalcular.addEventListener('click', () => {
                 const pegaDadosArquivo = await inputArquivo.files[0].text()
                 const dadosTemp = pegaDadosArquivo.split('\n').filter(dado => dado != '')
                 
-                dadosEntrada.nome = dadosTemp.shift()
-                dadosEntrada.valores = dadosTemp
+                dados.nome = dadosTemp.shift()
+                dados.valores = dadosTemp
             }
             capturaDadosArquivo()
 
-            dadosEntrada.tipoVar = document.querySelector
+            dados.tipoVar = document.querySelector
                     ('input[name="tipoVariavel"]:checked').value
-            dadosEntrada.tipoCalc = document.querySelector('#tipoCalculo').value
+            dados.tipoCalc = document.querySelector('#tipoCalculo').value
             break
         default: 
             alert('Algo de errado não está certo')
     }
+
+
+
+    
+    const criaTabela = (dadosTratados) => {
+        const tabela = document.createElement('tabel')
+        const variavel = document.createElement('th')
+        const freqSimples = document.createElement('th')
+
+        variavel.innerText = 'Nome Variável'
+        freqSimples.innerText = 'Frequência Simples'
+
+        tabela.appendChild(variavel)
+        tabela.appendChild(freqSimples)
+
+        for(const chave in dadosTratados){
+            const linha = document.createElement('tr')
+            const nomeVariavel = document.createElement('td')
+            const valorVariavel = document.createElement('td')
+
+            nomeVariavel.innerText = chave
+            valorVariavel.innerText = dadosTratados[chave]
+
+            linha.appendChild(nomeVariavel)
+            linha.appendChild(valorVariavel)
+
+            tabela.appendChild(linha)
+        }
+
+        sectionTabela.appendChild(tabela)
+    }
+
+    criaTabela(dadosTratados)
 })
+
+const calculaContinua = valores => {
+    valores.sort()
+    const menor = valores[0], maior = valores[valores.length -1]
+    let amplitude = maior - menor
+
+    const j = Math.trunc(valores.length ** 0.5)
+    const i = j -1
+    const k = j +1
+
+    do {
+        amplitude++
+        if(amplitude % i == 0) {
+            return [i, amplitude / i]
+        }
+        else if(amplitude % i == 0) {
+            return [j, amplitude / j]
+        }
+        else if(amplitude % i == 0) {
+            return [k, amplitude / k]
+        }
+    } while (amplitude < maior)
+}
+
+let vetor  = [20,27,28,32,40,46,52,37,35,31,25,22,36,37,33,42,43,44,31,38]
+
+const [linhas, intervalo] = calculaContinua(vetor)
+
+let objeto = {}
+
+const separaIntervalo = (lin, interv, vet, obj) => {
+    let inicio = null
+    let fim = null
+    vet.sort()
+
+    for(let i = 0; i < lin; i++ ) {
+        !inicio ? inicio = vet[0] : inicio = fim
+        fim = inicio + interv
+
+        const nomeAtributo = `${inicio} |--- ${fim}`
+
+        vet.filter(elemento => {
+            if(elemento >= inicio && elemento < fim) {
+                !obj[nomeAtributo] ? obj[nomeAtributo] = 1 : obj[nomeAtributo] += 1
+                console.log(elemento);
+            }
+        })
+    }
+}
+separaIntervalo(linhas, intervalo, vetor, objeto)
+console.log(objeto);
