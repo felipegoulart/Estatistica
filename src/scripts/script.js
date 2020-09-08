@@ -93,7 +93,7 @@ btnCalcular.addEventListener('click', () => {
         }
         else {
             dados.nome = inputNome.value.trim()
-            dados.vetorValores = inputValores.value.trim().split(',')
+            dados.vetorValores = inputValores.value.trim().split(';')
             dados.tipoVar = document.querySelector
             ('input[name="tipoVariavel"]:checked').value
             dados.tipoCalc = document.querySelector('#tipoCalculo').value
