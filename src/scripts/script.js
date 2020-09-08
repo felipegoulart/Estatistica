@@ -55,9 +55,9 @@ function exibirFormArquivo() {
 // valida se valores estão separado por virgula
 inputValores.addEventListener('change', () => {
 
-    if(inputValores.value.indexOf(',') == -1 
+    if(inputValores.value.indexOf(';') == -1 
         && inputValores.value.trim().indexOf(' ') != -1) {   
-            textoErroValor.innerText = 'Separe os elementos com ,'
+            textoErroValor.innerText = 'Separe os elementos com ;'
             inputValores.classList.add('erro')
     } else {
         textoErroValor.innerText = ''
