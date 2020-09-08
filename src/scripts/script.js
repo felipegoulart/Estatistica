@@ -2,24 +2,30 @@ const formManual = document.querySelector('.formManual')
 const formArquivo = document.querySelector('.formArquivo')
 const textoErroNome = document.querySelector('[data-js=inputNome]')
 const textoErroValor = document.querySelector('[data-js=inputValor]')
-const sectionTabela = document.querySelector('.sectionTabela')
+const formDescritiva = document.querySelector('#formDescritiva')
 
 const inputNome = document.querySelector('#nomeVariavel')
 const inputValores = document.querySelector('#valores')
 const inputArquivo = document.querySelector('#inputArquivo')
 
 const btnCalcular = document.querySelector('#calcular')
+const btnLimpar = document.querySelector('.btnLimpar')
 
 let formAtivado = false
-let tipoForm
+let validacao = false
+let tipoForm = null
+
+let idTabela = 0
 
 const dados = {
     nome: '',
-    vetorValores: '',
+    vetorValores: [],
     tipoVar: '',
     tipoCalc: '',
     valoresAgrupados: {},
 }
+
+let vetorValoresArquivo = []
 
 // Ativar formulário para inserção de dados
 function ativaForm() {
@@ -56,58 +62,57 @@ inputValores.addEventListener('change', () => {
     } else {
         textoErroValor.innerText = ''
         inputValores.classList.remove('erro')
+    }
+})
 
+inputArquivo.addEventListener('change', () => {
+    const reader = new FileReader()
+        
+    reader.readAsText(inputArquivo.files[0])
+    
+    reader.onloadend = () => {
+        vetorValoresArquivo = reader.result.split('\n')
     }
 })
 
 btnCalcular.addEventListener('click', () => {
-    let dadosTratados = {
-        'Ensino Médio': 3,
-        'Ensino Superior': 3,
-        'Ensino Fundamental': 4
-    }
-    switch (tipoForm) {
-        case 'manual':
-            if(!inputNome.value.trim()) {
-                inputNome.classList.add('erro')
-                inputNome.focus()
-                textoErroNome.classList.add('erro')
-                textoErroNome.innerText = 'Preencha o NOME'
-            } else if (!inputValores.value.trim()) {
-                inputValores.classList.add('erro')
-                inputValores.focus()
-                textoErroValor.classList.add('erro')
-                textoErroValor.innerText = 'Preencha os VALORES'
-            } else {
-                dados.nome = inputNome.value.trim()
-                dados.vetorValores = inputValores.value.trim().split(',')
-                dados.tipoVar = document.querySelector
-                    ('input[name="tipoVariavel"]:checked').value
-                dados.tipoCalc = document.querySelector('#tipoCalculo').value
-            }
-            break
-
-        case 'arquivo':
-            
-            const capturaDadosArquivo = async () => {
-                const pegaDadosArquivo = await inputArquivo.files[0].text()
-                const dadosTemp = pegaDadosArquivo.split('\n').filter(dado => dado != '')
-                
-                dados.nome = dadosTemp.shift()
-                dados.vetorValores = dadosTemp
-            }
-            capturaDadosArquivo()
-
+    if(tipoForm == 'manual') {
+        if(!inputNome.value.trim()) {
+            inputNome.classList.add('erro')
+            inputNome.focus()
+            textoErroNome.classList.add('erro')
+            textoErroNome.innerText = 'Preencha o NOME'
+            validacao = false
+        }
+        else if (!inputValores.value.trim()) {
+            inputValores.classList.add('erro')
+            inputValores.focus()
+            textoErroValor.classList.add('erro')
+            textoErroValor.innerText = 'Preencha os VALORES'
+            validacao = false
+        }
+        else {
+            dados.nome = inputNome.value.trim()
+            dados.vetorValores = inputValores.value.trim().split(',')
             dados.tipoVar = document.querySelector
-                    ('input[name="tipoVariavel"]:checked').value
+            ('input[name="tipoVariavel"]:checked').value
             dados.tipoCalc = document.querySelector('#tipoCalculo').value
-            break
-        default: 
-            alert('Algo de errado não está certo')
+            validacao = true
+        }
+    }
+    else {
+        dados.nome = vetorValoresArquivo.shift()
+        dados.vetorValores = vetorValoresArquivo.filter(elemento => elemento != '')
+        dados.tipoVar = document.querySelector
+        ('input[name="tipoVariavel"]:checked').value
+        dados.tipoCalc = document.querySelector('#tipoCalculo').value
+        
+        validacao = true
     }
 
-    const defineValores = (dados) => {
-        if (dados.tipoVar == 'continua'){        
+    if (validacao) {
+        if (dados.tipoVar == 'continua'){
+            dados.vetorValores = dados.vetorValores.map(elemento => Number(elemento))        
             const calculaIntervalo = valores => {
                 valores.sort()
                 const menor = valores[0], maior = valores[valores.length -1]
@@ -130,72 +135,91 @@ btnCalcular.addEventListener('click', () => {
                     }
                 } while (amplitude < maior)
             }
-    
+
             const [linhas, intervalo] = calculaIntervalo(dados.vetorValores)
-    
-            const separaIntervalo = (linha, intervalo, dados) => {
-                let inicio = null
-                let fim = null
-                dados.vetorValores.sort()
-            
-                for(let i = 0; i < linha; i++ ) {
-                    !inicio ? inicio = dados.vetorValores[0] : inicio = fim
-                    fim = inicio + intervalo
-            
-                    const nomeAtributo = `${inicio} |--- ${fim}`
-            
-                    dados.vetorValores.filter(elemento => {
-                        if(elemento >= inicio && elemento < fim) {
-                            !dados.valoresAgrupados[nomeAtributo] ? dados.valoresAgrupados[nomeAtributo] = 1
-                                : dados.valoresAgrupados[nomeAtributo] += 1
-                            console.log(elemento);
-                        }
-                    })
-                }
+
+            let inicio = null
+            let fim = null
+            dados.vetorValores.sort()
+        
+            for(let i = 0; i < linhas; i++ ) {
+                !inicio ? inicio = dados.vetorValores[0] : inicio = fim
+                fim = inicio + intervalo
+        
+                const nomeAtributo = `${inicio} |--- ${fim}`
+        
+                dados.vetorValores.filter(elemento => {
+                    if(elemento >= inicio && elemento < fim) {
+                        !dados.valoresAgrupados[nomeAtributo] ? dados.valoresAgrupados[nomeAtributo] = 1
+                            : dados.valoresAgrupados[nomeAtributo] += 1
+                    }
+                })
             }
-            
-            separaIntervalo(linhas, intervalo, dados)
         }
-        else{
+        else {
             dados.vetorValores.filter(elemento => {
                 dados.valoresAgrupados[elemento] ? dados.valoresAgrupados[elemento] += 1
                     : dados.valoresAgrupados[elemento] = 1
             })
         } 
-    }
 
-    const criaTabela = (dadosTratados) => {
+        const sectionTabela = document.querySelector('.sectionTabela')
 
-        defineValores(dados)
+        const criaTabela = (dadosTratados) => {
 
-        const tabela = document.createElement('tabel')
-        const variavel = document.createElement('th')
-        const freqSimples = document.createElement('th')
+            const tabela = document.createElement('table')
+            const variavel = document.createElement('th')
+            const freqSimples = document.createElement('th')
 
-        variavel.innerText = 'Nome Variável'
-        freqSimples.innerText = 'Frequência Simples'
+            tabela.id = idTabela
 
-        tabela.appendChild(variavel)
-        tabela.appendChild(freqSimples)
+            idTabela++
 
-        for(const chave in dadosTratados){
-            const linha = document.createElement('tr')
-            const nomeVariavel = document.createElement('td')
-            const valorVariavel = document.createElement('td')
+            variavel.innerText = dados.nome
+            freqSimples.innerText = 'Frequência Simples'
 
-            nomeVariavel.innerText = chave
-            valorVariavel.innerText = dadosTratados[chave]
+            tabela.appendChild(variavel)
+            tabela.appendChild(freqSimples)
 
-            linha.appendChild(nomeVariavel)
-            linha.appendChild(valorVariavel)
+            for(const chave in dadosTratados){
+                const linha = document.createElement('tr')
+                const nomeVariavel = document.createElement('td')
+                const valorVariavel = document.createElement('td')
 
-            tabela.appendChild(linha)
+                nomeVariavel.innerText = chave
+                valorVariavel.innerText = dadosTratados[chave]
+
+                linha.appendChild(nomeVariavel)
+                linha.appendChild(valorVariavel)
+
+                tabela.appendChild(linha)
+            }
+            
+            if(sectionTabela.classList.contains('esconder')){
+                sectionTabela.classList.remove('esconder')
+            }
+            
+            if(sectionTabela.childElementCount == 1){
+                const tabelaARemover = sectionTabela.firstElementChild
+
+                sectionTabela.removeChild(tabelaARemover)
+                sectionTabela.appendChild(tabela)
+            } 
+            else sectionTabela.appendChild(tabela)
+            
         }
 
-        sectionTabela.appendChild(tabela)
-        sectionTabela.classList.contains('esconder') ?
-            sectionTabela.classList.remove('esconder') : null
-    }
+        criaTabela(dados.valoresAgrupados)
+        
+        //zerar variaveis
+        vetorValoresArquivo = []
+        dados.nome = ''
+        dados.vetorValores = []
+        dados.tipoVar = ''
+        dados.tipoCalc = ''
+        dados.valoresAgrupados = {}
 
-    criaTabela(dados.valoresAgrupados)
+        formDescritiva.reset()
+    }
+    else alert('Verifique todos os CAMPOS')
 })
