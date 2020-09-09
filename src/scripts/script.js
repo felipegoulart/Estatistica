@@ -114,7 +114,7 @@ btnCalcular.addEventListener('click', () => {
         if (dados.tipoVar == 'continua'){
             dados.vetorValores = dados.vetorValores.map(elemento => Number(elemento))        
             const calculaIntervalo = valores => {
-                valores.sort()
+                valores.sort((a, b) => a-b)
                 const menor = valores[0], maior = valores[valores.length -1]
                 let amplitude = maior - menor
             
@@ -127,10 +127,10 @@ btnCalcular.addEventListener('click', () => {
                     if(amplitude % i == 0) {
                         return [i, amplitude / i]
                     }
-                    else if(amplitude % i == 0) {
+                    else if(amplitude % j == 0) {
                         return [j, amplitude / j]
                     }
-                    else if(amplitude % i == 0) {
+                    else if(amplitude % k == 0) {
                         return [k, amplitude / k]
                     }
                 } while (amplitude < maior)
