@@ -115,7 +115,6 @@ btnCalcular.addEventListener('click', () => {
             dados.vetorValores = dados.vetorValores.map(elemento => Number(elemento))        
             const calculaIntervalo = valores => {
                 const vetor = valores.sort((a, b) => a-b)
-                console.log(vetor);
                 const menor = vetor[0], maior = vetor[vetor.length -1]
                 let amplitude = maior - menor
             
