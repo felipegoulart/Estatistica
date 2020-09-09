@@ -114,11 +114,12 @@ btnCalcular.addEventListener('click', () => {
         if (dados.tipoVar == 'continua'){
             dados.vetorValores = dados.vetorValores.map(elemento => Number(elemento))        
             const calculaIntervalo = valores => {
-                valores.sort((a, b) => a-b)
-                const menor = valores[0], maior = valores[valores.length -1]
+                const vetor = valores.sort((a, b) => a-b)
+                console.log(vetor);
+                const menor = vetor[0], maior = vetor[vetor.length -1]
                 let amplitude = maior - menor
             
-                const j = Math.trunc(valores.length ** 0.5)
+                const j = Math.trunc(vetor.length ** 0.5)
                 const i = j -1
                 const k = j +1
             
@@ -140,7 +141,6 @@ btnCalcular.addEventListener('click', () => {
 
             let inicio = null
             let fim = null
-            dados.vetorValores.sort()
         
             for(let i = 0; i < linhas; i++ ) {
                 !inicio ? inicio = dados.vetorValores[0] : inicio = fim
