@@ -14,9 +14,8 @@ table {
     padding: 25px;
     border-radius: 15px;
     box-shadow: 5px 3px 5px #00000035;
-    border-spacing: 5px;
-    border-s
-    
+    border-collapse: collapse;
+
     text-align: center;
     font-family: sans-serif;
     text-transform: capitalize;
