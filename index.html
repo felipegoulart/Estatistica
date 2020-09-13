@@ -8,104 +8,110 @@
     <title>Descritiva</title>
 </head>
 <body>
-    <section class="conteudo">
-        <form autocomplete="off" id="formDescritiva">
-            <div class="divBotoes">
-                <button type="button" id="btnManual" class="botoesTipo" onclick="exibirFormManual()">Manual</button>
-                <button type="button" id="btnArquivo" class="botoesTipo" onclick="exibirFormArquivo()">Arquivo</button>
-            </div>
-            <div class="formularios esconder">
-                <div class="formManual esconder">
-                    
-                    <div class="inputs">
-                        <label for="nomeVariavel" class="labelValores">
-                            Nome da Variável
-                        </label>
-                        <input type="text" 
-                        name="nomeVariavel"
-                        id="nomeVariavel"
-                        class="inputValores"
-                        placeholder="Variável">
-                        <small data-js="inputNome" class="erro"></small>
-
-                    </div>
-                    
-                    <div class="inputs">
-                        <label for="valores">
-                            Valores
-                        </label>
-                        <input 
-                            name="valores"
-                            id="valores"
-                            class="inputValores"
-                            placeholder="Separe por ;">
-                            <small data-js="inputValor" class="erro"></small>
-                        </div>
-                    </div>
+<section class="conteudo">
+    <form autocomplete="off" id="formDescritiva" class="formDescritiva">
+        <div class="divBotoes">
+            <button type="button" id="btnManual" class="botoesTipo" onclick="exibirFormManual()">Manual</button>
+            <button type="button" id="btnArquivo" class="botoesTipo" onclick="exibirFormArquivo()">Arquivo</button>
+        </div>
+        <div class="formularios esconder">
+            <div class="formManual esconder">
                 
-                <div class="formArquivo esconder">
-                    <input type="file" name="inputArquivo" id="inputArquivo" accept=".csv">
-                </div>
+                <div class="inputs">
+                    <label for="nomeVariavel" class="labelValores">
+                        Nome da Variável
+                    </label>
+                    <input type="text" 
+                    name="nomeVariavel"
+                    id="nomeVariavel"
+                    class="inputValores"
+                    placeholder="Variável">
+                    <small data-js="inputNome" class="erro"></small>
 
-                <div class="tiposVariaveis">
-                    <fieldset>
-                        <legend>Qualitativa</legend>
-                        <input type="radio"
-                             name="tipoVariavel"
-                             id="nominal"
-                             value="nominal"
-                             checked>
-                        <label for="nominal">
-                            Nominal
-                        </label>
-    
-                        <input type="radio"
-                             name="tipoVariavel"
-                             id="ordinal"
-                             value="ordinal">
-                        <label for="ordinal">
-                            Ordinal
-                        </label>
-                    </fieldset>
-                    
-                    <fieldset>
-                        <legend>Quantitativa</legend>
-                        <input type="radio"
-                                name="tipoVariavel"
-                                id="discreta"
-                                value="discreta">
-                        <label for="discreta">
-                            Discreta
-                        </label>
-    
-                        <input type="radio"
-                                name="tipoVariavel"
-                                id="continua"
-                                value="continua">
-                        <label for="continua">
-                            Contínua
-                        </label>
-                    </fieldset>
-
-                    <select name="tipoCalculo" id="tipoCalculo">
-                        <option value="amostra" selected>Amostra</option>
-                        <option value="populacao">População</option>
-                    </select>
                 </div>
-
-                <div class="divBotoes btnInferior">
-                    <button type="reset" class="btnLimpar">Limpar</button>
-                    <button type="button" id="calcular">Calcular</button>
+                
+                <div class="inputs">
+                    <label for="valores">
+                        Valores
+                    </label>
+                    <input 
+                        name="valores"
+                        id="valores"
+                        class="inputValores"
+                        placeholder="Separe por ;">
+                        <small data-js="inputValor" class="erro"></small>
+                    </div>
                 </div>
+            
+            <div class="formArquivo esconder">
+                <input type="file" name="inputArquivo" id="inputArquivo" accept=".csv">
             </div>
-        </form>
-    </section>
 
-    <section class="sectionTabela esconder">
+            <div class="tiposVariaveis">
+                <fieldset>
+                    <legend>Qualitativa</legend>
+                    <input type="radio"
+                            name="tipoVariavel"
+                            id="nominal"
+                            value="nominal"
+                            checked>
+                    <label for="nominal">
+                        Nominal
+                    </label>
 
-    </section>
-    <canvas id="grafico" width="300" height="300"></canvas>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script> 
-    <script src="./src/scripts/script.js"></script>
+                    <input type="radio"
+                            name="tipoVariavel"
+                            id="ordinal"
+                            value="ordinal">
+                    <label for="ordinal">
+                        Ordinal
+                    </label>
+                </fieldset>
+                
+                <fieldset>
+                    <legend>Quantitativa</legend>
+                    <input type="radio"
+                            name="tipoVariavel"
+                            id="discreta"
+                            value="discreta">
+                    <label for="discreta">
+                        Discreta
+                    </label>
+
+                    <input type="radio"
+                            name="tipoVariavel"
+                            id="continua"
+                            value="continua">
+                    <label for="continua">
+                        Contínua
+                    </label>
+                </fieldset>
+
+                <select name="tipoCalculo" id="tipoCalculo">
+                    <option value="amostra" selected>Amostra</option>
+                    <option value="populacao">População</option>
+                </select>
+            </div>
+
+            <div class="divBotoes btnInferior">
+                <button type="reset" class="btnLimpar">Limpar</button>
+                <a href="#areaTabela"><button type="button" id="calcular">Calcular</button></a>
+            </div>
+        </div>
+    </form>
+    
+    <div class="sectionTabela esconder" id="areaTabela">
+
+    </div>
+
+    <div class="sectGrafico esconder">
+        <canvas id="grafico"></canvas>
+    </div>
+</section>
+
+<script src="./src/scripts/script.js"></script>
+<script type="module" src="./src/scripts/tabela.js" ></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script> 
 </body>
 </html>

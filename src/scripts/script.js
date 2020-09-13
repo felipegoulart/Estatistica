@@ -3,7 +3,8 @@ const formArquivo = document.querySelector('.formArquivo')
 const textoErroNome = document.querySelector('[data-js=inputNome]')
 const textoErroValor = document.querySelector('[data-js=inputValor]')
 const formDescritiva = document.querySelector('#formDescritiva')
-const grafico = document.querySelector('#grafico');
+const sectionGrafico = document.querySelector('.sectGrafico')
+const grafico = document.querySelector('#grafico').getContext('2d');
 
 const inputNome = document.querySelector('#nomeVariavel')
 const inputValores = document.querySelector('#valores')
@@ -16,8 +17,6 @@ let formAtivado = false
 let validacao = false
 let tipoForm = null
 
-let idTabela = 0
-
 const dados = {
     nome: '',
     vetorValores: [],
@@ -27,6 +26,37 @@ const dados = {
 }
 
 let vetorValoresArquivo = []
+
+// Função para gerar a tabela
+const geraGrafico = grafico => {
+    const meuGrafico = new Chart(grafico, {
+        type: 'bar',
+        data: {
+        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        datasets: [{
+            label: '# of Votes',
+            data: [12, 19, 3, 5, 2, 3],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+            },
+    })
+}
 
 // Ativar formulário para inserção de dados
 function ativaForm() {
@@ -171,10 +201,6 @@ btnCalcular.addEventListener('click', () => {
             const variavel = document.createElement('th')
             const freqSimples = document.createElement('th')
 
-            tabela.id = idTabela
-
-            idTabela++
-
             variavel.innerText = dados.nome
             freqSimples.innerText = 'Frequência Simples'
 
@@ -220,43 +246,12 @@ btnCalcular.addEventListener('click', () => {
         dados.valoresAgrupados = {}
 
         formDescritiva.reset()
+
+        if(sectionGrafico.classList.contains('esconder')) {
+            console.log('Contém');
+            sectionGrafico.classList.remove('esconder')
+        }
+        geraGrafico(grafico)
     }
     else alert('Verifique todos os CAMPOS')
 })
-
-var myChart = new Chart(grafico, {
-    type: 'bar',
-    data: {
-    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-    datasets: [{
-        label: '# of Votes',
-        data: [12, 19, 3, 5, 2, 3],
-        backgroundColor: [
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(255, 206, 86, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(153, 102, 255, 0.2)',
-            'rgba(255, 159, 64, 0.2)'
-        ],
-        borderColor: [
-            'rgba(255, 99, 132, 1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)'
-        ],
-        borderWidth: 1
-    }]
-        },
-    options: {
-    scales: {
-        yAxes: [{
-            ticks: {
-                beginAtZero: true
-            }
-        }]
-    }
-    }
-});

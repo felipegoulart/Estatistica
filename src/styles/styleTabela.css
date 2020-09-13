@@ -1,7 +1,6 @@
 .sectionTabela {
     max-width: 100%;
     min-height: 100%;
-    background-color: #f9f9f9;
     display: flex;
     justify-content: center;
     align-items: baseline;
@@ -40,4 +39,11 @@ td:last-child {
 
 tr:hover {
     background-color: #f9f9f9;
+}
+
+/* Estilos do gráfico */
+.sectGrafico {
+    display: flex;
+    width: 60%;
+    margin: 0 auto;
 }
