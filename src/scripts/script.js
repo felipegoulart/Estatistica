@@ -225,7 +225,7 @@ btnCalcular.addEventListener('click', () => {
         } 
 
         // Responsável pelos calculos das frequencias
-        let vetorFsPrec = []
+        let vetorFsPerc = []
         let vetorFreAc = []
         let vetorFreAcPerc = []
         let x, y = 0 
@@ -234,7 +234,7 @@ btnCalcular.addEventListener('click', () => {
         
         for (let v in dados.valoresAgrupados){
             x =((dados.valoresAgrupados[v] / dados.vetorValores.length) * 100).toFixed(2)
-            vetorFsPrec.push(x)
+            vetorFsPerc.push(x)
             y += dados.valoresAgrupados[v]
             vetorFreAc.push(y)
         }
@@ -251,7 +251,7 @@ btnCalcular.addEventListener('click', () => {
             obj = {}
             i += 1 
             obj[data] = dados.valoresAgrupados[data]
-            obj['freqSimpPerc']= vetorFsPrec[i]
+            obj['freqSimpPerc']= vetorFsPerc[i]
             obj['freqAc']= vetorFreAc[i]
             obj['freqAcPerc'] = vetorFreAcPerc[i]
             vet.push(obj)
@@ -322,25 +322,25 @@ btnCalcular.addEventListener('click', () => {
             
         }
         
-        criaTabela(dados.valoresAgrupados, vetorFsPrec, vetorFreAc, vetorFreAcPerc)
+        criaTabela(dados.valoresAgrupados, vetorFsPerc, vetorFreAc, vetorFreAcPerc)
 
         let vetorNomeCol = []
         for(let nomeCol in dados.valoresAgrupados) {
-            vetorNomeCol.push(nomeCol)
+            vetorNomeCol.push(`${nomeCol} em %`)
         }
 
         switch (dados.tipoVar){
             case 'nominal':
-                geraGrafico(grafico, 'pie', vetorNomeCol, vetorFsPrec, 'Qualitativa Nominal')
+                geraGrafico(grafico, 'pie', vetorNomeCol, vetorFsPerc, 'Qualitativa Nominal')
                 break
             case 'ordinal':
-                geraGrafico(grafico, 'pie', vetorNomeCol, vetorFsPrec, 'Qualitativa Ordinal')
+                geraGrafico(grafico, 'pie', vetorNomeCol, vetorFsPerc, 'Qualitativa Ordinal')
                 break
             case 'discreta': 
-                geraGrafico(grafico, 'bar', vetorNomeCol, vetorFsPrec, 'Quantitativa Discreta')
+                geraGrafico(grafico, 'bar', vetorNomeCol, vetorFsPerc, 'Quantitativa Discreta')
                 break
             case 'continua': 
-                geraGraficoContinua(grafico, 'bar', vetorNomeCol, vetorFsPrec, 'Quantitativa Contínua')
+                geraGraficoContinua(grafico, 'bar', vetorNomeCol, vetorFsPerc, 'Quantitativa Contínua')
                 break
         }
         
