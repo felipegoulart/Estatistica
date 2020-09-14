@@ -24,6 +24,7 @@ const dados = {
     tipoVar: '',
     tipoCalc: '',
     valoresAgrupados: {},
+    vetorObjetos: null
 }
 
 let vetorValoresArquivo = []
@@ -163,13 +164,18 @@ btnCalcular.addEventListener('click', () => {
             })
         } 
 
+           
+        
         const sectionTabela = document.querySelector('.sectionTabela')
 
-        const criaTabela = (dadosTratados) => {
+        const criaTabela = (dadosTratados,perc, ac, acP) => {
 
             const tabela = document.createElement('table')
             const variavel = document.createElement('th')
             const freqSimples = document.createElement('th')
+            const freqPerc = document.createElement('th')
+            const freqAc = document.createElement('th')
+            const freqAcPerc = document.createElement('th')
 
             tabela.id = idTabela
 
@@ -177,20 +183,39 @@ btnCalcular.addEventListener('click', () => {
 
             variavel.innerText = dados.nome
             freqSimples.innerText = 'Frequência Simples'
+            freqPerc.innerText = 'Frequência Simples Percentual'
+            freqAc.innerText = 'Frequência Acumulada'
+            freqAcPerc.innerText = 'Frequência Acumulada Percentual'
 
             tabela.appendChild(variavel)
             tabela.appendChild(freqSimples)
+            tabela.appendChild(freqPerc)
+            tabela.appendChild(freqAc)
+            tabela.appendChild(freqAcPerc)
+
+            let i = -1
 
             for(const chave in dadosTratados){
+                i+=1
                 const linha = document.createElement('tr')
                 const nomeVariavel = document.createElement('td')
                 const valorVariavel = document.createElement('td')
+                const valorperc = document.createElement('td')
+                const valorac = document.createElement('td')
+                const valorAcP = document.createElement('td')
 
                 nomeVariavel.innerText = chave
                 valorVariavel.innerText = dadosTratados[chave]
+                valorperc.innerText = perc[i] +' %'
+                valorac.innerText = ac [i]
+                valorAcP.innerText = acP[i] + ' %'
+                
 
                 linha.appendChild(nomeVariavel)
                 linha.appendChild(valorVariavel)
+                linha.appendChild(valorperc)
+                linha.appendChild(valorac)
+                linha.appendChild(valorAcP)
 
                 tabela.appendChild(linha)
             }
@@ -208,9 +233,38 @@ btnCalcular.addEventListener('click', () => {
             else sectionTabela.appendChild(tabela)
             
         }
+        let vetorFsPrec = []
+        let vetorFreAc = []
+        let vetorFreAcPerc = []
+        let x, y = 0 
+        let z = 0
+        let r = -1
+        for (v in dados.valoresAgrupados){
+            x =((dados.valoresAgrupados[v] / dados.vetorValores.length) * 100).toFixed(2)
+            vetorFsPrec.push(x)
+            y += dados.valoresAgrupados[v]
+            vetorFreAc.push(y)
+        }
+        for (t in dados.valoresAgrupados){
+            r += 1
+            z = ((vetorFreAc[r] / dados.vetorValores.length) * 100).toFixed(2)
+            vetorFreAcPerc.push(z)
+        }
 
-        criaTabela(dados.valoresAgrupados)
+        let vet =[]
+        let i = -1
+        for (data in dados.valoresAgrupados){
+            obj = {}
+            i += 1 
+            obj[data] = dados.valoresAgrupados[data]
+            obj['freqSimpPerc']= vetorFsPrec[i]
+            obj['freqAc']= vetorFreAc[i]
+            obj['freqAcPerc'] = vetorFreAcPerc[i]
+            vet.push(obj)
+        }
+        dados.vetorObjetos = vet 
         
+        criaTabela(dados.valoresAgrupados, vetorFsPrec, vetorFreAc, vetorFreAcPerc)
         //zerar variaveis
         vetorValoresArquivo = []
         dados.nome = ''
@@ -260,3 +314,4 @@ var myChart = new Chart(grafico, {
     }
     }
 });
+

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    
+</body>
+<script>
+   var vetor  = [20,27,28,32,40,46,52,37,35,31,25,22,36,37,33,42,43,44,31,38]
+   vetor.sort()
+
+   const ultimo = vetor[vetor.length - 1], primeiro = vetor[0]
+
+   amplitude = ultimo - primeiro
+
+   const i = Math.trunc(vetor.length**0.5) 
+   const j = i - 1 
+   const k = i + 1
+   
+   do {
+        amplitude ++
+        if (amplitude % i == 0){
+            int = amplitude/i
+            lin = i
+            break
+        }
+        else if (amplitude % j == 0){
+            int = amplitude/j
+            lin = j
+            break
+        }
+        else if (amplitude % k == 0){
+            int = amplitude/k
+            lin = k
+            break
+        }
+    } while (amplitude < ultimo)
+
+    console.log(lin)
+    console.log(int)
+
+    for (x = 1, y= lin + 1; x<y ; x++){
+            it = int * x
+            inte = int * (lin)
+            const newA = vetor.filter(elemento => primeiro + it > elemento && ultimo - inte < elemento )
+            it -= int
+            inte -= int
+            console.log(newA)
+
+    }
+    
+    const separaIntervalo = (lin, int, vetor) => {
+        let inicio = null
+        let fim = null 
+        vetor.sort()
+        for (let i = 0; i < lin; i++) {
+            ! inicio ? inicio = vetor[0] : inicio = fim
+            fim = inicio +  int
+        }
+    }
+
+
+</script>
+
+</html>
