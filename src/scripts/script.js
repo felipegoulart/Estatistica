@@ -28,34 +28,38 @@ const dados = {
 let vetorValoresArquivo = []
 
 // Função para gerar a tabela
-const geraGrafico = grafico => {
+const geraGrafico = (grafico, tipoGraf = 'bar', nomesCol, valores, nomeGraf = 'Gráfico') => {
     const meuGrafico = new Chart(grafico, {
-        type: 'bar',
+        type: tipoGraf,
         data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-        datasets: [{
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
-        }]
-            },
+            labels: nomesCol,
+            datasets: [{
+                label: nomeGraf,
+                data: valores,
+                borderWidth: 1,
+                backgroundColor: cor(valores), // Usa o tamanho do vetor para gerar as cores
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
     })
+}
+
+// Função para gerar as cores para o Gráfico de acordo com o número de elementos
+function cor(vetor) { 
+    let cores = []
+
+    for(let i = 0; i < vetor.length; i++) {
+        i % 2 == 0 ? cores.push('#6C63FF') : cores.push('#FFC463')
+    }
+    return cores
 }
 
 // Ativar formulário para inserção de dados
@@ -247,11 +251,10 @@ btnCalcular.addEventListener('click', () => {
 
         formDescritiva.reset()
 
-        if(sectionGrafico.classList.contains('esconder')) {
-            console.log('Contém');
-            sectionGrafico.classList.remove('esconder')
+        if(sectionGrafico.classList.contains('esconder')) sectionGrafico
+            .classList.remove('esconder')
+
+        geraGrafico(grafico, 'bar')
         }
-        geraGrafico(grafico)
-    }
-    else alert('Verifique todos os CAMPOS')
-})
+        else alert('Verifique todos os CAMPOS')
+    })
