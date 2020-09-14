@@ -3,7 +3,8 @@ const formArquivo = document.querySelector('.formArquivo')
 const textoErroNome = document.querySelector('[data-js=inputNome]')
 const textoErroValor = document.querySelector('[data-js=inputValor]')
 const formDescritiva = document.querySelector('#formDescritiva')
-const grafico = document.querySelector('#grafico');
+const sectionGrafico = document.querySelector('.sectGrafico')
+const grafico = document.querySelector('#grafico').getContext('2d');
 
 const inputNome = document.querySelector('#nomeVariavel')
 const inputValores = document.querySelector('#valores')
@@ -16,8 +17,6 @@ let formAtivado = false
 let validacao = false
 let tipoForm = null
 
-let idTabela = 0
-
 const dados = {
     nome: '',
     vetorValores: [],
@@ -28,6 +27,67 @@ const dados = {
 }
 
 let vetorValoresArquivo = []
+
+// Função para gerar a tabela
+const geraGrafico = (grafico, tipoGraf = 'bar', nomesCol, valores, nomeGraf = 'Gráfico') => {
+    const meuGrafico = new Chart(grafico, {
+        type: tipoGraf,
+        data: {
+            labels: nomesCol,
+            datasets: [{
+                label: nomeGraf,
+                data: valores,
+                borderWidth: 2,
+                backgroundColor: cor(valores), // Usa o tamanho do vetor para gerar as cores
+            }]
+        },
+        options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+    })
+}
+
+const geraGraficoContinua = (grafico, tipoGraf = 'bar', nomesCol, valores, nomeGraf = 'Gráfico') => {
+    const meuGrafico = new Chart(grafico, {
+        type: tipoGraf,
+        data: {
+            labels: nomesCol,
+            datasets: [{
+                label: nomeGraf,
+                data: valores,
+                borderWidth: 1,
+                backgroundColor: '#6C63FF',
+                borderColor: '#6C63FF', // Usa o tamanho do vetor para gerar as cores
+                barPercentage: 1.25,
+            }]
+        },
+        options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+    })
+}
+
+// Função para gerar as cores para o Gráfico de acordo com o número de elementos
+function cor(vetor) { 
+    let cores = []
+
+    for(let i = 0; i < vetor.length; i++) {
+        i % 2 ? cores.push('#6C63FF') : cores.push('#FFE663')
+    }
+    return cores
+}
 
 // Ativar formulário para inserção de dados
 function ativaForm() {
@@ -164,7 +224,39 @@ btnCalcular.addEventListener('click', () => {
             })
         } 
 
-           
+        // Responsável pelos calculos das frequencias
+        let vetorFsPrec = []
+        let vetorFreAc = []
+        let vetorFreAcPerc = []
+        let x, y = 0 
+        let z = 0
+        let r = -1
+        
+        for (let v in dados.valoresAgrupados){
+            x =((dados.valoresAgrupados[v] / dados.vetorValores.length) * 100).toFixed(2)
+            vetorFsPrec.push(x)
+            y += dados.valoresAgrupados[v]
+            vetorFreAc.push(y)
+        }
+
+        for (let t in dados.valoresAgrupados){
+            r += 1
+            z = ((vetorFreAc[r] / dados.vetorValores.length) * 100).toFixed(2)
+            vetorFreAcPerc.push(z)
+        }
+
+        let vet =[]
+        let i = -1
+        for (let data in dados.valoresAgrupados){
+            obj = {}
+            i += 1 
+            obj[data] = dados.valoresAgrupados[data]
+            obj['freqSimpPerc']= vetorFsPrec[i]
+            obj['freqAc']= vetorFreAc[i]
+            obj['freqAcPerc'] = vetorFreAcPerc[i]
+            vet.push(obj)
+        }
+        dados.vetorObjetos = vet 
         
         const sectionTabela = document.querySelector('.sectionTabela')
 
@@ -176,10 +268,6 @@ btnCalcular.addEventListener('click', () => {
             const freqPerc = document.createElement('th')
             const freqAc = document.createElement('th')
             const freqAcPerc = document.createElement('th')
-
-            tabela.id = idTabela
-
-            idTabela++
 
             variavel.innerText = dados.nome
             freqSimples.innerText = 'Frequência Simples'
@@ -196,7 +284,7 @@ btnCalcular.addEventListener('click', () => {
             let i = -1
 
             for(const chave in dadosTratados){
-                i+=1
+                i +=1
                 const linha = document.createElement('tr')
                 const nomeVariavel = document.createElement('td')
                 const valorVariavel = document.createElement('td')
@@ -206,9 +294,9 @@ btnCalcular.addEventListener('click', () => {
 
                 nomeVariavel.innerText = chave
                 valorVariavel.innerText = dadosTratados[chave]
-                valorperc.innerText = perc[i] +' %'
+                valorperc.innerText = `${perc[i]}%`
                 valorac.innerText = ac [i]
-                valorAcP.innerText = acP[i] + ' %'
+                valorAcP.innerText = `${acP[i]}%`
                 
 
                 linha.appendChild(nomeVariavel)
@@ -233,38 +321,30 @@ btnCalcular.addEventListener('click', () => {
             else sectionTabela.appendChild(tabela)
             
         }
-        let vetorFsPrec = []
-        let vetorFreAc = []
-        let vetorFreAcPerc = []
-        let x, y = 0 
-        let z = 0
-        let r = -1
-        for (v in dados.valoresAgrupados){
-            x =((dados.valoresAgrupados[v] / dados.vetorValores.length) * 100).toFixed(2)
-            vetorFsPrec.push(x)
-            y += dados.valoresAgrupados[v]
-            vetorFreAc.push(y)
-        }
-        for (t in dados.valoresAgrupados){
-            r += 1
-            z = ((vetorFreAc[r] / dados.vetorValores.length) * 100).toFixed(2)
-            vetorFreAcPerc.push(z)
-        }
-
-        let vet =[]
-        let i = -1
-        for (data in dados.valoresAgrupados){
-            obj = {}
-            i += 1 
-            obj[data] = dados.valoresAgrupados[data]
-            obj['freqSimpPerc']= vetorFsPrec[i]
-            obj['freqAc']= vetorFreAc[i]
-            obj['freqAcPerc'] = vetorFreAcPerc[i]
-            vet.push(obj)
-        }
-        dados.vetorObjetos = vet 
         
         criaTabela(dados.valoresAgrupados, vetorFsPrec, vetorFreAc, vetorFreAcPerc)
+
+        let vetorNomeCol = []
+        for(let nomeCol in dados.valoresAgrupados) {
+            vetorNomeCol.push(nomeCol)
+        }
+
+        switch (dados.tipoVar){
+            case 'nominal':
+                geraGrafico(grafico, 'pie', vetorNomeCol, vetorFsPrec, 'Qualitativa Nominal')
+                break
+            case 'ordinal':
+                geraGrafico(grafico, 'pie', vetorNomeCol, vetorFsPrec, 'Qualitativa Ordinal')
+                break
+            case 'discreta': 
+                geraGrafico(grafico, 'bar', vetorNomeCol, vetorFsPrec, 'Quantitativa Discreta')
+                break
+            case 'continua': 
+                geraGraficoContinua(grafico, 'bar', vetorNomeCol, vetorFsPrec, 'Quantitativa Contínua')
+                break
+        }
+        
+
         //zerar variaveis
         vetorValoresArquivo = []
         dados.nome = ''
@@ -274,44 +354,11 @@ btnCalcular.addEventListener('click', () => {
         dados.valoresAgrupados = {}
 
         formDescritiva.reset()
-    }
-    else alert('Verifique todos os CAMPOS')
-})
 
-var myChart = new Chart(grafico, {
-    type: 'bar',
-    data: {
-    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-    datasets: [{
-        label: '# of Votes',
-        data: [12, 19, 3, 5, 2, 3],
-        backgroundColor: [
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(255, 206, 86, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(153, 102, 255, 0.2)',
-            'rgba(255, 159, 64, 0.2)'
-        ],
-        borderColor: [
-            'rgba(255, 99, 132, 1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)'
-        ],
-        borderWidth: 1
-    }]
-        },
-    options: {
-    scales: {
-        yAxes: [{
-            ticks: {
-                beginAtZero: true
-            }
-        }]
-    }
-    }
-});
+        if(sectionGrafico.classList.contains('esconder')) {
+            sectionGrafico.classList.remove('esconder')
+        }
 
+        }
+        else alert('Verifique todos os CAMPOS')
+    })
