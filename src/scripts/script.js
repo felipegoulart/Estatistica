@@ -1,3 +1,5 @@
+// import {arrastarESoltar} from './tabela.js'
+
 const formManual = document.querySelector('.formManual')
 const formArquivo = document.querySelector('.formArquivo')
 const textoErroNome = document.querySelector('[data-js=inputNome]')
@@ -62,8 +64,8 @@ const geraGraficoContinua = (grafico, tipoGraf = 'bar', nomesCol, valores, nomeG
                 label: nomeGraf,
                 data: valores,
                 borderWidth: 1,
-                backgroundColor: '#6C63FF',
-                borderColor: '#6C63FF', // Usa o tamanho do vetor para gerar as cores
+                backgroundColor: cor(valores),
+                borderColor: cor(valores), // Usa o tamanho do vetor para gerar as cores
                 barPercentage: 1.25,
             }]
         },
@@ -127,6 +129,7 @@ inputValores.addEventListener('change', () => {
     }
 })
 
+// Abre o arquivo e captura os dados
 inputArquivo.addEventListener('change', () => {
     const reader = new FileReader()
         
@@ -216,6 +219,7 @@ btnCalcular.addEventListener('click', () => {
                     }
                 })
             }
+            console.log(dados.valoresAgrupados);
         }
         else {
             dados.vetorValores.filter(elemento => {
@@ -262,7 +266,7 @@ btnCalcular.addEventListener('click', () => {
 
         const criaTabela = (dadosTratados,perc, ac, acP) => {
 
-            const tabela = document.createElement('table')
+            const novaTabela = document.createElement('table')
             const variavel = document.createElement('th')
             const freqSimples = document.createElement('th')
             const freqPerc = document.createElement('th')
@@ -275,11 +279,11 @@ btnCalcular.addEventListener('click', () => {
             freqAc.innerText = 'Frequência Acumulada'
             freqAcPerc.innerText = 'Frequência Acumulada Percentual'
 
-            tabela.appendChild(variavel)
-            tabela.appendChild(freqSimples)
-            tabela.appendChild(freqPerc)
-            tabela.appendChild(freqAc)
-            tabela.appendChild(freqAcPerc)
+            novaTabela.appendChild(variavel)
+            novaTabela.appendChild(freqSimples)
+            novaTabela.appendChild(freqPerc)
+            novaTabela.appendChild(freqAc)
+            novaTabela.appendChild(freqAcPerc)
 
             let i = -1
 
@@ -297,7 +301,11 @@ btnCalcular.addEventListener('click', () => {
                 valorperc.innerText = `${perc[i]}%`
                 valorac.innerText = ac [i]
                 valorAcP.innerText = `${acP[i]}%`
-                
+
+                if(dados.tipoVar == 'ordinal') {
+                    linha.draggable = true
+                    linha.classList.add('arrastavel')
+                }
 
                 linha.appendChild(nomeVariavel)
                 linha.appendChild(valorVariavel)
@@ -305,7 +313,7 @@ btnCalcular.addEventListener('click', () => {
                 linha.appendChild(valorac)
                 linha.appendChild(valorAcP)
 
-                tabela.appendChild(linha)
+                novaTabela.appendChild(linha)
             }
             
             if(sectionTabela.classList.contains('esconder')){
@@ -316,12 +324,12 @@ btnCalcular.addEventListener('click', () => {
                 const tabelaARemover = sectionTabela.firstElementChild
 
                 sectionTabela.removeChild(tabelaARemover)
-                sectionTabela.appendChild(tabela)
+                sectionTabela.appendChild(novaTabela)
             } 
-            else sectionTabela.appendChild(tabela)
+            else sectionTabela.appendChild(novaTabela)
             
         }
-        
+
         criaTabela(dados.valoresAgrupados, vetorFsPerc, vetorFreAc, vetorFreAcPerc)
 
         let vetorNomeCol = []
@@ -342,9 +350,12 @@ btnCalcular.addEventListener('click', () => {
             case 'continua': 
                 geraGraficoContinua(grafico, 'bar', vetorNomeCol, vetorFsPerc, 'Quantitativa Contínua')
                 break
+            }
+
+        if(dados.tipoVar == 'ordinal') {
+            editarTabela()
         }
         
-
         //zerar variaveis
         vetorValoresArquivo = []
         dados.nome = ''
@@ -358,7 +369,70 @@ btnCalcular.addEventListener('click', () => {
         if(sectionGrafico.classList.contains('esconder')) {
             sectionGrafico.classList.remove('esconder')
         }
+    }
+    else alert('Verifique todos os CAMPOS')
+})
 
-        }
-        else alert('Verifique todos os CAMPOS')
+function editarTabela() {
+    const tabela = document.querySelector('table')
+    const linhasTabela = document.querySelectorAll('tr')
+
+    linhasTabela.forEach(elemento => {
+        elemento.addEventListener('dragstart', () => {
+            elemento.classList.add('arrastando')
+        })
+        elemento.addEventListener('dragend', () => {
+            elemento.classList.remove('arrastando')
+            })
     })
+
+    tabela.addEventListener('dragover', elemento => {
+        elemento.preventDefault()
+        const elementoPosterior = arrastarProximoElemento(tabela, elemento.clientY)
+        const arrastado = document.querySelector('.arrastando')
+        if (elementoPosterior == null) {
+            tabela.appendChild(arrastado)
+        } else {
+            tabela.insertBefore(arrastado, elementoPosterior)
+        }
+    })
+
+    function arrastarProximoElemento(tabela, y) {
+        const elementosArrastaveis = [...tabela.querySelectorAll('.arrastavel:not(.arrastando)')]
+      
+        return elementosArrastaveis.reduce((maisProximo, filho) => {
+          const box = filho.getBoundingClientRect()
+          const deslocamento = y - box.top - box.height / 2
+          if (deslocamento < 0 && deslocamento > maisProximo.deslocamento) {
+            return { deslocamento: deslocamento, element: filho }
+          } else {
+            return maisProximo
+          }
+        }, { deslocamento: Number.NEGATIVE_INFINITY }).element
+    }
+    atualizarTabela(tabela, linhasTabela)
+}
+function atualizarTabela(tabela) {
+    tabela.addEventListener('dragend', () => {
+        const linhasTabela = document.querySelectorAll('tr')
+        let vetorFreqSimples = [] 
+        let vetorFreqAcum = []
+        linhasTabela.forEach(element => {
+            vetorFreqSimples.push(Number(element.children[1].innerText))
+        })
+        let aux = 0
+        for(let i = 0; i < vetorFreqSimples.length; i++){
+            aux += vetorFreqSimples[i]
+            vetorFreqAcum.push(aux)
+        }
+
+        const qtdElementos = vetorFreqSimples.reduce((acumulador, valorAtual) => acumulador + valorAtual)
+
+        linhasTabela.forEach(element => {
+            let valorAtual = vetorFreqAcum.shift()
+            element.children[3].innerText = valorAtual
+            element.children[4].innerText = `${((valorAtual / qtdElementos) * 100).toFixed(2)}%`
+        })
+    })
+
+}

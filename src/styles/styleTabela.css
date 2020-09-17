@@ -42,6 +42,15 @@ tr:hover {
     background-color: #f9f9f9;
 }
 
+/* Elemetos arrastáveis */
+.arrastavel {
+    cursor: grab;
+}
+
+.arrastando {
+    opacity: .3;
+}
+
 /* Estilos do gráfico */
 .sectGrafico {
     display: flex;
