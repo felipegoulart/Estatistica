@@ -320,13 +320,13 @@ btnCalcular.addEventListener('click', () => {
                 sectionTabela.classList.remove('esconder')
             }
             
-            if(sectionTabela.childElementCount == 1){
-                const tabelaARemover = sectionTabela.firstElementChild
-
-                sectionTabela.removeChild(tabelaARemover)
-                sectionTabela.appendChild(novaTabela)
+            const filhos = sectionTabela.childNodes
+            if(filhos.length > 1){
+                while (filhos.length != 0) {
+                    sectionTabela.removeChild(filhos[0])
+                }
             } 
-            else sectionTabela.appendChild(novaTabela)
+            sectionTabela.appendChild(novaTabela)
             
         }
 
