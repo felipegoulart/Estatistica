@@ -373,6 +373,9 @@ btnCalcular.addEventListener('click', () => {
     else alert('Verifique todos os CAMPOS')
 })
 
+
+/* Funções responsáveis por fazer drag n drop da tabela
+e atualizar os valores dela */
 function editarTabela() {
     const tabela = document.querySelector('table')
     const linhasTabela = document.querySelectorAll('tr')
