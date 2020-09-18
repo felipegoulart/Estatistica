@@ -2,7 +2,8 @@
     max-width: 100%;
     min-height: 100%;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    flex-wrap: wrap;
     align-items: baseline;
     margin-bottom: 50px;
 }
@@ -10,7 +11,7 @@
 table {
     display: block;
     background-color: #fff;
-    margin: 10px;
+    margin: 10px auto;
     padding: 25px;
     border-radius: 15px;
     box-shadow: 5px 3px 5px #00000035;
@@ -40,6 +41,27 @@ td:last-child {
 
 tr:hover {
     background-color: #f9f9f9;
+}
+
+/* Caixas Media, Moda e Mediana */
+.areaCaixas {
+    display: flex;
+    width: 35vw;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    margin: 0 auto;
+}
+
+.caixaMedias {
+    margin: 5px;
+    padding: 10px;
+    border-radius: 5px;
+    display: inline-block;
+    background-color: #fff;
+    box-shadow: 3px 2px 5px #00000035;
+}
+.caixaMedias > p {
+    font-size: 1.2rem;
 }
 
 /* Elemetos arrastáveis */

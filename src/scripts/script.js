@@ -274,10 +274,10 @@ btnCalcular.addEventListener('click', () => {
             const freqAcPerc = document.createElement('th')
 
             variavel.innerText = dados.nome
-            freqSimples.innerText = 'Frequência Simples'
-            freqPerc.innerText = 'Frequência Simples Percentual'
-            freqAc.innerText = 'Frequência Acumulada'
-            freqAcPerc.innerText = 'Frequência Acumulada Percentual'
+            freqSimples.innerText = 'Freq Si'
+            freqPerc.innerText = 'Freq Si Perc'
+            freqAc.innerText = 'Freq Ac'
+            freqAcPerc.innerText = 'Freq Ac Perc'
 
             novaTabela.appendChild(variavel)
             novaTabela.appendChild(freqSimples)
@@ -331,7 +331,26 @@ btnCalcular.addEventListener('click', () => {
         }
 
         criaTabela(dados.valoresAgrupados, vetorFsPerc, vetorFreAc, vetorFreAcPerc)
+        
+        function criaCaixasDeMedias (medias = [null, null, null]) {
+            const textoMedias = ['Média', 'Moda', 'Mediana']
+            const areaCaixas = document.createElement('div')
 
+            areaCaixas.classList.add('areaCaixas')
+            for(let i = 0; i < textoMedias.length; i++) {
+                const divCaixa = document.createElement('div')
+                const texto = document.createElement('p')
+
+                divCaixa.classList.add('caixaMedias')
+                texto.innerText = `${textoMedias[i]}: ${medias[i]}`
+
+                divCaixa.appendChild(texto)
+                areaCaixas.appendChild(divCaixa)
+            }
+            sectionTabela.appendChild(areaCaixas)
+        }
+        criaCaixasDeMedias()
+        
         let vetorNomeCol = []
         for(let nomeCol in dados.valoresAgrupados) {
             vetorNomeCol.push(`${nomeCol} em %`)
