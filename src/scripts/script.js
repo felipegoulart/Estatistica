@@ -1,5 +1,3 @@
-// import {arrastarESoltar} from './tabela.js'
-
 const formManual = document.querySelector('.formManual')
 const formArquivo = document.querySelector('.formArquivo')
 const textoErroNome = document.querySelector('[data-js=inputNome]')
@@ -29,6 +27,59 @@ const dados = {
 }
 
 let vetorValoresArquivo = []
+
+
+// Ativar formulário para inserção de dados
+function ativaForm() {
+    if(!formAtivado){
+        document.querySelector('.formularios').classList.remove('esconder')
+        formAtivado = true
+    }
+}
+
+function exibirFormManual() {
+    ativaForm()
+    if(formManual.classList.contains('esconder')) {
+        formManual.classList.remove('esconder')
+    }
+    formArquivo.classList.add('esconder')
+    tipoForm = 'manual'
+}
+function exibirFormArquivo() {
+    ativaForm()
+    if(formArquivo.classList.contains('esconder')) {
+        formArquivo.classList.remove('esconder')
+    }
+    formManual.classList.add('esconder')
+    tipoForm = 'arquivo'
+}
+
+// Rola até a tabela
+function rolarTela (area) {
+    const posicao = area.offsetHeight
+    this.scroll(0, posicao)
+    console.log(posicao);
+}
+
+// valida se valores estão separado por virgula
+inputValores.addEventListener('change', () => {
+
+    if(inputValores.value.indexOf(';') == -1 
+        && inputValores.value.trim().indexOf(' ') != -1) {   
+            textoErroValor.innerText = 'Separe os elementos com ;'
+            inputValores.classList.add('erro')
+    } else {
+        textoErroValor.innerText = ''
+        inputValores.classList.remove('erro')
+    }
+})
+
+inputNome.addEventListener('change', () => {
+    if(inputNome.value.trim()) {
+        textoErroNome.innerText = ''
+        inputNome.classList.remove('erro')
+    }
+})
 
 // Função para gerar a tabela
 const geraGrafico = (grafico, tipoGraf = 'bar', nomesCol, valores, nomeGraf = 'Gráfico') => {
@@ -91,44 +142,6 @@ function cor(vetor) {
     return cores
 }
 
-// Ativar formulário para inserção de dados
-function ativaForm() {
-    if(!formAtivado){
-        document.querySelector('.formularios').classList.remove('esconder')
-        formAtivado = true
-    }
-}
-
-function exibirFormManual() {
-    ativaForm()
-    if(formManual.classList.contains('esconder')) {
-        formManual.classList.remove('esconder')
-    }
-    formArquivo.classList.add('esconder')
-    tipoForm = 'manual'
-}
-function exibirFormArquivo() {
-    ativaForm()
-    if(formArquivo.classList.contains('esconder')) {
-        formArquivo.classList.remove('esconder')
-    }
-    formManual.classList.add('esconder')
-    tipoForm = 'arquivo'
-}
-
-// valida se valores estão separado por virgula
-inputValores.addEventListener('change', () => {
-
-    if(inputValores.value.indexOf(';') == -1 
-        && inputValores.value.trim().indexOf(' ') != -1) {   
-            textoErroValor.innerText = 'Separe os elementos com ;'
-            inputValores.classList.add('erro')
-    } else {
-        textoErroValor.innerText = ''
-        inputValores.classList.remove('erro')
-    }
-})
-
 // Abre o arquivo e captura os dados
 inputArquivo.addEventListener('change', () => {
     const reader = new FileReader()
@@ -159,6 +172,8 @@ btnCalcular.addEventListener('click', () => {
         else {
             dados.nome = inputNome.value.trim()
             dados.vetorValores = inputValores.value.trim().split(';')
+            // map para teste
+            dados.vetorValores = dados.vetorValores.map(elemento => elemento.trim()) 
             dados.tipoVar = document.querySelector
             ('input[name="tipoVariavel"]:checked').value
             dados.tipoCalc = document.querySelector('#tipoCalculo').value
@@ -327,7 +342,7 @@ btnCalcular.addEventListener('click', () => {
                 }
             } 
             sectionTabela.appendChild(novaTabela)
-            
+            rolarTela(novaTabela)
         }
 
         criaTabela(dados.valoresAgrupados, vetorFsPerc, vetorFreAc, vetorFreAcPerc)
@@ -374,6 +389,10 @@ btnCalcular.addEventListener('click', () => {
         if(dados.tipoVar == 'ordinal') {
             editarTabela()
         }
+    
+        if(sectionGrafico.classList.contains('esconder')) {
+            sectionGrafico.classList.remove('esconder')
+        }
         
         //zerar variaveis
         vetorValoresArquivo = []
@@ -382,12 +401,8 @@ btnCalcular.addEventListener('click', () => {
         dados.tipoVar = ''
         dados.tipoCalc = ''
         dados.valoresAgrupados = {}
-
+        
         formDescritiva.reset()
-
-        if(sectionGrafico.classList.contains('esconder')) {
-            sectionGrafico.classList.remove('esconder')
-        }
     }
     else alert('Verifique todos os CAMPOS')
 })
