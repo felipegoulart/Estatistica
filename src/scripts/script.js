@@ -4,7 +4,8 @@ const textoErroNome = document.querySelector('[data-js=inputNome]')
 const textoErroValor = document.querySelector('[data-js=inputValor]')
 const formDescritiva = document.querySelector('#formDescritiva')
 const sectionGrafico = document.querySelector('.sectGrafico')
-const grafico = document.querySelector('#grafico').getContext('2d');
+const areaGrafico = document.querySelector('#grafico')
+let meuGrafico = null
 
 const inputNome = document.querySelector('#nomeVariavel')
 const inputValores = document.querySelector('#valores')
@@ -54,11 +55,11 @@ function exibirFormArquivo() {
     tipoForm = 'arquivo'
 }
 
+
 // Rola até a tabela
-function rolarTela (area) {
-    const posicao = area.offsetHeight
-    this.scroll(0, posicao)
-    console.log(posicao);
+function rolarTela () {
+    this.location = '#tabela'
+
 }
 
 // valida se valores estão separado por virgula
@@ -81,33 +82,31 @@ inputNome.addEventListener('change', () => {
     }
 })
 
-// Função para gerar a tabela
-const geraGrafico = (grafico, tipoGraf = 'bar', nomesCol, valores, nomeGraf = 'Gráfico') => {
-    const meuGrafico = new Chart(grafico, {
+// Funções para gerar os Graficos
+const geraGrafico = (areaGrafico, tipoGraf = 'bar', nomesCol, valores, nomeGraf = 'Gráfico', opt) => {
+    if(meuGrafico) meuGrafico.destroy()
+
+    meuGrafico = areaGrafico.getContext('2d');
+    meuGrafico = new Chart(grafico, {
         type: tipoGraf,
         data: {
             labels: nomesCol,
             datasets: [{
                 label: nomeGraf,
                 data: valores,
-                borderWidth: 2,
                 backgroundColor: cor(valores), // Usa o tamanho do vetor para gerar as cores
+                borderWidth: 2,
             }]
         },
-        options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
-                }
-            }
+        options: opt
     })
 }
 
-const geraGraficoContinua = (grafico, tipoGraf = 'bar', nomesCol, valores, nomeGraf = 'Gráfico') => {
-    const meuGrafico = new Chart(grafico, {
+const geraGraficoContinua = (grafico, tipoGraf = 'bar', nomesCol, valores, nomeGraf = 'Gráfico', opt) => {
+    if(meuGrafico) meuGrafico.destroy()
+
+    meuGrafico = areaGrafico.getContext('2d');
+    meuGrafico = new Chart(grafico, {
         type: tipoGraf,
         data: {
             labels: nomesCol,
@@ -120,15 +119,7 @@ const geraGraficoContinua = (grafico, tipoGraf = 'bar', nomesCol, valores, nomeG
                 barPercentage: 1.25,
             }]
         },
-        options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
-                }
-            }
+        options: opt
     })
 }
 
@@ -140,6 +131,60 @@ function cor(vetor) {
         i % 2 ? cores.push('#6C63FF') : cores.push('#FFE663')
     }
     return cores
+}
+
+// A função recebe os nomes da Label e valor para retornar uma label com numeros em %
+function editarLabelComPorcent(tooltipItem, data) {
+    let label = data.labels[tooltipItem.index] || '';
+    let valor = data.datasets[0].data[tooltipItem.index]
+    if (label) {
+        label += ': ';
+    }
+    label += valor + '%';
+    return label;
+}
+
+// Funções de tipos de gráfico
+function optGraficoPizza () {
+    return {tooltips: {
+        backgroundColor: '#fff',
+        cornerRadius: 10, 
+
+        bodyFontColor: '#222',
+        bodyFontSize: 13,
+        bodyFontStyle: 'bold',
+
+        xPadding: 12,
+        yPadding: 15,
+
+        callbacks: {
+            label: editarLabelComPorcent
+        }
+    }}
+}
+
+function optGraficoColuna () {
+    return {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    min: 0,
+                    callback: function(value) {
+                        return value + "%"
+                    }
+                },
+                scaleLabel: {
+                    display: true,
+                    labelString: "Em Porcentagem"
+                }
+            }]
+        },
+        tooltips: {
+            callbacks: {
+                label: editarLabelComPorcent
+            }
+        }
+    }
 }
 
 // Abre o arquivo e captura os dados
@@ -154,6 +199,7 @@ inputArquivo.addEventListener('change', () => {
 })
 
 btnCalcular.addEventListener('click', () => {
+
     if(tipoForm == 'manual') {
         if(!inputNome.value.trim()) {
             inputNome.classList.add('erro')
@@ -171,25 +217,34 @@ btnCalcular.addEventListener('click', () => {
         }
         else {
             dados.nome = inputNome.value.trim()
-            dados.vetorValores = inputValores.value.trim().split(';')
-            // map para teste
-            dados.vetorValores = dados.vetorValores.map(elemento => elemento.trim()) 
-            dados.tipoVar = document.querySelector
-            ('input[name="tipoVariavel"]:checked').value
-            dados.tipoCalc = document.querySelector('#tipoCalculo').value
+            vetorValoresArquivo = inputValores.value.trim().split(';')
+            dados.vetorValores = vetorValoresArquivo.map(elemento => elemento.trim()) 
+
             validacao = true
         }
     }
     else {
-        dados.nome = vetorValoresArquivo.shift()
-        dados.vetorValores = vetorValoresArquivo.filter(elemento => elemento != '')
-        dados.tipoVar = document.querySelector
-        ('input[name="tipoVariavel"]:checked').value
-        dados.tipoCalc = document.querySelector('#tipoCalculo').value
-        
-        validacao = true
+        if(inputArquivo) {
+            alert('Insira um arquivo!')
+
+            validacao = false
+        }
+        else {
+            dados.nome = vetorValoresArquivo.shift()
+            dados.vetorValores = vetorValoresArquivo.filter(elemento => elemento != '')
+            
+            validacao = true
+            
+        }
     }
 
+    // Atributos para calculo.
+    // Mesma atribuição de valor independendo se é manual ou arquivo.
+    dados.tipoVar = document.querySelector
+            ('input[name="tipoVariavel"]:checked').value
+    dados.tipoCalc = document.querySelector('#tipoCalculo').value
+
+    // Caso Todas as entradas estejam validadas ele executa os calculos.
     if (validacao) {
         if (dados.tipoVar == 'continua'){
             dados.vetorValores = dados.vetorValores.map(elemento => Number(elemento))        
@@ -234,7 +289,6 @@ btnCalcular.addEventListener('click', () => {
                     }
                 })
             }
-            console.log(dados.valoresAgrupados);
         }
         else {
             dados.vetorValores.filter(elemento => {
@@ -368,21 +422,21 @@ btnCalcular.addEventListener('click', () => {
         
         let vetorNomeCol = []
         for(let nomeCol in dados.valoresAgrupados) {
-            vetorNomeCol.push(`${nomeCol} em %`)
+            vetorNomeCol.push(nomeCol)
         }
 
         switch (dados.tipoVar){
             case 'nominal':
-                geraGrafico(grafico, 'pie', vetorNomeCol, vetorFsPerc, 'Qualitativa Nominal')
+                geraGrafico(areaGrafico, 'pie', vetorNomeCol, vetorFsPerc, 'Qualitativa Nominal', optGraficoPizza())
                 break
             case 'ordinal':
-                geraGrafico(grafico, 'pie', vetorNomeCol, vetorFsPerc, 'Qualitativa Ordinal')
+                geraGrafico(areaGrafico, 'pie', vetorNomeCol, vetorFsPerc, 'Qualitativa Ordinal', optGraficoPizza())
                 break
             case 'discreta': 
-                geraGrafico(grafico, 'bar', vetorNomeCol, vetorFsPerc, 'Quantitativa Discreta')
+                geraGrafico(areaGrafico, 'bar', vetorNomeCol, vetorFsPerc, 'Quantitativa Discreta', optGraficoColuna())
                 break
             case 'continua': 
-                geraGraficoContinua(grafico, 'bar', vetorNomeCol, vetorFsPerc, 'Quantitativa Contínua')
+                geraGraficoContinua(areaGrafico, 'bar', vetorNomeCol, vetorFsPerc, 'Quantitativa Contínua', optGraficoColuna())
                 break
             }
 
@@ -404,7 +458,6 @@ btnCalcular.addEventListener('click', () => {
         
         formDescritiva.reset()
     }
-    else alert('Verifique todos os CAMPOS')
 })
 
 
