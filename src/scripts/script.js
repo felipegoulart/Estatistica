@@ -59,7 +59,71 @@ function exibirFormArquivo() {
 // Rola até a tabela
 function rolarTela () {
     this.location = '#tabela'
+}
 
+/* Funções responsáveis por fazer drag n drop da tabela
+e atualizar os valores dela */
+function editarTabela() {
+    const tabela = document.querySelector('table')
+    const linhasTabela = document.querySelectorAll('tr')
+
+    linhasTabela.forEach(elemento => {
+        elemento.addEventListener('dragstart', () => {
+            elemento.classList.add('arrastando')
+        })
+        elemento.addEventListener('dragend', () => {
+            elemento.classList.remove('arrastando')
+            })
+    })
+
+    tabela.addEventListener('dragover', elemento => {
+        elemento.preventDefault()
+        const elementoPosterior = arrastarProximoElemento(tabela, elemento.clientY)
+        const arrastado = document.querySelector('.arrastando')
+        if (elementoPosterior == null) {
+            tabela.appendChild(arrastado)
+        } else {
+            tabela.insertBefore(arrastado, elementoPosterior)
+        }
+    })
+
+    function arrastarProximoElemento(tabela, y) {
+        const elementosArrastaveis = [...tabela.querySelectorAll('.arrastavel:not(.arrastando)')]
+      
+        return elementosArrastaveis.reduce((maisProximo, filho) => {
+            const box = filho.getBoundingClientRect()
+            const deslocamento = y - box.top - box.height / 2
+            if (deslocamento < 0 && deslocamento > maisProximo.deslocamento) {
+                return { deslocamento: deslocamento, element: filho }
+            } else {
+                return maisProximo
+            }
+        }, { deslocamento: Number.NEGATIVE_INFINITY }).element
+    }
+    atualizarTabela(tabela, linhasTabela)
+}
+function atualizarTabela(tabela) {
+    tabela.addEventListener('dragend', () => {
+        const linhasTabela = document.querySelectorAll('tr')
+        let vetorFreqSimples = [] 
+        let vetorFreqAcum = []
+        linhasTabela.forEach(element => {
+            vetorFreqSimples.push(Number(element.children[1].innerText))
+        })
+        let aux = 0
+        for(let i = 0; i < vetorFreqSimples.length; i++){
+            aux += vetorFreqSimples[i]
+            vetorFreqAcum.push(aux)
+        }
+
+        const qtdElementos = vetorFreqSimples.reduce((acumulador, valorAtual) => acumulador + valorAtual)
+
+        linhasTabela.forEach(element => {
+            let valorAtual = vetorFreqAcum.shift()
+            element.children[3].innerText = valorAtual
+            element.children[4].innerText = `${((valorAtual / qtdElementos) * 100).toFixed(2)}%`
+        })
+    })
 }
 
 // valida se valores estão separado por virgula
@@ -128,7 +192,7 @@ function cor(vetor) {
     let cores = []
 
     for(let i = 0; i < vetor.length; i++) {
-        i % 2 ? cores.push('#6C63FF') : cores.push('#FFE663')
+        i % 2 == 0 ? cores.push('#6C63FF') : cores.push('#FFE663')
     }
     return cores
 }
@@ -180,6 +244,17 @@ function optGraficoColuna () {
             }]
         },
         tooltips: {
+            backgroundColor: '#fff',
+            cornerRadius: 10, 
+
+            titleFontColor: '#222',
+            bodyFontColor: '#222',
+            bodyFontSize: 13,
+            bodyFontStyle: 'bold',
+
+            xPadding: 12,
+            yPadding: 15,
+
             callbacks: {
                 label: editarLabelComPorcent
             }
@@ -224,7 +299,7 @@ btnCalcular.addEventListener('click', () => {
         }
     }
     else {
-        if(inputArquivo) {
+        if(inputArquivo.files.length == 0) { // Testa se o input tem algum arquivo
             alert('Insira um arquivo!')
 
             validacao = false
@@ -252,11 +327,11 @@ btnCalcular.addEventListener('click', () => {
                 const vetor = valores.sort((a, b) => a-b)
                 const menor = vetor[0], maior = vetor[vetor.length -1]
                 let amplitude = maior - menor
-            
+                
                 const j = Math.trunc(vetor.length ** 0.5)
                 const i = j -1
                 const k = j +1
-            
+                console.log(amplitude);
                 do {
                     amplitude++
                     if(amplitude % i == 0) {
@@ -271,8 +346,9 @@ btnCalcular.addEventListener('click', () => {
                 } while (amplitude < maior)
             }
 
+            
             const [linhas, intervalo] = calculaIntervalo(dados.vetorValores)
-
+            console.log(linhas, intervalo);
             let inicio = null
             let fim = null
         
@@ -459,70 +535,3 @@ btnCalcular.addEventListener('click', () => {
         formDescritiva.reset()
     }
 })
-
-
-/* Funções responsáveis por fazer drag n drop da tabela
-e atualizar os valores dela */
-function editarTabela() {
-    const tabela = document.querySelector('table')
-    const linhasTabela = document.querySelectorAll('tr')
-
-    linhasTabela.forEach(elemento => {
-        elemento.addEventListener('dragstart', () => {
-            elemento.classList.add('arrastando')
-        })
-        elemento.addEventListener('dragend', () => {
-            elemento.classList.remove('arrastando')
-            })
-    })
-
-    tabela.addEventListener('dragover', elemento => {
-        elemento.preventDefault()
-        const elementoPosterior = arrastarProximoElemento(tabela, elemento.clientY)
-        const arrastado = document.querySelector('.arrastando')
-        if (elementoPosterior == null) {
-            tabela.appendChild(arrastado)
-        } else {
-            tabela.insertBefore(arrastado, elementoPosterior)
-        }
-    })
-
-    function arrastarProximoElemento(tabela, y) {
-        const elementosArrastaveis = [...tabela.querySelectorAll('.arrastavel:not(.arrastando)')]
-      
-        return elementosArrastaveis.reduce((maisProximo, filho) => {
-          const box = filho.getBoundingClientRect()
-          const deslocamento = y - box.top - box.height / 2
-          if (deslocamento < 0 && deslocamento > maisProximo.deslocamento) {
-            return { deslocamento: deslocamento, element: filho }
-          } else {
-            return maisProximo
-          }
-        }, { deslocamento: Number.NEGATIVE_INFINITY }).element
-    }
-    atualizarTabela(tabela, linhasTabela)
-}
-function atualizarTabela(tabela) {
-    tabela.addEventListener('dragend', () => {
-        const linhasTabela = document.querySelectorAll('tr')
-        let vetorFreqSimples = [] 
-        let vetorFreqAcum = []
-        linhasTabela.forEach(element => {
-            vetorFreqSimples.push(Number(element.children[1].innerText))
-        })
-        let aux = 0
-        for(let i = 0; i < vetorFreqSimples.length; i++){
-            aux += vetorFreqSimples[i]
-            vetorFreqAcum.push(aux)
-        }
-
-        const qtdElementos = vetorFreqSimples.reduce((acumulador, valorAtual) => acumulador + valorAtual)
-
-        linhasTabela.forEach(element => {
-            let valorAtual = vetorFreqAcum.shift()
-            element.children[3].innerText = valorAtual
-            element.children[4].innerText = `${((valorAtual / qtdElementos) * 100).toFixed(2)}%`
-        })
-    })
-
-}
