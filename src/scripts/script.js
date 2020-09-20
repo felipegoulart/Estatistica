@@ -276,6 +276,8 @@ btnCalcular.addEventListener('click', () => {
             vet.push(obj)
         }
         dados.vetorObjetos = vet 
+
+        
         
         const sectionTabela = document.querySelector('.sectionTabela')
 
@@ -346,8 +348,7 @@ btnCalcular.addEventListener('click', () => {
         }
 
         criaTabela(dados.valoresAgrupados, vetorFsPerc, vetorFreAc, vetorFreAcPerc)
-        
-        function criaCaixasDeMedias (medias = [null, null, null]) {
+        function criaCaixasDeMedias (medias = [null,null,null]) {
             const textoMedias = ['Média', 'Moda', 'Mediana']
             const areaCaixas = document.createElement('div')
 
