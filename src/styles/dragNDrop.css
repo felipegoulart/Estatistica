@@ -1,0 +1,31 @@
+.dropZone {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+
+    box-shadow: 3px 3px 5px #00000040 inset;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+}
+
+.dragging {
+    border: 2px solid #6C63FF;
+    box-shadow: 3px 3px 5px #6C63FF55 inset;
+}
+
+.DropZone p {
+    color: #555;
+    font-family: sans-serif;
+}
+
+p label {
+    color: #6C63FF;
+    cursor: pointer;
+}
+
+#inputArquivo {
+    display: none;
+}
+

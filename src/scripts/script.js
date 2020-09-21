@@ -535,3 +535,6 @@ btnCalcular.addEventListener('click', () => {
         formDescritiva.reset()
     }
 })
+
+// ----------TESTES--------- \\
+
