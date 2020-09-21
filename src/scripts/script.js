@@ -406,6 +406,8 @@ btnCalcular.addEventListener('click', () => {
             vet.push(obj)
         }
         dados.vetorObjetos = vet 
+
+        
         
         const sectionTabela = document.querySelector('.sectionTabela')
 
@@ -476,8 +478,88 @@ btnCalcular.addEventListener('click', () => {
         }
 
         criaTabela(dados.valoresAgrupados, vetorFsPerc, vetorFreAc, vetorFreAcPerc)
+        let e = []
+        let numero = Boolean
+        for (let i = 0; i < dados.vetorValores.length; i++){
+            aux = dados.vetorValores[i]
+            if (isNaN(aux) == true){
+                e = dados.vetorValores.sort()
+                numero = false
+            }
+            else{
+                e = dados.vetorValores.sort((a,b) => a-b)
+                numero = true
+            }
+        }
+
+        if (numero == true){
+            if(e.length % 2 == 0){
+                let esq = 0
+                let dir = e.length - 1
+                let meio = 0 
+                meio = Math.trunc((esq+dir)/2)
+                mediana = ((e[meio] + e[meio+1])/2).toFixed(1)
+            }else{
+                let esq = 0
+                let dir = e.length - 1
+                let meio = 0 
+                meio = Math.trunc((esq+dir)/2)
+                mediana = e[meio]
+            }
+        }else {
+            if(e.length % 2 == 0){
+                let esq = 0
+                let dir = e.length - 1
+                let meio = 0 
+                meio = Math.trunc((esq+dir)/2)
+                if (e[meio] == e[meio+1]){
+                mediana =[e[meio]]
+                }else{
+                    mediana = [e[meio],e[meio+1]]
+                }
+                
+            }else{
+                let esq = 0
+                let dir = e.length - 1
+                let meio = 0 
+                meio = Math.trunc((esq+dir)/2)
+                mediana = e[meio]
+                console.log(meio)
+            }
+        }
         
-        function criaCaixasDeMedias (medias = [null, null, null]) {
+        if (numero == true){
+            let soma = 0
+            for (let i = 0; i< e.length - 1; i++){
+                soma = soma + e[i]
+            }
+            media = (soma/e.length)
+        }else{
+            media = 'Não Possui'
+        }
+        
+        
+        let au = []
+        for(data in dados.valoresAgrupados){
+            au.push(dados.valoresAgrupados[data])
+        }
+        let a = au.reduce(function(a,b){return Math.max(a,b)})
+        
+        let auxiliar = []
+        for(dt in dados.valoresAgrupados){
+            if (dados.valoresAgrupados[dt] === a){
+                auxiliar.push(dt)
+            }
+        }
+        let moda = []
+        if (auxiliar.length === au.length){
+            moda.push('Estes dados são amodais')
+        }else{
+            moda = auxiliar
+        }
+
+
+        function criaCaixasDeMedias (medias = [media,moda,mediana]) {
             const textoMedias = ['Média', 'Moda', 'Mediana']
             const areaCaixas = document.createElement('div')
 
