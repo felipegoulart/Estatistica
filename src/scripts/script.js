@@ -593,6 +593,7 @@ btnCalcular.addEventListener('click', () => {
         let fimd = 0
         let h = 0
         let f = 0
+        let moda = []
         if (dados.tipoVar === 'discreta'){
             for (dt in dados.valoresAgrupados){
                 u.push(parseInt(dt))
@@ -649,7 +650,7 @@ btnCalcular.addEventListener('click', () => {
                 auxiliar.push(dt)
             }
         }
-        let moda = []
+        
         if (auxiliar.length === au.length){
             moda.push('Estes dados são amodais')
         }else{
