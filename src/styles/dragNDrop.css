@@ -1,9 +1,9 @@
 .dropzone {
     display: flex;
     justify-content: center;
-    align-content: center;
+    align-items: center;
     width: 100%;
-    min-height: 100px;
+    min-height: 116px;
     max-width: 100%;
     box-sizing: border-box;
     margin: 15px 0;

@@ -12,8 +12,8 @@
 <section class="conteudo">
     <form autocomplete="off" id="formDescritiva" class="formDescritiva">
         <div class="divBotoes">
-            <button type="button" id="btnManual" class="botoesTipo" onclick="exibirFormManual()">Manual</button>
-            <button type="button" id="btnArquivo" class="botoesTipo" onclick="exibirFormArquivo()">Arquivo</button>
+            <button type="button" id="btnManual" class="botoesTipo">Manual</button>
+            <button type="button" id="btnArquivo" class="botoesTipo">Arquivo</button>
         </div>
         <div class="formularios esconder">
             <div class="formManual esconder">
@@ -120,7 +120,10 @@
     </div>
 </section>
 
-<script src="./src/scripts/script.js"></script>
+<script src="./src/scripts/script.js" type="module"></script>
+<script src="./src/scripts/fileDrop.js" type="module"></script>
+<script src="./src/scripts/thumbnail.js" type="module"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script> 
 </body>
 </html>

@@ -1,3 +1,6 @@
+import dragNDropFile from './fileDrop.js'
+import { atualizarThumb } from './thumbnail.js'
+
 const formManual = document.querySelector('.formManual')
 const formArquivo = document.querySelector('.formArquivo')
 const textoErroNome = document.querySelector('[data-js=inputNome]')
@@ -16,6 +19,8 @@ let arquivo // recebe os arquivos posteriormente
 const btnCalcular = document.querySelector('#calcular')
 const btnLimpar = document.querySelector('.btnLimpar')
 const btnExcluirThumb = document.querySelector('.btnExcluir--thumb')
+const btnManual = document.querySelector('#btnManual')
+const btnArquivo = document.querySelector('#btnArquivo')
 
 
 let formAtivado = false
@@ -42,22 +47,23 @@ function ativaForm() {
     }
 }
 
-function exibirFormManual() {
+btnManual.addEventListener('click', () => {
     ativaForm()
     if(formManual.classList.contains('esconder')) {
         formManual.classList.remove('esconder')
     }
     formArquivo.classList.add('esconder')
     tipoForm = 'manual'
-}
-function exibirFormArquivo() {
+})
+
+btnArquivo.addEventListener('click', () => {
     ativaForm()
     if(formArquivo.classList.contains('esconder')) {
         formArquivo.classList.remove('esconder')
     }
     formManual.classList.add('esconder')
     tipoForm = 'arquivo'
-}
+}) 
 
 // ----------Validar Entrada Manual--------- \\
 // valida se valores estão separado por virgula
@@ -80,53 +86,7 @@ inputNome.addEventListener('change', () => {
     }
 })
 
-// ----------Capturar Arquivos--------- \\
-dropzone.addEventListener('dragover', e => {
-    e.preventDefault()
-    dropzone.classList.add('dragging')
-})
-
-dropzone.addEventListener('dragleave', e => {
-    dropzone.classList.remove('dragging')
-})
-
-dropzone.addEventListener('drop', e => {
-    e.preventDefault()
-    const nomeArquivo = e.dataTransfer.files[0].name
-    const extensao = nomeArquivo
-        .substring(nomeArquivo
-            .lastIndexOf("."))
-            .toLowerCase()
-    
-    extensao == '.csv' ? arquivoValido = true : arquivoValido = false
-
-    if(arquivoValido) {
-        arquivo = e.dataTransfer.files[0]
-        atualizarThumb(nomeArquivo)
-        capturaDadosArquivo(arquivo)
-    }
-    else {
-        alert('Insira um arquivo .CSV')
-    }
-})
-
-const atualizarThumb = (nomeArquivo) => {
-    document.querySelector('.nomeArquivo--thumb').innerText = nomeArquivo
-
-    document.querySelector('.textoDropzone').classList.add('esconder')
-    document.querySelector('.thumbnail').classList.remove('esconder')
-}
-
-inputArquivo.addEventListener('change', () => {
-    arquivo = inputArquivo.files[0]
-    const nomeArq = arquivo.name
-    atualizarThumb(nomeArq)
-    dropzone.classList.add('dragging')
-    capturaDadosArquivo(arquivo)
-})
-
-// Abre o arquivo e captura os dados
-const capturaDadosArquivo = arquivo => {
+function capturaDadosArquivo (arquivo, vetorValoresArquivo) {
     const reader = new FileReader()
         
     reader.readAsText(arquivo)
@@ -135,6 +95,19 @@ const capturaDadosArquivo = arquivo => {
         vetorValoresArquivo = reader.result.split('\n')
     }
 }
+
+dragNDropFile(dropzone, arquivo, atualizarThumb, capturaDadosArquivo)
+
+inputArquivo.addEventListener('change', () => {
+    arquivo = inputArquivo.files[0]
+    const nomeArq = arquivo.name
+
+    dropzone.classList.add('dragging')
+
+    atualizarThumb(nomeArq)
+    capturaDadosArquivo(arquivo, vetorValoresArquivo)
+})
+
 
 btnExcluirThumb.addEventListener('click', () => {
     arquivo = null
@@ -329,6 +302,7 @@ function editarLabelComPorcent(tooltipItem, data) {
 
 // Botão calcular, responsável por realizar os calculos, gerar tabela e gráficos
 btnCalcular.addEventListener('click', () => {
+    console.log(vetorValoresArquivo);
     if(tipoForm == 'manual') {
         if(!inputNome.value.trim()) {
             inputNome.classList.add('erro')
@@ -529,10 +503,10 @@ btnCalcular.addEventListener('click', () => {
             } 
             sectionTabela.appendChild(novaTabela)
             
-            this.location = '#tabela'
         }
 
         criaTabela(dados.valoresAgrupados, vetorFsPerc, vetorFreAc, vetorFreAcPerc)
+        this.location = '#tabela'
         let e = []
         let numero = Boolean
         for (let i = 0; i < dados.vetorValores.length; i++){
