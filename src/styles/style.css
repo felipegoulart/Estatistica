@@ -60,14 +60,14 @@ form button {
 button:focus {
     background-color:#4E45E1;
     outline: none;
-    box-shadow: 0 0 5px 5px #6C63FF25,
+    box-shadow: 0 0 5px 5px #6C63FF35,
     0 0 2px 2px #6C63FF15;
 }
 
 button:hover {
     cursor: pointer;
-    box-shadow: 0 0 5px 5px #6C63FF25,
-    0 0 2px 2px #6C63FF15;
+    box-shadow: 0 0 5px 5px #6C63FF35,
+    0 0 2px 2px #6C63FF25;
 }
 
 .btnLimpar,

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./src/styles/style.css">
     <link rel="stylesheet" href="./src/styles/styleTabela.css">
+    <link rel="stylesheet" href="./src/styles/dragNDrop.css">
     <title>Descritiva</title>
 </head>
 <body>
@@ -44,7 +45,18 @@
                 </div>
             
             <div class="formArquivo esconder">
-                <input type="file" name="inputArquivo" id="inputArquivo" accept=".csv">
+                <div class="dropzone">
+                    <span class="textoDropzone">
+                        Arraste um arquivo<br>ou 
+                        <label for="inputArquivo">Clique aqui</label>
+                    </span>
+                    <input type="file" name="inputArquivo" id="inputArquivo" accept=".csv">
+                    <div class="thumbnail esconder">
+                        <span class="nomeArquivo--thumb"></span>
+                        <input type="button" class="btnExcluir--thumb" value="x">
+                    </div>
+                </div>
+                
             </div>
 
             <div class="tiposVariaveis">
