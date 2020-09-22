@@ -527,15 +527,58 @@ btnCalcular.addEventListener('click', () => {
                 console.log(meio)
             }
         }
-        
-        if (numero == true){
-            let soma = 0
-            for (let i = 0; i< e.length - 1; i++){
-                soma = soma + e[i]
+        let u = []
+        let w = []
+        let ex = []
+        let ponto = []
+        let fi = []
+        let soma = 0 
+        let o = 0 
+        let fant = 0
+        let fimd = 0
+        let h = 0
+        let f = 0
+        if (dados.tipoVar === 'discreta'){
+            for (dt in dados.valoresAgrupados){
+                u.push(parseInt(dt))
+                w.push(dados.valoresAgrupados[dt])
+                soma = soma + (w[o] * u[o])
+                o + 1 
+            }   
+            media = (soma / vetorFreAc[vetorFreAc.length - 1]).toFixed(2)
+            
+        } else if (dados.tipoVar === 'continua'){
+            for (dt in dados.valoresAgrupados){
+                ex.push((dt.split(' |--- ')))
+                fi.push(dados.valoresAgrupados[dt])
             }
-            media = (soma/e.length)
-        }else{
-            media = 'Não Possui'
+
+            for (num in ex){
+                u.push(parseInt(ex[num][0]))
+                w.push(parseInt(ex[num][1]))
+                if (e[vetorFreAc-1/2] > ex[num][0] && e[vetorFreAc-1/2] > ex[num][1]){
+                    f = ex[num][0]
+                    fant = fi[o-1]
+                    fimd = fi[o]
+                    h = ex[num][0] - ex[num][1]
+                }
+                o+1
+            }
+            for(let q = 0; q < u.length;q++){
+                ponto.push((u[q] + w[q])/2)
+                soma = soma + (ponto[q]*fi[q])
+            }
+            media = (soma / vetorFreAc[vetorFreAc.length - 1]).toFixed(2)
+            let med  = vetorFreAc /2
+
+            mediana = f + (((med - fant)/fimd).h)
+            let au = []
+        for(data in dados.valoresAgrupados){
+            au.push(dados.valoresAgrupados[data])
+        }
+        let a = au.reduce(function(a,b){return Math.max(a,b)})
+        let t = au.indexOf(a)
+        moda = (u[t] + w[t])/2
         }
         
         
