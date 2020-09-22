@@ -45,12 +45,16 @@
                 </div>
             
             <div class="formArquivo esconder">
-                <div class="dropZone">
-                    <p>
-                        Solte um arquivo aqui<br>ou 
+                <div class="dropzone">
+                    <span class="textoDropzone">
+                        Arraste um arquivo<br>ou 
                         <label for="inputArquivo">Clique aqui</label>
-                    </p>
+                    </span>
                     <input type="file" name="inputArquivo" id="inputArquivo" accept=".csv">
+                    <div class="thumbnail esconder">
+                        <span class="nomeArquivo--thumb"></span>
+                        <input type="button" class="btnExcluir--thumb" value="x">
+                    </div>
                 </div>
                 
             </div>

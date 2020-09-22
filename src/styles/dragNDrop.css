@@ -1,7 +1,12 @@
-.dropZone {
+.dropzone {
     display: flex;
     justify-content: center;
     align-content: center;
+    width: 100%;
+    min-height: 100px;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 15px 0;
 
     box-shadow: 3px 3px 5px #00000040 inset;
     background-color: #fff;
@@ -11,21 +16,61 @@
 }
 
 .dragging {
-    border: 2px solid #6C63FF;
     box-shadow: 3px 3px 5px #6C63FF55 inset;
 }
 
-.DropZone p {
+.textoDropzone {
     color: #555;
     font-family: sans-serif;
 }
 
-p label {
+.textoDropzone label {
     color: #6C63FF;
-    cursor: pointer;
+    cursor: pointer !important;
 }
 
 #inputArquivo {
     display: none;
 }
 
+/* THUMBNAIL */
+
+.thumbnail {
+    display: flex;
+    padding: 10px;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+}
+
+.nomeArquivo--thumb {
+    font-size: 12pt;
+    font-family: sans-serif;
+    font-weight: bolder;
+    color: #6C63FF;
+    text-transform: uppercase;
+}
+
+.btnExcluir--thumb {
+    padding: 5px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: none;
+    outline: none;
+
+    background-color: #6C63FF;
+    color: #fff;
+    font-size: 10pt;
+    line-height: 10px;
+
+    position: absolute;
+    top: -5px;
+    right: -25px;
+
+    cursor: pointer;
+}
+
+.btnExcluir--thumb:hover {
+    background-color: #4E45E1;
+}

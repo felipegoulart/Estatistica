@@ -10,9 +10,13 @@ let meuGrafico = null
 const inputNome = document.querySelector('#nomeVariavel')
 const inputValores = document.querySelector('#valores')
 const inputArquivo = document.querySelector('#inputArquivo')
+const dropzone = document.querySelector('.dropzone')
+let arquivo // recebe os arquivos posteriormente
 
 const btnCalcular = document.querySelector('#calcular')
 const btnLimpar = document.querySelector('.btnLimpar')
+const btnExcluirThumb = document.querySelector('.btnExcluir--thumb')
+
 
 let formAtivado = false
 let validacao = false
@@ -29,7 +33,7 @@ const dados = {
 
 let vetorValoresArquivo = []
 
-
+// ----------Revelar Formulário--------- \\
 // Ativar formulário para inserção de dados
 function ativaForm() {
     if(!formAtivado){
@@ -55,12 +59,92 @@ function exibirFormArquivo() {
     tipoForm = 'arquivo'
 }
 
+// ----------Validar Entrada Manual--------- \\
+// valida se valores estão separado por virgula
+inputValores.addEventListener('change', () => {
 
-// Rola até a tabela
-function rolarTela () {
-    this.location = '#tabela'
+    if(inputValores.value.indexOf(';') == -1 
+        && inputValores.value.trim().indexOf(' ') != -1) {   
+            textoErroValor.innerText = 'Separe os elementos com ;'
+            inputValores.classList.add('erro')
+    } else {
+        textoErroValor.innerText = ''
+        inputValores.classList.remove('erro')
+    }
+})
+
+inputNome.addEventListener('change', () => {
+    if(inputNome.value.trim()) {
+        textoErroNome.innerText = ''
+        inputNome.classList.remove('erro')
+    }
+})
+
+// ----------Capturar Arquivos--------- \\
+dropzone.addEventListener('dragover', e => {
+    e.preventDefault()
+    dropzone.classList.add('dragging')
+})
+
+dropzone.addEventListener('dragleave', e => {
+    dropzone.classList.remove('dragging')
+})
+
+dropzone.addEventListener('drop', e => {
+    e.preventDefault()
+    const nomeArquivo = e.dataTransfer.files[0].name
+    const extensao = nomeArquivo
+        .substring(nomeArquivo
+            .lastIndexOf("."))
+            .toLowerCase()
+    
+    extensao == '.csv' ? arquivoValido = true : arquivoValido = false
+
+    if(arquivoValido) {
+        arquivo = e.dataTransfer.files[0]
+        atualizarThumb(nomeArquivo)
+        capturaDadosArquivo(arquivo)
+    }
+    else {
+        alert('Insira um arquivo .CSV')
+    }
+})
+
+const atualizarThumb = (nomeArquivo) => {
+    document.querySelector('.nomeArquivo--thumb').innerText = nomeArquivo
+
+    document.querySelector('.textoDropzone').classList.add('esconder')
+    document.querySelector('.thumbnail').classList.remove('esconder')
 }
 
+inputArquivo.addEventListener('change', () => {
+    arquivo = inputArquivo.files[0]
+    const nomeArq = arquivo.name
+    atualizarThumb(nomeArq)
+    dropzone.classList.add('dragging')
+    capturaDadosArquivo(arquivo)
+})
+
+// Abre o arquivo e captura os dados
+const capturaDadosArquivo = arquivo => {
+    const reader = new FileReader()
+        
+    reader.readAsText(arquivo)
+    
+    reader.onloadend = () => {
+        vetorValoresArquivo = reader.result.split('\n')
+    }
+}
+
+btnExcluirThumb.addEventListener('click', () => {
+    arquivo = null
+    validacao = false
+    document.querySelector('.dragging').classList.remove('dragging')
+    document.querySelector('.textoDropzone').classList.remove('esconder')
+    document.querySelector('.thumbnail').classList.add('esconder')
+}) 
+
+// ----------Drag N Drop da tabela Ordinal--------- \\
 /* Funções responsáveis por fazer drag n drop da tabela
 e atualizar os valores dela */
 function editarTabela() {
@@ -126,26 +210,7 @@ function atualizarTabela(tabela) {
     })
 }
 
-// valida se valores estão separado por virgula
-inputValores.addEventListener('change', () => {
-
-    if(inputValores.value.indexOf(';') == -1 
-        && inputValores.value.trim().indexOf(' ') != -1) {   
-            textoErroValor.innerText = 'Separe os elementos com ;'
-            inputValores.classList.add('erro')
-    } else {
-        textoErroValor.innerText = ''
-        inputValores.classList.remove('erro')
-    }
-})
-
-inputNome.addEventListener('change', () => {
-    if(inputNome.value.trim()) {
-        textoErroNome.innerText = ''
-        inputNome.classList.remove('erro')
-    }
-})
-
+// ----------Gráficos--------- \\
 // Funções para gerar os Graficos
 const geraGrafico = (areaGrafico, tipoGraf = 'bar', nomesCol, valores, nomeGraf = 'Gráfico', opt) => {
     if(meuGrafico) meuGrafico.destroy()
@@ -185,27 +250,6 @@ const geraGraficoContinua = (grafico, tipoGraf = 'bar', nomesCol, valores, nomeG
         },
         options: opt
     })
-}
-
-// Função para gerar as cores para o Gráfico de acordo com o número de elementos
-function cor(vetor) { 
-    let cores = []
-
-    for(let i = 0; i < vetor.length; i++) {
-        i % 2 == 0 ? cores.push('#6C63FF') : cores.push('#FFE663')
-    }
-    return cores
-}
-
-// A função recebe os nomes da Label e valor para retornar uma label com numeros em %
-function editarLabelComPorcent(tooltipItem, data) {
-    let label = data.labels[tooltipItem.index] || '';
-    let valor = data.datasets[0].data[tooltipItem.index]
-    if (label) {
-        label += ': ';
-    }
-    label += valor + '%';
-    return label;
 }
 
 // Funções de tipos de gráfico
@@ -262,19 +306,29 @@ function optGraficoColuna () {
     }
 }
 
-// Abre o arquivo e captura os dados
-inputArquivo.addEventListener('change', () => {
-    const reader = new FileReader()
-        
-    reader.readAsText(inputArquivo.files[0])
-    
-    reader.onloadend = () => {
-        vetorValoresArquivo = reader.result.split('\n')
+// Função para gerar as cores para o Gráfico de acordo com o número de elementos
+function cor(vetor) { 
+    let cores = []
+
+    for(let i = 0; i < vetor.length; i++) {
+        i % 2 == 0 ? cores.push('#6C63FF') : cores.push('#FFE663')
     }
-})
+    return cores
+}
 
+// A função recebe os nomes da Label e valor para retornar uma label com numeros em %
+function editarLabelComPorcent(tooltipItem, data) {
+    let label = data.labels[tooltipItem.index] || '';
+    let valor = data.datasets[0].data[tooltipItem.index]
+    if (label) {
+        label += ': ';
+    }
+    label += valor + '%';
+    return label;
+}
+
+// Botão calcular, responsável por realizar os calculos, gerar tabela e gráficos
 btnCalcular.addEventListener('click', () => {
-
     if(tipoForm == 'manual') {
         if(!inputNome.value.trim()) {
             inputNome.classList.add('erro')
@@ -299,7 +353,7 @@ btnCalcular.addEventListener('click', () => {
         }
     }
     else {
-        if(inputArquivo.files.length == 0) { // Testa se o input tem algum arquivo
+        if(!arquivo) { // Testa se o input tem algum arquivo
             alert('Insira um arquivo!')
 
             validacao = false
@@ -474,7 +528,8 @@ btnCalcular.addEventListener('click', () => {
                 }
             } 
             sectionTabela.appendChild(novaTabela)
-            rolarTela(novaTabela)
+            
+            this.location = '#tabela'
         }
 
         criaTabela(dados.valoresAgrupados, vetorFsPerc, vetorFreAc, vetorFreAcPerc)
@@ -617,6 +672,3 @@ btnCalcular.addEventListener('click', () => {
         formDescritiva.reset()
     }
 })
-
-// ----------TESTES--------- \\
-
