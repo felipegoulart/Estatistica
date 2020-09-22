@@ -582,6 +582,26 @@ btnCalcular.addEventListener('click', () => {
                 console.log(meio)
             }
         }
+        let moda = []
+        let au = []
+        for(data in dados.valoresAgrupados){
+            au.push(dados.valoresAgrupados[data])
+        }
+        let a = au.reduce(function(a,b){return Math.max(a,b)})
+        
+        let auxiliar = []
+        for(dt in dados.valoresAgrupados){
+            if (dados.valoresAgrupados[dt] === a){
+                auxiliar.push(dt)
+            }
+        }
+        
+        if (auxiliar.length === au.length){
+            moda.push('Estes dados são amodais')
+        }else{
+            moda = auxiliar
+        }
+
         let u = []
         let w = []
         let ex = []
@@ -593,7 +613,7 @@ btnCalcular.addEventListener('click', () => {
         let fimd = 0
         let h = 0
         let f = 0
-        let moda = []
+        
         if (dados.tipoVar === 'discreta'){
             for (dt in dados.valoresAgrupados){
                 u.push(parseInt(dt))
@@ -637,25 +657,6 @@ btnCalcular.addEventListener('click', () => {
         moda = (u[t] + w[t])/2
         }
         
-        
-        let au = []
-        for(data in dados.valoresAgrupados){
-            au.push(dados.valoresAgrupados[data])
-        }
-        let a = au.reduce(function(a,b){return Math.max(a,b)})
-        
-        let auxiliar = []
-        for(dt in dados.valoresAgrupados){
-            if (dados.valoresAgrupados[dt] === a){
-                auxiliar.push(dt)
-            }
-        }
-        
-        if (auxiliar.length === au.length){
-            moda.push('Estes dados são amodais')
-        }else{
-            moda = auxiliar
-        }
 
 
         function criaCaixasDeMedias (medias = [media,moda,mediana]) {
