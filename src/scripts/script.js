@@ -86,7 +86,7 @@ inputNome.addEventListener('change', () => {
     }
 })
 
-function capturaDadosArquivo (arquivo, vetorValoresArquivo) {
+const capturaDadosArquivo = arquivo => {
     const reader = new FileReader()
         
     reader.readAsText(arquivo)
@@ -105,7 +105,7 @@ inputArquivo.addEventListener('change', () => {
     dropzone.classList.add('dragging')
 
     atualizarThumb(nomeArq)
-    capturaDadosArquivo(arquivo, vetorValoresArquivo)
+    capturaDadosArquivo(arquivo)
 })
 
 
@@ -292,6 +292,7 @@ function cor(vetor) {
 // A função recebe os nomes da Label e valor para retornar uma label com numeros em %
 function editarLabelComPorcent(tooltipItem, data) {
     let label = data.labels[tooltipItem.index] || '';
+    console.log(data.datasets);
     let valor = data.datasets[0].data[tooltipItem.index]
     if (label) {
         label += ': ';
@@ -302,7 +303,6 @@ function editarLabelComPorcent(tooltipItem, data) {
 
 // Botão calcular, responsável por realizar os calculos, gerar tabela e gráficos
 btnCalcular.addEventListener('click', () => {
-    console.log(vetorValoresArquivo);
     if(tipoForm == 'manual') {
         if(!inputNome.value.trim()) {
             inputNome.classList.add('erro')
@@ -359,7 +359,7 @@ btnCalcular.addEventListener('click', () => {
                 const j = Math.trunc(vetor.length ** 0.5)
                 const i = j -1
                 const k = j +1
-                console.log(amplitude);
+
                 do {
                     amplitude++
                     if(amplitude % i == 0) {
@@ -376,7 +376,7 @@ btnCalcular.addEventListener('click', () => {
 
             
             const [linhas, intervalo] = calculaIntervalo(dados.vetorValores)
-            console.log(linhas, intervalo);
+
             let inicio = null
             let fim = null
         
@@ -386,7 +386,7 @@ btnCalcular.addEventListener('click', () => {
         
                 const nomeAtributo = `${inicio} |--- ${fim}`
         
-                dados.vetorValores.filter(elemento => {
+                dados.vetorValores.forEach(elemento => {
                     if(elemento >= inicio && elemento < fim) {
                         !dados.valoresAgrupados[nomeAtributo] ? dados.valoresAgrupados[nomeAtributo] = 1
                             : dados.valoresAgrupados[nomeAtributo] += 1
@@ -395,7 +395,7 @@ btnCalcular.addEventListener('click', () => {
             }
         }
         else {
-            dados.vetorValores.filter(elemento => {
+            dados.vetorValores.forEach(elemento => {
                 dados.valoresAgrupados[elemento] ? dados.valoresAgrupados[elemento] += 1
                     : dados.valoresAgrupados[elemento] = 1
             })
@@ -425,7 +425,7 @@ btnCalcular.addEventListener('click', () => {
         let vet =[]
         let i = -1
         for (let data in dados.valoresAgrupados){
-            obj = {}
+            let obj = {}
             i += 1 
             obj[data] = dados.valoresAgrupados[data]
             obj['freqSimpPerc']= vetorFsPerc[i]
@@ -434,8 +434,6 @@ btnCalcular.addEventListener('click', () => {
             vet.push(obj)
         }
         dados.vetorObjetos = vet 
-
-        
         
         const sectionTabela = document.querySelector('.sectionTabela')
 
@@ -506,11 +504,12 @@ btnCalcular.addEventListener('click', () => {
         }
 
         criaTabela(dados.valoresAgrupados, vetorFsPerc, vetorFreAc, vetorFreAcPerc)
-        this.location = '#tabela'
+        window.scroll = '#tabela'
+
         let e = []
         let numero = Boolean
         for (let i = 0; i < dados.vetorValores.length; i++){
-            aux = dados.vetorValores[i]
+            let aux = dados.vetorValores[i]
             if (isNaN(aux) == true){
                 e = dados.vetorValores.sort()
                 numero = false
@@ -521,6 +520,7 @@ btnCalcular.addEventListener('click', () => {
             }
         }
 
+        let mediana
         if (numero == true){
             if(e.length % 2 == 0){
                 let esq = 0
@@ -557,6 +557,7 @@ btnCalcular.addEventListener('click', () => {
             }
         }
         
+        let media
         if (numero == true){
             let soma = 0
             for (let i = 0; i< e.length - 1; i++){
@@ -569,13 +570,13 @@ btnCalcular.addEventListener('click', () => {
         
         
         let au = []
-        for(data in dados.valoresAgrupados){
+        for(let data in dados.valoresAgrupados){
             au.push(dados.valoresAgrupados[data])
         }
         let a = au.reduce(function(a,b){return Math.max(a,b)})
         
         let auxiliar = []
-        for(dt in dados.valoresAgrupados){
+        for(let dt in dados.valoresAgrupados){
             if (dados.valoresAgrupados[dt] === a){
                 auxiliar.push(dt)
             }
