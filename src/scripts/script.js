@@ -1,6 +1,3 @@
-import dragNDropFile from './fileDrop.js'
-import { atualizarThumb } from './thumbnail.js'
-
 const formManual = document.querySelector('.formManual')
 const formArquivo = document.querySelector('.formArquivo')
 const textoErroNome = document.querySelector('[data-js=inputNome]')
@@ -13,15 +10,19 @@ let meuGrafico = null
 const inputNome = document.querySelector('#nomeVariavel')
 const inputValores = document.querySelector('#valores')
 const inputArquivo = document.querySelector('#inputArquivo')
+const selectSeparatriz = document.querySelector('#separatrizes')
+const inputRangeSeparatriz = document.querySelector('#range')
+const inputNumSeparatriz = document.querySelector('#numSeparatriz')
 const dropzone = document.querySelector('.dropzone')
-let arquivo // recebe os arquivos posteriormente
+let arquivo = null // recebe os arquivos posteriormente
 
 const btnCalcular = document.querySelector('#calcular')
 const btnLimpar = document.querySelector('.btnLimpar')
-const btnExcluirThumb = document.querySelector('.btnExcluir--thumb')
 const btnManual = document.querySelector('#btnManual')
 const btnArquivo = document.querySelector('#btnArquivo')
 
+const btnExcluirThumb = document.querySelector('.btnThumb')
+const btnExcluirPopup = document.querySelector('.btnPopup')
 
 let formAtivado = false
 let validacao = false
@@ -86,6 +87,48 @@ inputNome.addEventListener('change', () => {
     }
 })
 
+inputArquivo.addEventListener('change', () => {
+    arquivo = inputArquivo.files[0] || arquivoDrop
+    const nomeArq = arquivo.name
+
+    dropzone.classList.add('dragging')
+
+    atualizarThumb(nomeArq)
+    capturaDadosArquivo(arquivo)
+})
+
+dropzone.addEventListener('dragover', e => {
+    e.preventDefault()
+    dropzone.classList.add('dragging')
+})
+
+dropzone.addEventListener('dragleave', () => {
+    dropzone.classList.remove('dragging')
+})
+
+dropzone.addEventListener('drop', e => {
+    e.preventDefault()
+
+    let arquivoValido = false
+
+    const nomeArquivo = e.dataTransfer.files[0].name
+    const extensao = nomeArquivo
+        .substring(nomeArquivo
+            .lastIndexOf("."))
+            .toLowerCase()
+    
+    extensao == '.csv' ? arquivoValido = true : arquivoValido = false
+
+    if(arquivoValido) {
+        arquivo = e.dataTransfer.files[0]
+        atualizarThumb(nomeArquivo)
+        capturaDadosArquivo(arquivo)
+    }
+    else {
+        alert('Insira um arquivo .CSV')
+    }
+})
+
 const capturaDadosArquivo = arquivo => {
     const reader = new FileReader()
         
@@ -95,27 +138,22 @@ const capturaDadosArquivo = arquivo => {
         vetorValoresArquivo = reader.result.split('\n')
     }
 }
+const atualizarThumb = (nomeArquivo) => {
+    document.querySelector('.nomeArquivo--thumb').innerText = nomeArquivo
 
-dragNDropFile(dropzone, arquivo, atualizarThumb, capturaDadosArquivo)
+    document.querySelector('.textoDropzone').classList.add('esconder')
+    document.querySelector('.thumbnail').classList.remove('esconder')
+}
 
-inputArquivo.addEventListener('change', () => {
-    arquivo = inputArquivo.files[0]
-    const nomeArq = arquivo.name
-
-    dropzone.classList.add('dragging')
-
-    atualizarThumb(nomeArq)
-    capturaDadosArquivo(arquivo)
-})
-
-
-btnExcluirThumb.addEventListener('click', () => {
+const excluirThumb = () => {
     arquivo = null
     validacao = false
-    document.querySelector('.dragging').classList.remove('dragging')
+    document.querySelector('.dropzone').classList.remove('dragging')
     document.querySelector('.textoDropzone').classList.remove('esconder')
     document.querySelector('.thumbnail').classList.add('esconder')
-}) 
+}
+
+btnExcluirThumb.addEventListener('click', excluirThumb) 
 
 // ----------Drag N Drop da tabela Ordinal--------- \\
 /* Funções responsáveis por fazer drag n drop da tabela
@@ -182,6 +220,9 @@ function atualizarTabela(tabela) {
         })
     })
 }
+
+btnExcluirPopup.addEventListener('click', () => document.querySelector('.popup')
+    .classList.add('esconder'))
 
 // ----------Gráficos--------- \\
 // Funções para gerar os Graficos
@@ -301,6 +342,44 @@ function editarLabelComPorcent(tooltipItem, data) {
     return label;
 }
 
+// ----------Controlador Separatrizes--------- \\
+function defineValoresInputSeparatrizes(input, value) {
+    input.min = value
+    input.step = value
+    input.value = value
+}
+selectSeparatriz.addEventListener('change', () => {
+   switch (selectSeparatriz.value) {
+        case 'quartil':
+            defineValoresInputSeparatrizes(inputNumSeparatriz, 25)
+            defineValoresInputSeparatrizes(inputRangeSeparatriz, 25)
+            break;
+
+        case 'quintil':
+            defineValoresInputSeparatrizes(inputNumSeparatriz, 20)
+            defineValoresInputSeparatrizes(inputRangeSeparatriz, 20)
+            break;
+
+        case 'decil':
+            defineValoresInputSeparatrizes(inputNumSeparatriz, 10)
+            defineValoresInputSeparatrizes(inputRangeSeparatriz, 10)
+            break;
+    
+        case 'percentil':
+            defineValoresInputSeparatrizes(inputNumSeparatriz, 1)
+            defineValoresInputSeparatrizes(inputRangeSeparatriz, 1)
+            break;
+   }
+})
+
+inputRangeSeparatriz.addEventListener('input', () => {
+    inputNumSeparatriz.value = inputRangeSeparatriz.value
+})
+
+inputNumSeparatriz.addEventListener('input', () => {
+    inputRangeSeparatriz.value = inputNumSeparatriz.value
+})
+
 // Botão calcular, responsável por realizar os calculos, gerar tabela e gráficos
 btnCalcular.addEventListener('click', () => {
     if(tipoForm == 'manual') {
@@ -321,6 +400,7 @@ btnCalcular.addEventListener('click', () => {
         else {
             dados.nome = inputNome.value.trim()
             vetorValoresArquivo = inputValores.value.trim().split(';')
+            vetorValoresArquivo = vetorValoresArquivo.filter(elemento => elemento != '')
             dados.vetorValores = vetorValoresArquivo.map(elemento => elemento.trim()) 
 
             validacao = true
@@ -500,11 +580,9 @@ btnCalcular.addEventListener('click', () => {
                 }
             } 
             sectionTabela.appendChild(novaTabela)
-            
         }
 
         criaTabela(dados.valoresAgrupados, vetorFsPerc, vetorFreAc, vetorFreAcPerc)
-        window.scroll = '#tabela'
 
         let e = []
         let numero = Boolean
@@ -629,11 +707,16 @@ btnCalcular.addEventListener('click', () => {
             }
 
         if(dados.tipoVar == 'ordinal') {
+            document.querySelector('.popup').classList.remove('esconder')
             editarTabela()
         }
     
         if(sectionGrafico.classList.contains('esconder')) {
             sectionGrafico.classList.remove('esconder')
+        }
+
+        if(document.querySelector('.sectionSeparatrizes').classList.contains('esconder')) {
+            document.querySelector('.sectionSeparatrizes').classList.remove('esconder')
         }
         
         //zerar variaveis
@@ -646,4 +729,8 @@ btnCalcular.addEventListener('click', () => {
         
         formDescritiva.reset()
     }
+    excluirThumb()
 })
+
+
+//

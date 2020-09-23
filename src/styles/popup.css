@@ -1,0 +1,93 @@
+.btnExcluir {
+    padding: 5px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: none;
+    outline: none;
+
+    background-color: #6C63FF;
+    color: #fff;
+    font-size: 10pt;
+    line-height: 10px;
+
+    position: absolute;
+    cursor: pointer;
+}
+
+.popup {
+    display: flex;
+    padding: 15px;
+
+    min-width: 220px;
+    max-width: 250px;
+    height: 80px;
+    border-radius: 10px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+
+    background-color: #ffffff;
+    box-shadow: 3px 3px 5px #00000040;
+
+    animation-duration: 1s;
+    animation-name: slidein;
+}
+
+@keyframes slidein {
+    from {
+        margin-bottom: -10%;
+        max-width: 250px ;
+    }
+
+    to {
+        margin-bottom: 0%;
+        max-width: 250px ;
+    }
+}
+
+.popup span{
+    font-family: sans-serif;
+    font-weight: bold;
+    color: #555;
+}
+
+.destaque {
+    color: #6C63FF !important;
+}
+
+.btnExcluir.btnPopup {
+    top: -8px;
+    right: -8px;
+}
+
+/* THUMBNAIL */
+
+.thumbnail {
+    display: flex;
+    padding: 10px;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+}
+
+.nomeArquivo--thumb {
+    font-size: 12pt;
+    font-family: sans-serif;
+    font-weight: bolder;
+    color: #6C63FF;
+    text-transform: uppercase;
+}
+
+.btnExcluir.btnThumb {
+    top: -5px;
+    right: -25px;
+}
+
+.btnExcluir:hover {
+    background-color: #4E45E1;
+}

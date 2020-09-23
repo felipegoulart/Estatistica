@@ -73,6 +73,26 @@ tr:hover {
     opacity: .3;
 }
 
+.sectionSeparatrizes {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    min-width: 30%;
+    max-width: 500px;
+    margin: 0 auto 50px auto;
+    justify-content: space-around;    
+}
+
+.sectionSeparatrizes input {
+    max-width: 100px;
+    margin: 0 10px;
+    outline: none;
+}
+
+.sectionSeparatrizes #numSeparatriz {
+    width: 51px;
+}
+
 /* Estilos do gráfico */
 .sectGrafico {
     display: flex;

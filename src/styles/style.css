@@ -9,7 +9,7 @@ html{
  }
 
 body {
-    background-color: #f9f9f9;
+    background-color: #efefef;
 }
 
 p ,h1, h2, h3, h4, input, button, legend, label, option {
@@ -23,7 +23,7 @@ p ,h1, h2, h3, h4, input, button, legend, label, option {
     flex-direction: column;
     justify-content: center;
     align-content: center;
-    background-color: #f9f9f9;
+    background-color: #efefef;
 }
 
 form {
@@ -135,6 +135,7 @@ label {
 
 select {
     height: 38px;
+    width: 90px;
     align-self: flex-end;
     background: none;
     border: none;
