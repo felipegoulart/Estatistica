@@ -83,6 +83,29 @@ tr:hover {
     justify-content: space-around;    
 }
 
+.resultadoSeparatriz {
+    display: block;
+    width: 110px;
+    position: relative;
+}
+
+#resultSepara {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+.resultadoSeparatriz input ~ label {
+    top: -2px;
+    left: 10px;
+    position: absolute;
+
+    color: #444;
+
+    font-weight: bold;
+}
+
+
 .sectionSeparatrizes input {
     max-width: 100px;
     margin: 0 10px;
