@@ -539,29 +539,79 @@ btnCalcular.addEventListener('click', () => {
             aux = dados.vetorValores[i]
             if (isNaN(aux) == true){
                 e = dados.vetorValores.sort()
-                numero = false
             }
             else{
                 e = dados.vetorValores.sort((a,b) => a-b)
-                numero = true
             }
         }
+        
+        let u = []
+        let w = []
+        let ex = []
+        let ponto = []
+        let fi = []
+        let soma = 0    
+        let fant = 0
+        let fimd = 0
+        let h = 0
+        let f = 0
+        let med = 0
+        let media = 0
 
-        if (numero == true){
-            if(e.length % 2 == 0){
-                let esq = 0
-                let dir = e.length - 1
-                let meio = 0 
-                meio = Math.trunc((esq+dir)/2)
-                mediana = ((e[meio] + e[meio+1])/2).toFixed(1)
-            }else{
-                let esq = 0
-                let dir = e.length - 1
-                let meio = 0 
-                meio = Math.trunc((esq+dir)/2)
-                mediana = e[meio]
+        if (dados.tipoVar === 'discreta'){
+            for (dt in dados.valoresAgrupados){
+                u.push(parseInt(dt))
+                w.push(dados.valoresAgrupados[dt])
+                 
             }
-        }else {
+            for ( var o = 0; o < u.length; o++){
+                f = parseInt(w[o]) * parseInt(u[o])
+                ex.push(f)
+            }   
+            soma = ex.reduce((total, currentElement) => total + currentElement)
+            media = (soma/ vetorFreAc[vetorFreAc.length - 1]).toFixed(2)
+            meio = (vetorFreAc[vetorFreAc.length -1]/2).toFixed()
+            e = dados.vetorValores.sort((a,b) => a-b)
+            mediana = e[meio]
+
+        } else if (dados.tipoVar === 'continua'){
+            for (dt in dados.valoresAgrupados){
+                ex.push((dt.split(' |--- ')))
+                fi.push(dados.valoresAgrupados[dt])
+            }
+            med  = Math.trunc(vetorFreAc[vetorFreAc.length-1] /2)
+            let x = e[med]
+            for (num in ex){
+                u.push(parseInt(ex[num][0]))
+                w.push(parseInt(ex[num][1]))   
+            }
+            for (let z = 0; z <= u.length; z++){
+                if (x>= u[z] && x< w[z]){
+                    f = u[z]
+                    fant = fi[z-1]
+                    fimd = fi[z]
+                    h = w[z] - u[z]
+                    break
+                }
+                
+            }
+            mediana = (f + (((med - fant)/fimd)*h)).toFixed(2)
+
+            for(let q = 0; q < u.length;q++){
+                ponto.push((u[q] + w[q])/2)
+                soma = soma + (ponto[q]*fi[q])
+            }
+            media = (soma / vetorFreAc[vetorFreAc.length - 1]).toFixed(1)
+            let au = []
+            for(data in dados.valoresAgrupados){
+                au.push(dados.valoresAgrupados[data])
+            }
+            let a = au.reduce(function(a,b){return Math.max(a,b)})
+            let t = au.indexOf(a)
+            moda = ((u[t] + w[t])/2).toFixed(0)
+        }else{
+            media = ['Não Possui média']
+
             if(e.length % 2 == 0){
                 let esq = 0
                 let dir = e.length - 1
@@ -581,85 +631,31 @@ btnCalcular.addEventListener('click', () => {
                 mediana = e[meio]
                 console.log(meio)
             }
-        }
-        let moda = []
-        let au = []
-        for(data in dados.valoresAgrupados){
-            au.push(dados.valoresAgrupados[data])
-        }
-        let a = au.reduce(function(a,b){return Math.max(a,b)})
-        
-        let auxiliar = []
-        for(dt in dados.valoresAgrupados){
-            if (dados.valoresAgrupados[dt] === a){
-                auxiliar.push(dt)
-            }
-        }
-        
-        if (auxiliar.length === au.length){
-            moda.push('Estes dados são amodais')
-        }else{
-            moda = auxiliar
-        }
 
-        let u = []
-        let w = []
-        let ex = []
-        let ponto = []
-        let fi = []
-        let soma = 0 
-        let o = 0 
-        let fant = 0
-        let fimd = 0
-        let h = 0
-        let f = 0
-        
-        if (dados.tipoVar === 'discreta'){
-            for (dt in dados.valoresAgrupados){
-                u.push(parseInt(dt))
-                w.push(dados.valoresAgrupados[dt])
-                soma = soma + (w[o] * u[o])
-                o + 1 
-            }   
-            media = (soma / vetorFreAc[vetorFreAc.length - 1]).toFixed(2)
-            
-        } else if (dados.tipoVar === 'continua'){
-            for (dt in dados.valoresAgrupados){
-                ex.push((dt.split(' |--- ')))
-                fi.push(dados.valoresAgrupados[dt])
-            }
-
-            for (num in ex){
-                u.push(parseInt(ex[num][0]))
-                w.push(parseInt(ex[num][1]))
-                if (e[vetorFreAc-1/2] > ex[num][0] && e[vetorFreAc-1/2] > ex[num][1]){
-                    f = ex[num][0]
-                    fant = fi[o-1]
-                    fimd = fi[o]
-                    h = ex[num][0] - ex[num][1]
-                }
-                o+1
-            }
-            for(let q = 0; q < u.length;q++){
-                ponto.push((u[q] + w[q])/2)
-                soma = soma + (ponto[q]*fi[q])
-            }
-            media = (soma / vetorFreAc[vetorFreAc.length - 1]).toFixed(2)
-            let med  = vetorFreAc /2
-
-            mediana = f + (((med - fant)/fimd).h)
+            let moda = []
             let au = []
-        for(data in dados.valoresAgrupados){
-            au.push(dados.valoresAgrupados[data])
-        }
-        let a = au.reduce(function(a,b){return Math.max(a,b)})
-        let t = au.indexOf(a)
-        moda = (u[t] + w[t])/2
+            for(data in dados.valoresAgrupados){
+                au.push(dados.valoresAgrupados[data])
+            }
+            let a = au.reduce(function(a,b){return Math.max(a,b)})
+            
+            let auxiliar = []
+            for(dt in dados.valoresAgrupados){
+                if (dados.valoresAgrupados[dt] === a){
+                    auxiliar.push(dt)
+                }
+            }
+            
+            if (auxiliar.length === au.length){
+                moda.push('Estes dados são amodais')
+            }else{
+                moda = auxiliar
+            }
         }
         
+        
 
-
-        function criaCaixasDeMedias (medias = [media,moda,mediana]) {
+        function criaCaixasDeMedias (medias = [null,null,null]) {
             const textoMedias = ['Média', 'Moda', 'Mediana']
             const areaCaixas = document.createElement('div')
 
@@ -676,7 +672,7 @@ btnCalcular.addEventListener('click', () => {
             }
             sectionTabela.appendChild(areaCaixas)
         }
-        criaCaixasDeMedias()
+        criaCaixasDeMedias([media,moda,mediana])
         
         let vetorNomeCol = []
         for(let nomeCol in dados.valoresAgrupados) {
