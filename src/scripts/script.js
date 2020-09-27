@@ -534,7 +534,6 @@ btnCalcular.addEventListener('click', () => {
 
         criaTabela(dados.valoresAgrupados, vetorFsPerc, vetorFreAc, vetorFreAcPerc)
         let e = []
-        let numero = Boolean
         for (let i = 0; i < dados.vetorValores.length; i++){
             aux = dados.vetorValores[i]
             if (isNaN(aux) == true){
@@ -557,6 +556,26 @@ btnCalcular.addEventListener('click', () => {
         let f = 0
         let med = 0
         let media = 0
+        let moda = null
+        let se = 0
+        let desvio = 0
+        let cv = 0 
+        let separatriz = 'percentil'
+        let quadrante = 80
+        switch (separatriz){
+            case 'quartil':
+                se = (quadrante*(vetorFreAc[vetorFreAc.length -1]/4)).toFixed()
+                break
+            case 'quintil':
+                se = (quadrante*(vetorFreAc[vetorFreAc.length -1]/5)).toFixed()
+                break
+            case 'decil':
+                se = (quadrante*(vetorFreAc[vetorFreAc.length -1]/10)).toFixed()
+                break
+            case 'percentil':
+                se = (quadrante*(vetorFreAc[vetorFreAc.length -1]/100)).toFixed()
+                break
+        }
 
         if (dados.tipoVar === 'discreta'){
             for (dt in dados.valoresAgrupados){
@@ -564,6 +583,8 @@ btnCalcular.addEventListener('click', () => {
                 w.push(dados.valoresAgrupados[dt])
                  
             }
+            let ax = 0
+            let z =[]
             for ( var o = 0; o < u.length; o++){
                 f = parseInt(w[o]) * parseInt(u[o])
                 ex.push(f)
@@ -573,6 +594,34 @@ btnCalcular.addEventListener('click', () => {
             meio = (vetorFreAc[vetorFreAc.length -1]/2).toFixed()
             e = dados.vetorValores.sort((a,b) => a-b)
             mediana = e[meio]
+            let au = []
+            for(data in dados.valoresAgrupados){
+                au.push(dados.valoresAgrupados[data])
+            }
+            let a = au.reduce(function(a,b){return Math.max(a,b)})
+            for(dt in dados.valoresAgrupados){
+                if (dados.valoresAgrupados[dt] === a){
+                    moda = dt
+                }
+            }
+            sep = e[se]
+            if (dados.tipoCalc === 'populacao'){
+                for (var o = 0; o < u.length; o++){
+                    ax = (u[o] - media)**2 * w[o]
+                    z.push(ax)
+                }
+                soma = z.reduce((total, currentElement) => total + currentElement)
+                desvio = Math.sqrt(soma/vetorFreAc[vetorFreAc.length - 1]).toFixed(2)
+                cv = ((desvio/media)*100).toFixed(2)
+            }else{
+                for (var o = 0; o < u.length; o++){
+                    ax = (u[o] - media)**2 * w[o]
+                    z.push(ax)
+                }
+                soma = z.reduce((total, currentElement) => total + currentElement)
+                desvio = Math.sqrt(soma/(vetorFreAc[vetorFreAc.length - 1] - 1)).toFixed(2)
+                cv = ((desvio/media)*100).toFixed(2)
+            }
 
         } else if (dados.tipoVar === 'continua'){
             for (dt in dados.valoresAgrupados){
@@ -588,15 +637,20 @@ btnCalcular.addEventListener('click', () => {
             for (let z = 0; z <= u.length; z++){
                 if (x>= u[z] && x< w[z]){
                     f = u[z]
-                    fant = fi[z-1]
+                    if ((z-1) != -1){
+                        fant = fi[z-1]
+                    }else{
+                        fant = 0
+                    }
                     fimd = fi[z]
                     h = w[z] - u[z]
                     break
                 }
                 
             }
+            
             mediana = (f + (((med - fant)/fimd)*h)).toFixed(2)
-
+            sep = (f + (((se - fant)/fimd)*h)).toFixed(2)
             for(let q = 0; q < u.length;q++){
                 ponto.push((u[q] + w[q])/2)
                 soma = soma + (ponto[q]*fi[q])
@@ -609,6 +663,25 @@ btnCalcular.addEventListener('click', () => {
             let a = au.reduce(function(a,b){return Math.max(a,b)})
             let t = au.indexOf(a)
             moda = ((u[t] + w[t])/2).toFixed(0)
+            let v = []
+            let xi = []
+            for (var p = 0; p < u.length; p++){
+                ax = parseInt((u[p] + w[p])/2).toFixed(0)
+                xi.push(ax)
+                v.push(xi[p] * au[p])
+            }
+            soma = v.reduce((total, currentElement) => total + currentElement)
+            let medDesvio = 0
+            medDesvio = (soma/vetorFreAc[vetorFreAc.length  - 1]).toFixed(2)
+            let z = []
+            for (var o = 0; o < u.length; o++){
+                ax = (xi[o] - medDesvio)**2 * au[o]
+                z.push(ax)
+            }
+            soma = z.reduce((total, currentElement) => total + currentElement)
+            desvio = Math.sqrt(soma/vetorFreAc[vetorFreAc.length - 1]).toFixed(2)
+            cv = ((desvio/media)*100).toFixed(2)
+            
         }else{
             media = ['Não Possui média']
 
@@ -632,28 +705,30 @@ btnCalcular.addEventListener('click', () => {
                 console.log(meio)
             }
 
-            let moda = []
             let au = []
             for(data in dados.valoresAgrupados){
                 au.push(dados.valoresAgrupados[data])
             }
             let a = au.reduce(function(a,b){return Math.max(a,b)})
-            
+                
             let auxiliar = []
             for(dt in dados.valoresAgrupados){
                 if (dados.valoresAgrupados[dt] === a){
                     auxiliar.push(dt)
                 }
             }
-            
+                
             if (auxiliar.length === au.length){
                 moda.push('Estes dados são amodais')
             }else{
                 moda = auxiliar
             }
+            sep = e[se]
+               
+
         }
         
-        
+
 
         function criaCaixasDeMedias (medias = [null,null,null]) {
             const textoMedias = ['Média', 'Moda', 'Mediana']
@@ -673,7 +748,9 @@ btnCalcular.addEventListener('click', () => {
             sectionTabela.appendChild(areaCaixas)
         }
         criaCaixasDeMedias([media,moda,mediana])
-        
+        console.log(e)
+        console.log(se)
+        console.log(sep)    
         let vetorNomeCol = []
         for(let nomeCol in dados.valoresAgrupados) {
             vetorNomeCol.push(nomeCol)
