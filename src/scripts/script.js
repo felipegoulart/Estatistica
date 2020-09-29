@@ -13,6 +13,7 @@ import {
     optGraficoPizza 
 } from './graficos.js'
 import tratarDados from './tratarDados.js'
+import calculos from './calculos.js'
 
 const formManual = document.querySelector('.formManual')
 const formArquivo = document.querySelector('.formArquivo')
@@ -267,20 +268,11 @@ btnCalcular.addEventListener('click', () => {
             vetorFreAcPerc
         )
 
-        let e = []
-        for (let i = 0; i < dados.vetorDados.length; i++){
-            let aux = dados.vetorDados[i]
-            if (isNaN(aux) == true){
-                e = dados.vetorDados.sort()
-            }
-            else{
-                e = dados.vetorDados.sort((a,b) => a-b)
-            }
-        }
         
+        let e
         let u = [], w = [], ex = [], ponto = [], fi = []
         let soma = 0, fant = 0, fimd = 0, h = 0, f = 0
-        let med = 0, mediana = 0, sep = 0, media = 0, moda = 0
+        let med = 0, mediana, sep, media, moda
         let ax = 0
         let se = 0
         let desvio = 0
@@ -292,13 +284,13 @@ btnCalcular.addEventListener('click', () => {
 
         switch (separatriz){
             case 'quartil':
-                se = (quadrante*(vetorFreAc[vetorFreAc.length -1]/4)).toFixed()
+                se = (quadrante*(vetorFreAc[vetorFreAc.length -1]/100)).toFixed()
                 break
             case 'quintil':
-                se = (quadrante*(vetorFreAc[vetorFreAc.length -1]/5)).toFixed()
+                se = (quadrante*(vetorFreAc[vetorFreAc.length -1]/100)).toFixed()
                 break
             case 'decil':
-                se = (quadrante*(vetorFreAc[vetorFreAc.length -1]/10)).toFixed()
+                se = (quadrante*(vetorFreAc[vetorFreAc.length -1]/100)).toFixed()
                 break
             case 'percentil':
                 se = (quadrante*(vetorFreAc[vetorFreAc.length -1]/100)).toFixed()
@@ -306,154 +298,16 @@ btnCalcular.addEventListener('click', () => {
         }
 
         if (dados.tipoVar === 'discreta'){
-            for (let dt in dados.valoresAgrupados){
-                u.push(parseInt(dt))
-                w.push(dados.valoresAgrupados[dt])
-                 
-            }
-            let z =[]
-            for (let o = 0; o < u.length; o++){
-                f = parseInt(w[o]) * parseInt(u[o])
-                ex.push(f)
-            }   
-            soma = ex.reduce((total, currentElement) => total + currentElement)
-            media = (soma/ vetorFreAc[vetorFreAc.length - 1]).toFixed(2)
-            meio = (vetorFreAc[vetorFreAc.length -1]/2).toFixed()
-            e = dados.vetorDados.sort((a,b) => a-b)
-            mediana = e[meio]
-            let au = []
-            for(data in dados.valoresAgrupados){
-                au.push(dados.valoresAgrupados[data])
-            }
-            let a = au.reduce(function(a,b){return Math.max(a,b)})
-            for(dt in dados.valoresAgrupados){
-                if (dados.valoresAgrupados[dt] === a){
-                    moda = dt
-                }
-            }
-            sep = e[se]
-            if (dados.tipoCalc === 'populacao'){
-                for (var o = 0; o < u.length; o++){
-                    ax = (u[o] - media)**2 * w[o]
-                    z.push(ax)
-                }
-                soma = z.reduce((total, currentElement) => total + currentElement)
-                desvio = Math.sqrt(soma/vetorFreAc[vetorFreAc.length - 1]).toFixed(2)
-                cv = ((desvio/media)*100).toFixed(2)
-            }else{
-                for (var o = 0; o < u.length; o++){
-                    ax = (u[o] - media)**2 * w[o]
-                    z.push(ax)
-                }
-                soma = z.reduce((total, currentElement) => total + currentElement)
-                desvio = Math.sqrt(soma/(vetorFreAc[vetorFreAc.length - 1] - 1)).toFixed(2)
-                cv = ((desvio/media)*100).toFixed(2)
-            }
 
         } else if (dados.tipoVar === 'continua'){
-            for (let dt in dados.valoresAgrupados){
-                ex.push((dt.split(' |--- ')))
-                fi.push(dados.valoresAgrupados[dt])
-            }
-            med  = Math.trunc(vetorFreAc[vetorFreAc.length-1] /2)
-            let x = e[med]
-            for (let num in ex){
-                u.push(parseInt(ex[num][0]))
-                w.push(parseInt(ex[num][1]))   
-            }
-            for (let z = 0; z <= u.length; z++){
-                if (x>= u[z] && x< w[z]){
-                    f = u[z]
-                    if ((z-1) != -1){
-                        fant = fi[z-1]
-                    }else{
-                        fant = 0
-                    }
-                    fimd = fi[z]
-                    h = w[z] - u[z]
-                    break
-                }
-                
-            }
             
-            mediana = (f + (((med - fant)/fimd)*h)).toFixed(2)
-            sep = (f + (((se - fant)/fimd)*h)).toFixed(2)
-            for(let q = 0; q < u.length;q++){
-                ponto.push((u[q] + w[q])/2)
-                soma = soma + (ponto[q]*fi[q])
-            }
-            media = (soma / vetorFreAc[vetorFreAc.length - 1]).toFixed(1)
-            let au = []
-            for(let data in dados.valoresAgrupados){
-                au.push(dados.valoresAgrupados[data])
-            }
-            let a = au.reduce(function(a,b){return Math.max(a,b)})
-            let t = au.indexOf(a)
-            moda = ((u[t] + w[t])/2).toFixed(0)
-            let v = []
-            let xi = []
-            for (var p = 0; p < u.length; p++){
-                ax = parseInt((u[p] + w[p])/2).toFixed(0)
-                xi.push(ax)
-                v.push(xi[p] * au[p])
-            }
-            soma = v.reduce((total, currentElement) => total + currentElement)
-            let medDesvio = 0
-            medDesvio = (soma/vetorFreAc[vetorFreAc.length  - 1]).toFixed(2)
-            let z = []
-            for (var o = 0; o < u.length; o++){
-                ax = (xi[o] - medDesvio)**2 * au[o]
-                z.push(ax)
-            }
-            soma = z.reduce((total, currentElement) => total + currentElement)
-            desvio = Math.sqrt(soma/vetorFreAc[vetorFreAc.length - 1]).toFixed(2)
-            cv = ((desvio/media)*100).toFixed(2)
-            
-        }else{
-            media = ['Não Possui média']
-
-            if(e.length % 2 == 0){
-                let esq = 0
-                let dir = e.length - 1
-                let meio = 0 
-                meio = Math.trunc((esq+dir)/2)
-                if (e[meio] == e[meio+1]){
-                mediana =[e[meio]]
-                }else{
-                    mediana = [e[meio],e[meio+1]]
-                }
-                
-            }else{
-                let esq = 0
-                let dir = e.length - 1
-                let meio = 0 
-                meio = Math.trunc((esq+dir)/2)
-                mediana = e[meio]
-            }
-
-            let au = []
-            for(let data in dados.valoresAgrupados){
-                au.push(dados.valoresAgrupados[data])
-            }
-            let a = au.reduce(function(a,b){return Math.max(a,b)})
-                
-            let auxiliar = []
-            for(let dt in dados.valoresAgrupados){
-                if (dados.valoresAgrupados[dt] === a){
-                    auxiliar.push(dt)
-                }
-            }
-                
-            if (auxiliar.length === au.length){
-                moda.push('Estes dados são amodais')
-            }else{
-                moda = auxiliar
-            }
-            sep = e[se]
-               
-
+        } else{
+            [mediana, media, moda, sep] = calculos
+                .calculaSeparatrizQualitativa(dados)
         }
         
+        console.log(sep);
+
         criaCaixasDeMedias([media,moda,mediana])
         let vetorNomeCol = []
         for(let nomeCol in dados.valoresAgrupados) {
@@ -462,17 +316,25 @@ btnCalcular.addEventListener('click', () => {
 
         switch (dados.tipoVar){
             case 'nominal':
-                geraGrafico(areaGrafico, 'pie', vetorNomeCol, vetorFsPerc, 'Qualitativa Nominal', optGraficoPizza())
+                geraGrafico(areaGrafico, 'pie', vetorNomeCol, 
+                    vetorFsPerc, 'Qualitativa Nominal', optGraficoPizza())
                 break
+
             case 'ordinal':
-                geraGrafico(areaGrafico, 'pie', vetorNomeCol, vetorFsPerc, 'Qualitativa Ordinal', optGraficoPizza())
+                geraGrafico(areaGrafico, 'pie', vetorNomeCol, 
+                    vetorFsPerc, 'Qualitativa Ordinal', optGraficoPizza())
                 break
+
             case 'discreta': 
-                geraGrafico(areaGrafico, 'bar', vetorNomeCol, vetorFsPerc, 'Quantitativa Discreta', optGraficoColuna())
+                geraGrafico(areaGrafico, 'bar', vetorNomeCol, 
+                    vetorFsPerc, 'Quantitativa Discreta', optGraficoColuna())
                 break
+
             case 'continua': 
-                geraGraficoContinua(areaGrafico, 'bar', vetorNomeCol, vetorFsPerc, 'Quantitativa Contínua', optGraficoColuna())
+                geraGraficoContinua(areaGrafico, 'bar', vetorNomeCol, 
+                    vetorFsPerc, 'Quantitativa Contínua', optGraficoColuna())
                 break
+
             }
 
         if(dados.tipoVar == 'ordinal') {
