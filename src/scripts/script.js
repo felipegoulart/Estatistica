@@ -1,11 +1,18 @@
 import { dropFile } from './dropArquivo.js'
-import { editarTabela } from './tabelas.js'
+import funcoesTratarDados from './tratarDados.js'
+import funcoesCalculo from './calculos.js'
+import { 
+    criaTabela, 
+    editarTabela, 
+    criaCaixasDeMedias 
+} from './tabelas.js'
 import { 
     geraGrafico, 
     geraGraficoContinua, 
     optGraficoColuna, 
     optGraficoPizza 
 } from './graficos.js'
+import tratarDados from './tratarDados.js'
 
 const formManual = document.querySelector('.formManual')
 const formArquivo = document.querySelector('.formArquivo')
@@ -18,6 +25,7 @@ const areaGrafico = document.querySelector('#grafico')
 const inputNome = document.querySelector('#nomeVariavel')
 const inputValores = document.querySelector('#valores')
 const inputArquivo = document.querySelector('#inputArquivo')
+
 const selectSeparatriz = document.querySelector('#separatrizes')
 const inputRangeSeparatriz = document.querySelector('#range')
 const inputNumSeparatriz = document.querySelector('#numSeparatriz')
@@ -39,14 +47,15 @@ let tipoForm = null
 
 const dados = {
     nome: '',
-    vetorValores: [],
+    vetorDados: [],
     tipoVar: '',
     tipoCalc: '',
     valoresAgrupados: {},
     vetorObjetos: null
 }
 
-let vetorValoresArquivo = []
+let vetorValoresInput = []
+let nome, valores
 
 // ----------Revelar Formulário--------- \\
 // Ativar formulário para inserção de dados
@@ -111,7 +120,7 @@ const capturaDadosArquivo = arquivo => {
     reader.readAsText(arquivo)
     
     reader.onloadend = () => {
-        vetorValoresArquivo = reader.result.split('\n')
+        vetorValoresInput = reader.result.split('\n')
     }
 }
 
@@ -141,7 +150,8 @@ function excluirThumb () {
     document.querySelector('.thumbnail').classList.add('esconder')
 }
 
-btnExcluirThumb.addEventListener('click', excluirThumb) 
+btnExcluirThumb.addEventListener('click', excluirThumb)
+btnLimpar.addEventListener('click', excluirThumb)
 
 btnExcluirPopup.addEventListener('click', () => document.querySelector('.popup')
     .classList.add('esconder'))
@@ -184,29 +194,31 @@ inputNumSeparatriz.addEventListener('input', () => {
     inputRangeSeparatriz.value = inputNumSeparatriz.value
 })
 
+
 // Botão calcular, responsável por realizar os calculos, gerar tabela e gráficos
 btnCalcular.addEventListener('click', () => {
     if(tipoForm == 'manual') {
         if(!inputNome.value.trim()) {
             inputNome.classList.add('erro')
             inputNome.focus()
+
             textoErroNome.classList.add('erro')
             textoErroNome.innerText = 'Preencha o NOME'
+
             validacao = false
         }
         else if (!inputValores.value.trim()) {
             inputValores.classList.add('erro')
             inputValores.focus()
+
             textoErroValor.classList.add('erro')
             textoErroValor.innerText = 'Preencha os VALORES'
+
             validacao = false
         }
         else {
-            dados.nome = inputNome.value.trim()
-            vetorValoresArquivo = inputValores.value.trim().split(';')
-            vetorValoresArquivo = vetorValoresArquivo.filter(elemento => elemento != '')
-            dados.vetorValores = vetorValoresArquivo.map(elemento => elemento.trim()) 
-
+            [nome, valores] = funcoesTratarDados // Recebe os dados limpos dos inputs 
+                .capturaDadosInputManual(inputValores, inputNome)
             validacao = true
         }
     }
@@ -217,118 +229,52 @@ btnCalcular.addEventListener('click', () => {
             validacao = false
         }
         else {
-            dados.nome = vetorValoresArquivo.shift()
-            dados.vetorValores = vetorValoresArquivo.filter(elemento => elemento != '')
-            
+            [nome, valores] = funcoesTratarDados // Recebe os dados limpos do arquivo 
+                .separarDadosArquivo(vetorValoresInput)
             validacao = true
             
         }
     }
-
-    // Atributos para calculo.
-    // Mesma atribuição de valor independendo se é manual ou arquivo.
-    dados.tipoVar = document.querySelector
-            ('input[name="tipoVariavel"]:checked').value
+    // Atribuindo os dados limpos capturados anteriormente
+    dados.nome = nome
+    dados.vetorDados = valores
+    dados.tipoVar = document.querySelector('input[name="tipoVariavel"]:checked').value
     dados.tipoCalc = document.querySelector('#tipoCalculo').value
-
+    
     // Caso Todas as entradas estejam validadas ele executa os calculos.
     if (validacao) {
-        if (dados.tipoVar == 'continua'){
-            dados.vetorValores = dados.vetorValores.map(elemento => Number(elemento))        
-            const calculaIntervalo = valores => {
-                const vetor = valores.sort((a, b) => a-b)
-                const menor = vetor[0], maior = vetor[vetor.length -1]
-                let amplitude = maior - menor
-                
-                const j = Math.trunc(vetor.length ** 0.5)
-                const i = j -1
-                const k = j +1
+        if (dados.tipoVar == 'continua') funcoesCalculo
+            .calculaContinua(dados)
 
-                do {
-                    amplitude++
-                    if(amplitude % i == 0) {
-                        return [i, amplitude / i]
-                    }
-                    else if(amplitude % j == 0) {
-                        return [j, amplitude / j]
-                    }
-                    else if(amplitude % k == 0) {
-                        return [k, amplitude / k]
-                    }
-                } while (amplitude < maior)
-            }
-
-            
-            const [linhas, intervalo] = calculaIntervalo(dados.vetorValores)
-
-            let inicio = null
-            let fim = null
+        // A soma da Frequência simples é igual para todas menos Continua
+        else  funcoesCalculo.calculaFreqSi(dados)
         
-            for(let i = 0; i < linhas; i++ ) {
-                !inicio ? inicio = dados.vetorValores[0] : inicio = fim
-                fim = inicio + intervalo
-        
-                const nomeAtributo = `${inicio} |--- ${fim}`
-        
-                dados.vetorValores.forEach(elemento => {
-                    if(elemento >= inicio && elemento < fim) {
-                        !dados.valoresAgrupados[nomeAtributo] ? dados.valoresAgrupados[nomeAtributo] = 1
-                            : dados.valoresAgrupados[nomeAtributo] += 1
-                    }
-                })
-            }
-        }
-        else {
-            dados.vetorValores.forEach(elemento => {
-                dados.valoresAgrupados[elemento] ? dados.valoresAgrupados[elemento] += 1
-                    : dados.valoresAgrupados[elemento] = 1
-            })
-        } 
+        const [vetorFsPerc, vetorFreAc, vetorFreAcPerc] = funcoesCalculo
+            .calcFreqPercent(dados)
 
-        // Responsável pelos calculos das frequencias
-        let vetorFsPerc = []
-        let vetorFreAc = []
-        let vetorFreAcPerc = []
-        let x, y = 0 
-        let z = 0
-        let r = -1
-        
-        for (let v in dados.valoresAgrupados){
-            x =((dados.valoresAgrupados[v] / dados.vetorValores.length) * 100).toFixed(2)
-            vetorFsPerc.push(x)
-            y += dados.valoresAgrupados[v]
-            vetorFreAc.push(y)
-        }
+        dados.vetorObjetos = tratarDados.agrupaValoresEmObjeto(
+            dados.valoresAgrupados,
+            vetorFsPerc, 
+            vetorFreAc, 
+            vetorFreAcPerc
+        )
 
-        for (let t in dados.valoresAgrupados){
-            r += 1
-            z = ((vetorFreAc[r] / dados.vetorValores.length) * 100).toFixed(2)
-            vetorFreAcPerc.push(z)
-        }
-
-        let vet =[]
-        let i = -1
-        for (let data in dados.valoresAgrupados){
-            let obj = {}
-            i += 1 
-            obj[data] = dados.valoresAgrupados[data]
-            obj['freqSimpPerc']= vetorFsPerc[i]
-            obj['freqAc']= vetorFreAc[i]
-            obj['freqAcPerc'] = vetorFreAcPerc[i]
-            vet.push(obj)
-        }
-        dados.vetorObjetos = vet 
-        
-        criaTabela(dados.valoresAgrupados, vetorFsPerc, vetorFreAc, vetorFreAcPerc)
+        console.log(dados.vetorObjetos );
+        criaTabela(
+            dados, 
+            vetorFsPerc, 
+            vetorFreAc, 
+            vetorFreAcPerc
+        )
 
         let e = []
-        for (let i = 0; i < dados.vetorValores.length; i++){
-            let aux = dados.vetorValores[i]
+        for (let i = 0; i < dados.vetorDados.length; i++){
+            let aux = dados.vetorDados[i]
             if (isNaN(aux) == true){
-                e = dados.vetorValores.sort()
+                e = dados.vetorDados.sort()
             }
             else{
-                e = dados.vetorValores.sort((a,b) => a-b)
+                e = dados.vetorDados.sort((a,b) => a-b)
             }
         }
         
@@ -347,7 +293,6 @@ btnCalcular.addEventListener('click', () => {
         switch (separatriz){
             case 'quartil':
                 se = (quadrante*(vetorFreAc[vetorFreAc.length -1]/4)).toFixed()
-                console.log(se);
                 break
             case 'quintil':
                 se = (quadrante*(vetorFreAc[vetorFreAc.length -1]/5)).toFixed()
@@ -374,7 +319,7 @@ btnCalcular.addEventListener('click', () => {
             soma = ex.reduce((total, currentElement) => total + currentElement)
             media = (soma/ vetorFreAc[vetorFreAc.length - 1]).toFixed(2)
             meio = (vetorFreAc[vetorFreAc.length -1]/2).toFixed()
-            e = dados.vetorValores.sort((a,b) => a-b)
+            e = dados.vetorDados.sort((a,b) => a-b)
             mediana = e[meio]
             let au = []
             for(data in dados.valoresAgrupados){
@@ -484,7 +429,6 @@ btnCalcular.addEventListener('click', () => {
                 let meio = 0 
                 meio = Math.trunc((esq+dir)/2)
                 mediana = e[meio]
-                console.log(meio)
             }
 
             let au = []
@@ -511,9 +455,6 @@ btnCalcular.addEventListener('click', () => {
         }
         
         criaCaixasDeMedias([media,moda,mediana])
-        console.log(e)
-        console.log(se)
-        console.log(sep)    
         let vetorNomeCol = []
         for(let nomeCol in dados.valoresAgrupados) {
             vetorNomeCol.push(nomeCol)
@@ -548,9 +489,9 @@ btnCalcular.addEventListener('click', () => {
         }
         
         //zerar variaveis
-        vetorValoresArquivo = []
+        vetorValoresInput = []
         dados.nome = ''
-        dados.vetorValores = []
+        dados.vetorDados = []
         dados.tipoVar = ''
         dados.tipoCalc = ''
         dados.valoresAgrupados = {}

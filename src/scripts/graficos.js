@@ -21,7 +21,7 @@ export const geraGrafico = (areaGrafico, tipoGraf = 'bar', nomesCol, valores, no
     })
 }
 
-export const geraGraficoContinua = (grafico, tipoGraf = 'bar', nomesCol, valores, nomeGraf = 'Gráfico', opt) => {
+export const geraGraficoContinua = (areaGrafico, tipoGraf = 'bar', nomesCol, valores, nomeGraf = 'Gráfico', opt) => {
     if(meuGrafico) meuGrafico.destroy()
 
     meuGrafico = areaGrafico.getContext('2d');

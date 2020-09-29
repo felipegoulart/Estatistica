@@ -67,7 +67,7 @@ function atualizarTabela(tabela) {
     })
 }
 
-export const criaTabela = (dadosTratados,perc, ac, acP) => {
+export const criaTabela = (obj ,perc, ac, acP) => {
 
     const novaTabela = document.createElement('table')
     const variavel = document.createElement('th')
@@ -76,7 +76,7 @@ export const criaTabela = (dadosTratados,perc, ac, acP) => {
     const freqAc = document.createElement('th')
     const freqAcPerc = document.createElement('th')
 
-    variavel.innerText = dados.nome
+    variavel.innerText = obj.nome
     freqSimples.innerText = 'Freq Si'
     freqPerc.innerText = 'Freq Si Perc'
     freqAc.innerText = 'Freq Ac'
@@ -90,7 +90,7 @@ export const criaTabela = (dadosTratados,perc, ac, acP) => {
 
     let i = -1
 
-    for(const chave in dadosTratados){
+    for(const chave in obj.valoresAgrupados){
         i +=1
         const linha = document.createElement('tr')
         const nomeVariavel = document.createElement('td')
@@ -100,12 +100,12 @@ export const criaTabela = (dadosTratados,perc, ac, acP) => {
         const valorAcP = document.createElement('td')
 
         nomeVariavel.innerText = chave
-        valorVariavel.innerText = dadosTratados[chave]
+        valorVariavel.innerText = obj.valoresAgrupados[chave]
         valorperc.innerText = `${perc[i]}%`
         valorac.innerText = ac [i]
         valorAcP.innerText = `${acP[i]}%`
 
-        if(dados.tipoVar == 'ordinal') {
+        if(obj.tipoVar == 'ordinal') {
             linha.draggable = true
             linha.classList.add('arrastavel')
         }
