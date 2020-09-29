@@ -13,6 +13,7 @@ const inputArquivo = document.querySelector('#inputArquivo')
 const selectSeparatriz = document.querySelector('#separatrizes')
 const inputRangeSeparatriz = document.querySelector('#range')
 const inputNumSeparatriz = document.querySelector('#numSeparatriz')
+const outputResultadoSeratriz = document.querySelector('#resultSepara')
 const dropzone = document.querySelector('.dropzone')
 let arquivo = null // recebe os arquivos posteriormente
 
@@ -613,18 +614,18 @@ btnCalcular.addEventListener('click', () => {
         let moda = null
         let se = 0
         let desvio = 0
-        let cv = 0 
-        let separatriz = 'percentil'
-        let quadrante = 80
+        let cv
+        let separatriz = 'quartil'
+        let quadrante = 75
         switch (separatriz){
             case 'quartil':
-                se = (quadrante*(vetorFreAc[vetorFreAc.length -1]/4)).toFixed()
+                se = (quadrante*(vetorFreAc[vetorFreAc.length -1]/100)).toFixed()
                 break
             case 'quintil':
-                se = (quadrante*(vetorFreAc[vetorFreAc.length -1]/5)).toFixed()
+                se = (quadrante*(vetorFreAc[vetorFreAc.length -1]/100)).toFixed()
                 break
             case 'decil':
-                se = (quadrante*(vetorFreAc[vetorFreAc.length -1]/10)).toFixed()
+                se = (quadrante*(vetorFreAc[vetorFreAc.length -1]/100)).toFixed()
                 break
             case 'percentil':
                 se = (quadrante*(vetorFreAc[vetorFreAc.length -1]/100)).toFixed()
@@ -801,9 +802,12 @@ btnCalcular.addEventListener('click', () => {
             sectionTabela.appendChild(areaCaixas)
         }
         criaCaixasDeMedias([media,moda,mediana])
-        console.log(e)
-        console.log(se)
-        console.log(sep)    
+        console.log('desvio: ' + desvio)
+        console.log('sep: ' + sep)
+        console.log('cv: ' + cv);    
+
+        outputResultadoSeratriz.value = sep
+
         let vetorNomeCol = []
         for(let nomeCol in dados.valoresAgrupados) {
             vetorNomeCol.push(nomeCol)
