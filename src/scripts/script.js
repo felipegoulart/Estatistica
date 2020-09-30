@@ -6,12 +6,7 @@ import {
     editarTabela, 
     criaCaixasDeMedias 
 } from './tabelas.js'
-import { 
-    geraGrafico, 
-    geraGraficoContinua, 
-    optGraficoColuna, 
-    optGraficoPizza 
-} from './graficos.js'
+import graficos from './graficos.js'
 import tratarDados from './tratarDados.js'
 import calculos from './calculos.js'
 
@@ -21,7 +16,6 @@ const textoErroNome = document.querySelector('[data-js=inputNome]')
 const textoErroValor = document.querySelector('[data-js=inputValor]')
 const formDescritiva = document.querySelector('#formDescritiva')
 const sectionGrafico = document.querySelector('.sectGrafico')
-const areaGrafico = document.querySelector('#grafico')
 
 const inputNome = document.querySelector('#nomeVariavel')
 const inputValores = document.querySelector('#valores')
@@ -195,6 +189,14 @@ inputNumSeparatriz.addEventListener('input', () => {
     inputRangeSeparatriz.value = inputNumSeparatriz.value
 })
 
+const executaFuncoes = (obj, objFreq) => {
+    const vetorMediaModaMediana = funcoesCalculo
+        .calculaMediaModaMediana(obj)
+
+    criaCaixasDeMedias(vetorMediaModaMediana)
+    criaTabela(obj)
+    graficos(obj, objFreq)
+}
 
 // Botão calcular, responsável por realizar os calculos, gerar tabela e gráficos
 btnCalcular.addEventListener('click', () => {
@@ -217,7 +219,7 @@ btnCalcular.addEventListener('click', () => {
 
             validacao = false
         }
-        else {
+        else { // caso todos as verificações passe, ele vai executar a função para captura e limpeza dos dados
             [nome, valores] = funcoesTratarDados // Recebe os dados limpos dos inputs 
                 .capturaDadosInputManual(inputValores, inputNome)
             validacao = true
@@ -233,9 +235,9 @@ btnCalcular.addEventListener('click', () => {
             [nome, valores] = funcoesTratarDados // Recebe os dados limpos do arquivo 
                 .separarDadosArquivo(vetorValoresInput)
             validacao = true
-            
         }
     }
+
     // Atribuindo os dados limpos capturados anteriormente
     dados.nome = nome
     dados.vetorDados = valores
@@ -250,52 +252,33 @@ btnCalcular.addEventListener('click', () => {
         // A soma da Frequência simples é igual para todas menos Continua
         else  funcoesCalculo.calculaFreqSi(dados)
         
-        const [vetorFsPerc, vetorFreAc, vetorFreAcPerc] = funcoesCalculo
-            .calcFreqPercent(dados)
+        const objFrequencias = {
+            vetorFsPerc: [],
+            vetorFreAc: [],
+            vetorFreAcPerc: []
+        }
+
+        [
+            objFrequencias.vetorFsPerc, 
+            objFrequencias.vetorFreAc, 
+            objFrequencias.vetorFreAcPerc
+        ] = funcoesCalculo.calcFreqPercent(dados)
+
 
         dados.vetorObjetos = tratarDados.agrupaValoresEmObjeto(
             dados.valoresAgrupados,
-            vetorFsPerc, 
-            vetorFreAc, 
-            vetorFreAcPerc
+            objFrequencias
         )
 
-        console.log(dados.vetorObjetos );
-        criaTabela(
-            dados, 
-            vetorFsPerc, 
-            vetorFreAc, 
-            vetorFreAcPerc
-        )
-
+        executaFuncoes(dados, objFrequencias)
         
-        let e
-        let u = [], w = [], ex = [], ponto = [], fi = []
-        let soma = 0, fant = 0, fimd = 0, h = 0, f = 0
-        let med = 0, mediana, sep, media, moda
-        let ax = 0
-        let se = 0
-        let desvio = 0
-        let cv = 0 
         
         let separatriz = 'quartil'
         let quadrante = inputRangeSeparatriz.value
-        outputValorSeparatriz.value = 'Nada Ainda'
+        outputValorSeparatriz.value = 'Nada Ainda...'
 
-        switch (separatriz){
-            case 'quartil':
-                se = (quadrante*(vetorFreAc[vetorFreAc.length -1]/100)).toFixed()
-                break
-            case 'quintil':
-                se = (quadrante*(vetorFreAc[vetorFreAc.length -1]/100)).toFixed()
-                break
-            case 'decil':
-                se = (quadrante*(vetorFreAc[vetorFreAc.length -1]/100)).toFixed()
-                break
-            case 'percentil':
-                se = (quadrante*(vetorFreAc[vetorFreAc.length -1]/100)).toFixed()
-                break
-        }
+        // se = (quadrante*(vetorFreAc[vetorFreAc.length -1]/100)).toFixed()
+               
 
         if (dados.tipoVar === 'discreta'){
 
@@ -306,36 +289,6 @@ btnCalcular.addEventListener('click', () => {
                 .calculaSeparatrizQualitativa(dados)
         }
         
-        console.log(sep);
-
-        criaCaixasDeMedias([media,moda,mediana])
-        let vetorNomeCol = []
-        for(let nomeCol in dados.valoresAgrupados) {
-            vetorNomeCol.push(nomeCol)
-        }
-
-        switch (dados.tipoVar){
-            case 'nominal':
-                geraGrafico(areaGrafico, 'pie', vetorNomeCol, 
-                    vetorFsPerc, 'Qualitativa Nominal', optGraficoPizza())
-                break
-
-            case 'ordinal':
-                geraGrafico(areaGrafico, 'pie', vetorNomeCol, 
-                    vetorFsPerc, 'Qualitativa Ordinal', optGraficoPizza())
-                break
-
-            case 'discreta': 
-                geraGrafico(areaGrafico, 'bar', vetorNomeCol, 
-                    vetorFsPerc, 'Quantitativa Discreta', optGraficoColuna())
-                break
-
-            case 'continua': 
-                geraGraficoContinua(areaGrafico, 'bar', vetorNomeCol, 
-                    vetorFsPerc, 'Quantitativa Contínua', optGraficoColuna())
-                break
-
-            }
 
         if(dados.tipoVar == 'ordinal') {
             document.querySelector('.popup').classList.remove('esconder')

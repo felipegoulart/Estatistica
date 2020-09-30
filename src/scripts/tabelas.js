@@ -67,7 +67,7 @@ function atualizarTabela(tabela) {
     })
 }
 
-export const criaTabela = (obj ,perc, ac, acP) => {
+export const criaTabela = (obj) => {
 
     const novaTabela = document.createElement('table')
     const variavel = document.createElement('th')
@@ -90,7 +90,7 @@ export const criaTabela = (obj ,perc, ac, acP) => {
 
     let i = -1
 
-    for(const chave in obj.valoresAgrupados){
+    for(const objeto of obj.vetorObjetos){
         i +=1
         const linha = document.createElement('tr')
         const nomeVariavel = document.createElement('td')
@@ -98,12 +98,16 @@ export const criaTabela = (obj ,perc, ac, acP) => {
         const valorperc = document.createElement('td')
         const valorac = document.createElement('td')
         const valorAcP = document.createElement('td')
-
-        nomeVariavel.innerText = chave
-        valorVariavel.innerText = obj.valoresAgrupados[chave]
-        valorperc.innerText = `${perc[i]}%`
-        valorac.innerText = ac [i]
-        valorAcP.innerText = `${acP[i]}%`
+        
+        for (const nome in objeto) {
+            nomeVariavel.innerText = nome
+            valorVariavel.innerText = objeto[nome]
+            break
+        }
+        
+        valorperc.innerText = `${objeto.freqSimpPerc}%`
+        valorac.innerText = objeto.freqAc
+        valorAcP.innerText = `${objeto.freqAcPerc}%`
 
         if(obj.tipoVar == 'ordinal') {
             linha.draggable = true

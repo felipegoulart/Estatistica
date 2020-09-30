@@ -26,20 +26,23 @@ const calculaContinua = dados => {
 
     let inicio = null
     let fim = null
+    let objTemp = {}
     
     for(let i = 0; i < linhas; i++ ) {
         !inicio ? inicio = vetor[0] : inicio = fim
         fim = inicio + intervalo
     
         const nomeAtributo = `${inicio} |--- ${fim}`
-    
+
         vetor.forEach(elemento => {
             if(elemento >= inicio && elemento < fim) {
-                !dados.valoresAgrupados[nomeAtributo] ? dados.valoresAgrupados[nomeAtributo] = 1
-                    : dados.valoresAgrupados[nomeAtributo] += 1
+                !objTemp[nomeAtributo] ? objTemp[nomeAtributo] = 1
+                    : objTemp[nomeAtributo] += 1
             }
         })
     }
+    dados.valoresAgrupados = objTemp
+
 }
 
 const calculaFreqSi = dados => {
@@ -74,6 +77,42 @@ const calcFreqPercent = dados => {
     return [vetorFsPerc, vetorFreAc, vetorFreAcPerc]
 }
 
+const calculaMediaModaMediana = obj => {
+    let media, moda, mediana
+    let ex = [], fi = [] 
+
+    let med = Math.trunc(obj.vetorDados.length /2)
+    let x = obj.vetorDados[med]
+
+    if(obj.tipoVar === 'continua') {
+        for (let dt in obj.valoresAgrupados){
+            ex.push((dt.split(' |--- ')))
+            fi.push(obj.valoresAgrupados[dt])
+        }
+
+        // for (let num in ex){
+        //     u.push(parseInt(ex[num][0]))
+        //     w.push(parseInt(ex[num][1]))   
+        // }
+        // for (let z = 0; z <= u.length; z++){
+        //     if (x>= u[z] && x< w[z]){
+        //         f = u[z]
+        //         if ((z-1) != -1){
+        //             fant = fi[z-1]
+        //         }else{
+        //             fant = 0
+        //         }
+        //         fimd = fi[z]
+        //         h = w[z] - u[z]
+        //         break
+        //     }
+            
+        // }
+        
+        // mediana = (f + (((med - fant)/fimd)*h)).toFixed(2)
+    }
+    return [media, moda, mediana]
+}
 
 //Separatrizes
 const calculaSeparatrizDiscreta = () => {
@@ -124,32 +163,6 @@ const calculaSeparatrizDiscreta = () => {
 }
 
 const calculaSeparatrizContinua = () => {
-    for (let dt in dados.valoresAgrupados){
-        ex.push((dt.split(' |--- ')))
-        fi.push(dados.valoresAgrupados[dt])
-    }
-    med  = Math.trunc(vetorFreAc[vetorFreAc.length-1] /2)
-    let x = e[med]
-    for (let num in ex){
-        u.push(parseInt(ex[num][0]))
-        w.push(parseInt(ex[num][1]))   
-    }
-    for (let z = 0; z <= u.length; z++){
-        if (x>= u[z] && x< w[z]){
-            f = u[z]
-            if ((z-1) != -1){
-                fant = fi[z-1]
-            }else{
-                fant = 0
-            }
-            fimd = fi[z]
-            h = w[z] - u[z]
-            break
-        }
-        
-    }
-    
-    mediana = (f + (((med - fant)/fimd)*h)).toFixed(2)
     sep = (f + (((se - fant)/fimd)*h)).toFixed(2)
     for(let q = 0; q < u.length;q++){
         ponto.push((u[q] + w[q])/2)
@@ -227,4 +240,5 @@ export default {
     calculaContinua: calculaContinua,
     calculaFreqSi: calculaFreqSi,
     calcFreqPercent: calcFreqPercent,
+    calculaMediaModaMediana: calculaMediaModaMediana
 }
