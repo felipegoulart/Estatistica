@@ -603,34 +603,25 @@ btnCalcular.addEventListener('click', () => {
         let fi = []
         let soma = 0    
         let fant = 0
+        let fAntMed = 0
+        let fimdMed = 0
         let fimd = 0
         let h = 0
         let f = 0
+        let fMed = 0
         let med = 0
         let mediana = null
         let sep = null
         let ax = 0
         let media = 0
         let moda = null
-        let se = 0
         let desvio = 0
         let cv
-        let separatriz = 'quartil'
-        let quadrante = 75
-        switch (separatriz){
-            case 'quartil':
-                se = (quadrante*(vetorFreAc[vetorFreAc.length -1]/100)).toFixed()
-                break
-            case 'quintil':
-                se = (quadrante*(vetorFreAc[vetorFreAc.length -1]/100)).toFixed()
-                break
-            case 'decil':
-                se = (quadrante*(vetorFreAc[vetorFreAc.length -1]/100)).toFixed()
-                break
-            case 'percentil':
-                se = (quadrante*(vetorFreAc[vetorFreAc.length -1]/100)).toFixed()
-                break
-        }
+        // let separatriz = 'quartil'
+        let quadrante = 50
+
+        let se = (quadrante*(vetorFreAc[vetorFreAc.length -1]/100)).toFixed()
+            
 
         if (dados.tipoVar === 'discreta'){
             for (let dt in dados.valoresAgrupados){
@@ -682,28 +673,50 @@ btnCalcular.addEventListener('click', () => {
                 ex.push((dt.split(' |--- ')))
                 fi.push(dados.valoresAgrupados[dt])
             }
-            med  = Math.trunc(vetorFreAc[vetorFreAc.length-1] /2)
-            let x = e[med]
+
+            med = Math.trunc(vetorFreAc[vetorFreAc.length -1] /2)
+            
+            let x = e[se]
+            let posicao = e[med]
+            console.log('posicao: ' + posicao);
+
             for (let num in ex){
                 u.push(parseInt(ex[num][0]))
                 w.push(parseInt(ex[num][1]))   
             }
-            for (let z = 0; z <= u.length; z++){
-                if (x>= u[z] && x< w[z]){
-                    f = u[z]
-                    if ((z-1) != -1){
-                        fant = fi[z-1]
-                    }else{
-                        fant = 0
-                    }
-                    fimd = fi[z]
-                    h = w[z] - u[z]
+
+            h = w[0] - u[0]
+            console.log('Intervalo' + h);
+
+            for (let i = 0; i <= u.length; i++){
+                if (posicao >= u[i] && posicao < w[i]){
+                    fMed = u[i]
+
+                    if ((i - 1) != -1) fAntMed = dados
+                        .vetorObjetos[i -1]['freqAc']
+                    
+                    else fAntMed = 0
+
+                    fimdMed = fi[i]
                     break
                 }
-                
+            }
+            mediana = (fMed + (((med - fAntMed)/ fimdMed) * h)).toFixed(2)
+            
+            for (let i = 0; i <= u.length; i++){
+                if (x >= u[i] && x < w[i]){
+                    f = u[i]
+
+                    if ((i-1) != -1) fant = dados
+                        .vetorObjetos[i -1]['freqAc']
+                        
+                    else fant = 0
+
+                    fimd = fi[i]
+                    break
+                }
             }
             
-            mediana = (f + (((med - fant)/fimd)*h)).toFixed(2)
             sep = (f + (((se - fant)/fimd)*h)).toFixed(2)
             for(let q = 0; q < u.length;q++){
                 ponto.push((u[q] + w[q])/2)
@@ -782,7 +795,7 @@ btnCalcular.addEventListener('click', () => {
 
         }
         
-
+        console.log(dados);
 
         function criaCaixasDeMedias (medias = [null,null,null]) {
             const textoMedias = ['Média', 'Moda', 'Mediana']
@@ -803,8 +816,10 @@ btnCalcular.addEventListener('click', () => {
         }
         criaCaixasDeMedias([media,moda,mediana])
         console.log('desvio: ' + desvio)
+        console.log('posição: ' + se)
         console.log('sep: ' + sep)
         console.log('cv: ' + cv);    
+        
 
         outputResultadoSeratriz.value = sep
 
