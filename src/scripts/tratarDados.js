@@ -28,20 +28,21 @@ const separarDadosArquivo = vetArquivo => {
     return limparDados(vetorDados, nomeVariavel)
 }
 
-const agrupaValoresEmObjeto = (dados, objFreq) => {
+const agrupaValoresEmObjeto = dados => {
     let vetTemp =[]
     let i = 0
     
-    for (let data in dados){
+    for (let data in dados.valoresAgrupados){
         let objTemp = {}
-        debugger
 
-        objTemp[data] = dados[data]
-        objTemp['freqSimpPerc'] = objFreq.vetorFsPerc[i]
-        objTemp['freqAc'] = objFreq.vetorFreAc[i]
-        objTemp['freqAcPerc'] = objFreq.vetorFreAcPerc[i]
-        
+        debugger
+        objTemp['nome'] = data
+        objTemp['freqSimp'] = dados.valoresAgrupados[data]
+        objTemp['freqSimpPerc'] = dados.vetorFsPerc[i]
+        objTemp['freqAc'] = dados.vetorFreAc[i]
+        objTemp['freqAcPerc'] = dados.vetorFreAcPerc[i]
         i++
+        console.log(objTemp);
         vetTemp.push(objTemp)
     }
     return vetTemp

@@ -99,13 +99,8 @@ export const criaTabela = (obj) => {
         const valorac = document.createElement('td')
         const valorAcP = document.createElement('td')
         
-        for (const nome in objeto) {
-            debugger
-            nomeVariavel.innerText = nome
-            valorVariavel.innerText = objeto[nome]
-            break
-        }
-        
+        nomeVariavel.innerText = objeto.nome  
+        valorVariavel.innerText = objeto.freqSimp
         valorperc.innerText = `${objeto.freqSimpPerc}%`
         valorac.innerText = objeto.freqAc
         valorAcP.innerText = `${objeto.freqAcPerc}%`

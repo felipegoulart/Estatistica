@@ -43,6 +43,9 @@ let tipoForm = null
 const dados = {
     nome: '',
     vetorDados: [],
+    vetorFsPerc: [],
+    vetorFreAc: [],
+    vetorFreAcPerc: [],
     tipoVar: '',
     tipoCalc: '',
     valoresAgrupados: {},
@@ -252,21 +255,12 @@ btnCalcular.addEventListener('click', () => {
         // A soma da Frequência simples é igual para todas menos Continua
         else  funcoesCalculo.calculaFreqSi(dados)
 
-        const [vetorFsPerc, vetorFreAc, vetorFreAcPerc] = funcoesCalculo
-            .calcFreqPercent(dados)
+        funcoesCalculo.calcFreqPercent(dados)
 
-        const objFrequencias = {
-            'vetorFsPerc': vetorFsPerc,
-            'vetorFreAc': vetorFreAc,
-            'vetorFreAcPerc': vetorFreAcPerc
-        }
+        
+        dados.vetorObjetos = tratarDados.agrupaValoresEmObjeto(dados)
 
-        dados.vetorObjetos = tratarDados.agrupaValoresEmObjeto(
-            dados.valoresAgrupados,
-            objFrequencias
-        )
-
-        executaFuncoes(dados, objFrequencias)
+        executaFuncoes(dados)
         
         
         let separatriz = 'quartil'

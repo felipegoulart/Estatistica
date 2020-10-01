@@ -74,7 +74,9 @@ const calcFreqPercent = dados => {
         vetorFreAcPerc.push(frecAcPerc)
     })
 
-    return [vetorFsPerc, vetorFreAc, vetorFreAcPerc]
+    dados.vetorFsPerc = vetorFsPerc
+    dados.vetorFreAc = vetorFreAc
+    dados.vetorFreAcPerc = vetorFreAcPerc
 }
 
 const calculaMediaModaMediana = obj => {
