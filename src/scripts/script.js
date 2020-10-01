@@ -703,7 +703,7 @@ btnCalcular.addEventListener('click', () => {
             }
             mediana = (fMed + (((med - fAntMed)/ fimdMed) * h)).toFixed(2)
             
-            for (let i = 0; i <= u.length; i++){
+            for (let i = 0; i < u.length; i++){
                 if (x >= u[i] && x < w[i]){
                     f = u[i]
 
