@@ -61,11 +61,11 @@ const calcFreqPercent = dados => {
     let frecAcPerc = 0
     
     
-    for (let v in dados.valoresAgrupados){
-        let percentSi = ((dados.valoresAgrupados[v] / dados.vetorDados.length) * 100).toFixed(2)
+    for (let i in dados.valoresAgrupados){
+        let percentSi = ((dados.valoresAgrupados[i] / dados.vetorDados.length) * 100).toFixed(2)
         vetorFsPerc.push(percentSi)
     
-        freAc += dados.valoresAgrupados[v]
+        freAc += dados.valoresAgrupados[i]
         vetorFreAc.push(freAc)
     }
     
@@ -113,19 +113,22 @@ const calculaMediaModaMediana = obj => {
             }
         }
 
-        for(let q = 0; q < u.length; q++){
-            ponto.push((u[q] + w[q])/2)
-            soma = soma + (ponto[q]*fi[q])
+        let ponto = []
+        let soma
+        for(let i = 0; i < vetLimiteInferior.length; i++){
+            ponto.push((vetLimiteInferior[i] + vetLimiteSuperior[i]) / 2)
+            soma = soma + (ponto[i] * vetFreqSimples[i])
         }
-        
-        media = (soma / vetorFreAc[vetorFreAc.length - 1]).toFixed(1)
+
+        let media
+        media = (soma / obj.vetorFreAc).toFixed(1)
         let au = []
-        for(let data in dados.valoresAgrupados){
-            au.push(dados.valoresAgrupados[data])
+        for(let data in obj.valoresAgrupados){
+            au.push(obj.valoresAgrupados[data])
         }
         let a = au.reduce(function(a,b){return Math.max(a,b)})
         let t = au.indexOf(a)
-        moda = ((u[t] + w[t])/2).toFixed(0)
+        moda = ((vetLimiteInferior[t] + vetLimiteSuperior[t])/2).toFixed(0)
 
         mediana = (limiteInferior + ((meioVet - fant) / fimd) * intervalo)
     }
@@ -134,7 +137,6 @@ const calculaMediaModaMediana = obj => {
     for(let data in obj.valoresAgrupados){
         au.push(obj.valoresAgrupados[data])
     }
-    console.log(obj.valoresAgrupados);
     let a = au.reduce((a,b) => Math.max(a,b))
     for(let dt in obj.valoresAgrupados){
         if (obj.valoresAgrupados[dt] === a){
@@ -148,34 +150,34 @@ const calculaMediaModaMediana = obj => {
 //Separatrizes
 const calculaSeparatrizDiscreta = () => {
     let z =[]
-    for (let dt in dados.valoresAgrupados){
-            u.push(parseInt(dt))
-            w.push(dados.valoresAgrupados[dt])
+    for (let dt in obj.valoresAgrupados){
+            vetLimiteInferior.push(parseInt(dt))
+            vetLimiteSuperior.push(obj.valoresAgrupados[dt])
         }
 
         
-        for (let o = 0; o < u.length; o++){
-            f = parseInt(w[o]) * parseInt(u[o])
+        for (let o = 0; o < vetLimiteInferior.length; o++){
+            f = parseInt(vetLimiteSuperior[o]) * parseInt(vetLimiteInferior[o])
             ex.push(f)
         }   
         soma = ex.reduce((total, currentElement) => total + currentElement)
         media = (soma/ vetorFreAc[vetorFreAc.length - 1]).toFixed(2)
         meio = (vetorFreAc[vetorFreAc.length -1]/2).toFixed()
-        e = dados.vetorDados.sort((a,b) => a-b)
+        e = obj.vetorDados.sort((a,b) => a-b)
         mediana = e[meio]
         
         sep = e[se]
-        if (dados.tipoCalc === 'populacao'){
-            for (var o = 0; o < u.length; o++){
-                ax = (u[o] - media)**2 * w[o]
+        if (obj.tipoCalc === 'populacao'){
+            for (var o = 0; o < vetLimiteInferior.length; o++){
+                ax = (vetLimiteInferior[o] - media)**2 * vetLimiteSuperior[o]
                 z.push(ax)
             }
             soma = z.reduce((total, currentElement) => total + currentElement)
             desvio = Math.sqrt(soma/vetorFreAc[vetorFreAc.length - 1]).toFixed(2)
             cv = ((desvio/media)*100).toFixed(2)
         }else{
-            for (var o = 0; o < u.length; o++){
-                ax = (u[o] - media)**2 * w[o]
+            for (var o = 0; o < vetLimiteInferior.length; o++){
+                ax = (vetLimiteInferior[o] - media)**2 * vetLimiteSuperior[o]
                 z.push(ax)
             }
             soma = z.reduce((total, currentElement) => total + currentElement)
@@ -190,8 +192,8 @@ const calculaSeparatrizContinua = () => {
     
     let v = []
     let xi = []
-    for (var p = 0; p < u.length; p++){
-        ax = parseInt((u[p] + w[p])/2).toFixed(0)
+    for (var p = 0; p < vetLimiteInferior.length; p++){
+        ax = parseInt((vetLimiteInferior[p] + vetLimiteSuperior[p])/2).toFixed(0)
         xi.push(ax)
         v.push(xi[p] * au[p])
     }
@@ -199,7 +201,7 @@ const calculaSeparatrizContinua = () => {
     let medDesvio = 0
     medDesvio = (soma/vetorFreAc[vetorFreAc.length  - 1]).toFixed(2)
     let z = []
-    for (var o = 0; o < u.length; o++){
+    for (var o = 0; o < vetLimiteInferior.length; o++){
         ax = (xi[o] - medDesvio)**2 * au[o]
         z.push(ax)
     }

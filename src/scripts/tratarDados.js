@@ -34,6 +34,7 @@ const agrupaValoresEmObjeto = (dados, objFreq) => {
     
     for (let data in dados){
         let objTemp = {}
+        debugger
 
         objTemp[data] = dados[data]
         objTemp['freqSimpPerc'] = objFreq.vetorFsPerc[i]

@@ -100,6 +100,7 @@ export const criaTabela = (obj) => {
         const valorAcP = document.createElement('td')
         
         for (const nome in objeto) {
+            debugger
             nomeVariavel.innerText = nome
             valorVariavel.innerText = objeto[nome]
             break

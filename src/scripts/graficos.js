@@ -126,20 +126,20 @@ const geraGraficoContinua = (areaGrafico, tipoGraf = 'bar', nomesCol, valores, n
     })
 }
 
-const renderizaGraficos = (obj, objFreq) => {
+const renderizaGraficos = (obj) => {
     const vetorNomeCol = geraNomesLabel(obj)
     const graficos = {
         nominal: geraGrafico(areaGrafico, 'pie', vetorNomeCol, 
-            objFreq.vetorFsPerc, 'Qualitativa Nominal', optGraficoPizza()),
+            obj.vetorFsPerc, 'Qualitativa Nominal', optGraficoPizza()),
 
         ordinal: geraGrafico(areaGrafico, 'pie', vetorNomeCol, 
-            objFreq.vetorFsPerc, 'Qualitativa Ordinal', optGraficoPizza()),
+            obj.vetorFsPerc, 'Qualitativa Ordinal', optGraficoPizza()),
 
         discreta: geraGrafico(areaGrafico, 'bar', vetorNomeCol, 
-            objFreq.vetorFsPerc, 'Quantitativa Discreta', optGraficoColuna()),
+            obj.vetorFsPerc, 'Quantitativa Discreta', optGraficoColuna()),
 
         continua: geraGraficoContinua(areaGrafico, 'bar', vetorNomeCol, 
-            objFreq.vetorFsPerc, 'Quantitativa Contínua', optGraficoColuna())
+            obj.vetorFsPerc, 'Quantitativa Contínua', optGraficoColuna())
     }
     graficos[obj.tipoVar]
 }
