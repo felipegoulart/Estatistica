@@ -79,38 +79,69 @@ const calcFreqPercent = dados => {
 
 const calculaMediaModaMediana = obj => {
     let media, moda, mediana
-    let ex = [], fi = [] 
+    let vetLimites = [], vetFreqSimples = [] 
 
-    let med = Math.trunc(obj.vetorDados.length /2)
-    let x = obj.vetorDados[med]
+    let meioVet = Math.trunc(obj.vetorDados.length /2)
+    let valorCentral = obj.vetorDados[meioVet]
 
     if(obj.tipoVar === 'continua') {
         for (let dt in obj.valoresAgrupados){
-            ex.push((dt.split(' |--- ')))
-            fi.push(obj.valoresAgrupados[dt])
+            vetLimites.push((dt.split(' |--- ')))
+            vetFreqSimples.push(obj.valoresAgrupados[dt])
         }
 
-        // for (let num in ex){
-        //     u.push(parseInt(ex[num][0]))
-        //     w.push(parseInt(ex[num][1]))   
-        // }
-        // for (let z = 0; z <= u.length; z++){
-        //     if (x>= u[z] && x< w[z]){
-        //         f = u[z]
-        //         if ((z-1) != -1){
-        //             fant = fi[z-1]
-        //         }else{
-        //             fant = 0
-        //         }
-        //         fimd = fi[z]
-        //         h = w[z] - u[z]
-        //         break
-        //     }
-            
-        // }
+        let vetLimiteInferior = [], vetLimiteSuperior = []
+        let limiteInferior, fant, fimd, intervalo
+        for (let vetor of vetLimites){
+            vetLimiteInferior.push(Number(vetor[0]))
+            vetLimiteSuperior.push(Number(vetor[1]))   
+        }
+
+        for (let i = 0; i <= vetLimiteInferior.length; i++) {
+            if (valorCentral >= vetLimiteInferior[i] 
+                    && valorCentral < vetLimiteSuperior[i]) {
+                limiteInferior = vetLimiteInferior[i]
+
+                // Caso não seja a primeira linha, deve usar Frq acumulada anterior
+                if ((i - 1) != -1) fant = vetFreqSimples[i - 1]
+                // Caso seja a primeira linha a Frq acumulada anterior será 0
+                else fant = 0
+
+                fimd = vetFreqSimples[i] // frequencia simples da linha atual
+                intervalo = vetLimiteSuperior[i] - vetLimiteInferior[i] // calcula o intervalo
+                break
+            }
+        }
+
+        for(let q = 0; q < u.length; q++){
+            ponto.push((u[q] + w[q])/2)
+            soma = soma + (ponto[q]*fi[q])
+        }
         
-        // mediana = (f + (((med - fant)/fimd)*h)).toFixed(2)
+        media = (soma / vetorFreAc[vetorFreAc.length - 1]).toFixed(1)
+        let au = []
+        for(let data in dados.valoresAgrupados){
+            au.push(dados.valoresAgrupados[data])
+        }
+        let a = au.reduce(function(a,b){return Math.max(a,b)})
+        let t = au.indexOf(a)
+        moda = ((u[t] + w[t])/2).toFixed(0)
+
+        mediana = (limiteInferior + ((meioVet - fant) / fimd) * intervalo)
     }
+
+    let au = []
+    for(let data in obj.valoresAgrupados){
+        au.push(obj.valoresAgrupados[data])
+    }
+    console.log(obj.valoresAgrupados);
+    let a = au.reduce((a,b) => Math.max(a,b))
+    for(let dt in obj.valoresAgrupados){
+        if (obj.valoresAgrupados[dt] === a){
+            moda = dt
+        }
+    }
+
     return [media, moda, mediana]
 }
 
@@ -132,16 +163,7 @@ const calculaSeparatrizDiscreta = () => {
         meio = (vetorFreAc[vetorFreAc.length -1]/2).toFixed()
         e = dados.vetorDados.sort((a,b) => a-b)
         mediana = e[meio]
-        let au = []
-        for(data in dados.valoresAgrupados){
-            au.push(dados.valoresAgrupados[data])
-        }
-        let a = au.reduce(function(a,b){return Math.max(a,b)})
-        for(dt in dados.valoresAgrupados){
-            if (dados.valoresAgrupados[dt] === a){
-                moda = dt
-            }
-        }
+        
         sep = e[se]
         if (dados.tipoCalc === 'populacao'){
             for (var o = 0; o < u.length; o++){
@@ -164,18 +186,8 @@ const calculaSeparatrizDiscreta = () => {
 
 const calculaSeparatrizContinua = () => {
     sep = (f + (((se - fant)/fimd)*h)).toFixed(2)
-    for(let q = 0; q < u.length;q++){
-        ponto.push((u[q] + w[q])/2)
-        soma = soma + (ponto[q]*fi[q])
-    }
-    media = (soma / vetorFreAc[vetorFreAc.length - 1]).toFixed(1)
-    let au = []
-    for(let data in dados.valoresAgrupados){
-        au.push(dados.valoresAgrupados[data])
-    }
-    let a = au.reduce(function(a,b){return Math.max(a,b)})
-    let t = au.indexOf(a)
-    moda = ((u[t] + w[t])/2).toFixed(0)
+
+    
     let v = []
     let xi = []
     for (var p = 0; p < u.length; p++){

@@ -193,8 +193,8 @@ const executaFuncoes = (obj, objFreq) => {
     const vetorMediaModaMediana = funcoesCalculo
         .calculaMediaModaMediana(obj)
 
-    criaCaixasDeMedias(vetorMediaModaMediana)
     criaTabela(obj)
+    criaCaixasDeMedias(vetorMediaModaMediana)
     graficos(obj, objFreq)
 }
 
@@ -251,19 +251,15 @@ btnCalcular.addEventListener('click', () => {
 
         // A soma da Frequência simples é igual para todas menos Continua
         else  funcoesCalculo.calculaFreqSi(dados)
-        
+
+        const [vetorFsPerc, vetorFreAc, vetorFreAcPerc] = funcoesCalculo
+            .calcFreqPercent(dados)
+
         const objFrequencias = {
-            vetorFsPerc: [],
-            vetorFreAc: [],
-            vetorFreAcPerc: []
+            'vetorFsPerc': vetorFsPerc,
+            'vetorFreAc': vetorFreAc,
+            'vetorFreAcPerc': vetorFreAcPerc
         }
-
-        [
-            objFrequencias.vetorFsPerc, 
-            objFrequencias.vetorFreAc, 
-            objFrequencias.vetorFreAcPerc
-        ] = funcoesCalculo.calcFreqPercent(dados)
-
 
         dados.vetorObjetos = tratarDados.agrupaValoresEmObjeto(
             dados.valoresAgrupados,
