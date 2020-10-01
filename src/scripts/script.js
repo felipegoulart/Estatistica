@@ -1,19 +1,30 @@
+import { dropFile } from './dropArquivo.js'
+import funcoesTratarDados from './tratarDados.js'
+import funcoesCalculo from './calculos.js'
+import { 
+    criaTabela, 
+    editarTabela, 
+    criaCaixasDeMedias 
+} from './tabelas.js'
+import graficos from './graficos.js'
+import tratarDados from './tratarDados.js'
+import calculos from './calculos.js'
+
 const formManual = document.querySelector('.formManual')
 const formArquivo = document.querySelector('.formArquivo')
 const textoErroNome = document.querySelector('[data-js=inputNome]')
 const textoErroValor = document.querySelector('[data-js=inputValor]')
 const formDescritiva = document.querySelector('#formDescritiva')
 const sectionGrafico = document.querySelector('.sectGrafico')
-const areaGrafico = document.querySelector('#grafico')
-let meuGrafico = null
 
 const inputNome = document.querySelector('#nomeVariavel')
 const inputValores = document.querySelector('#valores')
 const inputArquivo = document.querySelector('#inputArquivo')
+
 const selectSeparatriz = document.querySelector('#separatrizes')
 const inputRangeSeparatriz = document.querySelector('#range')
 const inputNumSeparatriz = document.querySelector('#numSeparatriz')
-const outputResultadoSeratriz = document.querySelector('#resultSepara')
+const outputValorSeparatriz = document.querySelector('#resultSepara')
 const dropzone = document.querySelector('.dropzone')
 let arquivo = null // recebe os arquivos posteriormente
 
@@ -31,14 +42,15 @@ let tipoForm = null
 
 const dados = {
     nome: '',
-    vetorValores: [],
+    vetorDados: [],
     tipoVar: '',
     tipoCalc: '',
     valoresAgrupados: {},
     vetorObjetos: null
 }
 
-let vetorValoresArquivo = []
+let vetorValoresInput = []
+let nome, valores
 
 // ----------Revelar Formulário--------- \\
 // Ativar formulário para inserção de dados
@@ -88,65 +100,44 @@ inputNome.addEventListener('change', () => {
     }
 })
 
-inputArquivo.addEventListener('change', () => {
-    arquivo = inputArquivo.files[0] || arquivoDrop
+const recebeArquivo = inputArquivo => {
+    arquivo = inputArquivo
     const nomeArq = arquivo.name
 
     dropzone.classList.add('dragging')
 
     atualizarThumb(nomeArq)
     capturaDadosArquivo(arquivo)
-})
-
-dropzone.addEventListener('dragover', e => {
-    e.preventDefault()
-    dropzone.classList.add('dragging')
-})
-
-dropzone.addEventListener('dragleave', () => {
-    dropzone.classList.remove('dragging')
-})
-
-dropzone.addEventListener('drop', e => {
-    e.preventDefault()
-
-    let arquivoValido = false
-
-    const nomeArquivo = e.dataTransfer.files[0].name
-    const extensao = nomeArquivo
-        .substring(nomeArquivo
-            .lastIndexOf("."))
-            .toLowerCase()
-    
-    extensao == '.csv' ? arquivoValido = true : arquivoValido = false
-
-    if(arquivoValido) {
-        arquivo = e.dataTransfer.files[0]
-        atualizarThumb(nomeArquivo)
-        capturaDadosArquivo(arquivo)
-    }
-    else {
-        alert('Insira um arquivo .CSV')
-    }
-})
-
+}
 const capturaDadosArquivo = arquivo => {
     const reader = new FileReader()
         
     reader.readAsText(arquivo)
     
     reader.onloadend = () => {
-        vetorValoresArquivo = reader.result.split('\n')
+        vetorValoresInput = reader.result.split('\n')
     }
 }
-const atualizarThumb = (nomeArquivo) => {
+
+inputArquivo.addEventListener('change', () => {
+    recebeArquivo(inputArquivo.files[0])
+})
+
+dropFile(dropzone, recebeArquivo, atualizarThumb, capturaDadosArquivo)
+
+/*
+    Ao inserir um arquivo no dropZone aparece uma thumbnail com o nome do arquivo.
+    As Duas funções a seguir são responsáveis por atualizar o nome do arquivo na thumb 
+deletar quando for necessário
+*/
+function atualizarThumb (nomeArquivo) {
     document.querySelector('.nomeArquivo--thumb').innerText = nomeArquivo
 
     document.querySelector('.textoDropzone').classList.add('esconder')
     document.querySelector('.thumbnail').classList.remove('esconder')
 }
 
-const excluirThumb = () => {
+function excluirThumb () {
     arquivo = null
     validacao = false
     document.querySelector('.dropzone').classList.remove('dragging')
@@ -154,194 +145,11 @@ const excluirThumb = () => {
     document.querySelector('.thumbnail').classList.add('esconder')
 }
 
-btnExcluirThumb.addEventListener('click', excluirThumb) 
-
-// ----------Drag N Drop da tabela Ordinal--------- \\
-/* Funções responsáveis por fazer drag n drop da tabela
-e atualizar os valores dela */
-function editarTabela() {
-    const tabela = document.querySelector('table')
-    const linhasTabela = document.querySelectorAll('tr')
-
-    linhasTabela.forEach(elemento => {
-        elemento.addEventListener('dragstart', () => {
-            elemento.classList.add('arrastando')
-        })
-        elemento.addEventListener('dragend', () => {
-            elemento.classList.remove('arrastando')
-            })
-    })
-
-    tabela.addEventListener('dragover', elemento => {
-        elemento.preventDefault()
-        const elementoPosterior = arrastarProximoElemento(tabela, elemento.clientY)
-        const arrastado = document.querySelector('.arrastando')
-        if (elementoPosterior == null) {
-            tabela.appendChild(arrastado)
-        } else {
-            tabela.insertBefore(arrastado, elementoPosterior)
-        }
-    })
-
-    function arrastarProximoElemento(tabela, y) {
-        const elementosArrastaveis = [...tabela.querySelectorAll('.arrastavel:not(.arrastando)')]
-      
-        return elementosArrastaveis.reduce((maisProximo, filho) => {
-            const box = filho.getBoundingClientRect()
-            const deslocamento = y - box.top - box.height / 2
-            if (deslocamento < 0 && deslocamento > maisProximo.deslocamento) {
-                return { deslocamento: deslocamento, element: filho }
-            } else {
-                return maisProximo
-            }
-        }, { deslocamento: Number.NEGATIVE_INFINITY }).element
-    }
-    atualizarTabela(tabela, linhasTabela)
-}
-function atualizarTabela(tabela) {
-    tabela.addEventListener('dragend', () => {
-        const linhasTabela = document.querySelectorAll('tr')
-        let vetorFreqSimples = [] 
-        let vetorFreqAcum = []
-        linhasTabela.forEach(element => {
-            vetorFreqSimples.push(Number(element.children[1].innerText))
-        })
-        let aux = 0
-        for(let i = 0; i < vetorFreqSimples.length; i++){
-            aux += vetorFreqSimples[i]
-            vetorFreqAcum.push(aux)
-        }
-
-        const qtdElementos = vetorFreqSimples.reduce((acumulador, valorAtual) => acumulador + valorAtual)
-
-        linhasTabela.forEach(element => {
-            let valorAtual = vetorFreqAcum.shift()
-            element.children[3].innerText = valorAtual
-            element.children[4].innerText = `${((valorAtual / qtdElementos) * 100).toFixed(2)}%`
-        })
-    })
-}
+btnExcluirThumb.addEventListener('click', excluirThumb)
+btnLimpar.addEventListener('click', excluirThumb)
 
 btnExcluirPopup.addEventListener('click', () => document.querySelector('.popup')
     .classList.add('esconder'))
-
-// ----------Gráficos--------- \\
-// Funções para gerar os Graficos
-const geraGrafico = (areaGrafico, tipoGraf = 'bar', nomesCol, valores, nomeGraf = 'Gráfico', opt) => {
-    if(meuGrafico) meuGrafico.destroy()
-
-    meuGrafico = areaGrafico.getContext('2d');
-    meuGrafico = new Chart(grafico, {
-        type: tipoGraf,
-        data: {
-            labels: nomesCol,
-            datasets: [{
-                label: nomeGraf,
-                data: valores,
-                backgroundColor: cor(valores), // Usa o tamanho do vetor para gerar as cores
-                borderWidth: 2,
-            }]
-        },
-        options: opt
-    })
-}
-
-const geraGraficoContinua = (grafico, tipoGraf = 'bar', nomesCol, valores, nomeGraf = 'Gráfico', opt) => {
-    if(meuGrafico) meuGrafico.destroy()
-
-    meuGrafico = areaGrafico.getContext('2d');
-    meuGrafico = new Chart(grafico, {
-        type: tipoGraf,
-        data: {
-            labels: nomesCol,
-            datasets: [{
-                label: nomeGraf,
-                data: valores,
-                borderWidth: 1,
-                backgroundColor: cor(valores),
-                borderColor: cor(valores), // Usa o tamanho do vetor para gerar as cores
-                barPercentage: 1.25,
-            }]
-        },
-        options: opt
-    })
-}
-
-// Funções de tipos de gráfico
-function optGraficoPizza () {
-    return {tooltips: {
-        backgroundColor: '#fff',
-        cornerRadius: 10, 
-
-        bodyFontColor: '#222',
-        bodyFontSize: 13,
-        bodyFontStyle: 'bold',
-
-        xPadding: 12,
-        yPadding: 15,
-
-        callbacks: {
-            label: editarLabelComPorcent
-        }
-    }}
-}
-
-function optGraficoColuna () {
-    return {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    min: 0,
-                    callback: function(value) {
-                        return value + "%"
-                    }
-                },
-                scaleLabel: {
-                    display: true,
-                    labelString: "Em Porcentagem"
-                }
-            }]
-        },
-        tooltips: {
-            backgroundColor: '#fff',
-            cornerRadius: 10, 
-
-            titleFontColor: '#222',
-            bodyFontColor: '#222',
-            bodyFontSize: 13,
-            bodyFontStyle: 'bold',
-
-            xPadding: 12,
-            yPadding: 15,
-
-            callbacks: {
-                label: editarLabelComPorcent
-            }
-        }
-    }
-}
-
-// Função para gerar as cores para o Gráfico de acordo com o número de elementos
-function cor(vetor) { 
-    let cores = []
-
-    for(let i = 0; i < vetor.length; i++) {
-        i % 2 == 0 ? cores.push('#6C63FF') : cores.push('#FFE663')
-    }
-    return cores
-}
-
-// A função recebe os nomes da Label e valor para retornar uma label com numeros em %
-function editarLabelComPorcent(tooltipItem, data) {
-    let label = data.labels[tooltipItem.index] || '';
-    console.log(data.datasets);
-    let valor = data.datasets[0].data[tooltipItem.index]
-    if (label) {
-        label += ': ';
-    }
-    label += valor + '%';
-    return label;
-}
 
 // ----------Controlador Separatrizes--------- \\
 function defineValoresInputSeparatrizes(input, value) {
@@ -381,29 +189,39 @@ inputNumSeparatriz.addEventListener('input', () => {
     inputRangeSeparatriz.value = inputNumSeparatriz.value
 })
 
+const executaFuncoes = (obj, objFreq) => {
+    const vetorMediaModaMediana = funcoesCalculo
+        .calculaMediaModaMediana(obj)
+
+    criaTabela(obj)
+    criaCaixasDeMedias(vetorMediaModaMediana)
+    graficos(obj, objFreq)
+}
+
 // Botão calcular, responsável por realizar os calculos, gerar tabela e gráficos
 btnCalcular.addEventListener('click', () => {
     if(tipoForm == 'manual') {
         if(!inputNome.value.trim()) {
             inputNome.classList.add('erro')
             inputNome.focus()
+
             textoErroNome.classList.add('erro')
             textoErroNome.innerText = 'Preencha o NOME'
+
             validacao = false
         }
         else if (!inputValores.value.trim()) {
             inputValores.classList.add('erro')
             inputValores.focus()
+
             textoErroValor.classList.add('erro')
             textoErroValor.innerText = 'Preencha os VALORES'
+
             validacao = false
         }
-        else {
-            dados.nome = inputNome.value.trim()
-            vetorValoresArquivo = inputValores.value.trim().split(';')
-            vetorValoresArquivo = vetorValoresArquivo.filter(elemento => elemento != '')
-            dados.vetorValores = vetorValoresArquivo.map(elemento => elemento.trim()) 
-
+        else { // caso todos as verificações passe, ele vai executar a função para captura e limpeza dos dados
+            [nome, valores] = funcoesTratarDados // Recebe os dados limpos dos inputs 
+                .capturaDadosInputManual(inputValores, inputNome)
             validacao = true
         }
     }
@@ -414,434 +232,59 @@ btnCalcular.addEventListener('click', () => {
             validacao = false
         }
         else {
-            dados.nome = vetorValoresArquivo.shift()
-            dados.vetorValores = vetorValoresArquivo.filter(elemento => elemento != '')
-            
+            [nome, valores] = funcoesTratarDados // Recebe os dados limpos do arquivo 
+                .separarDadosArquivo(vetorValoresInput)
             validacao = true
-            
         }
     }
 
-    // Atributos para calculo.
-    // Mesma atribuição de valor independendo se é manual ou arquivo.
-    dados.tipoVar = document.querySelector
-            ('input[name="tipoVariavel"]:checked').value
+    // Atribuindo os dados limpos capturados anteriormente
+    dados.nome = nome
+    dados.vetorDados = valores
+    dados.tipoVar = document.querySelector('input[name="tipoVariavel"]:checked').value
     dados.tipoCalc = document.querySelector('#tipoCalculo').value
-
+    
     // Caso Todas as entradas estejam validadas ele executa os calculos.
     if (validacao) {
-        if (dados.tipoVar == 'continua'){
-            dados.vetorValores = dados.vetorValores.map(elemento => Number(elemento))        
-            const calculaIntervalo = valores => {
-                const vetor = valores.sort((a, b) => a-b)
-                const menor = vetor[0], maior = vetor[vetor.length -1]
-                let amplitude = maior - menor
-                
-                const j = Math.trunc(vetor.length ** 0.5)
-                const i = j -1
-                const k = j +1
+        if (dados.tipoVar == 'continua') funcoesCalculo
+            .calculaContinua(dados)
 
-                do {
-                    amplitude++
-                    if(amplitude % i == 0) {
-                        return [i, amplitude / i]
-                    }
-                    else if(amplitude % j == 0) {
-                        return [j, amplitude / j]
-                    }
-                    else if(amplitude % k == 0) {
-                        return [k, amplitude / k]
-                    }
-                } while (amplitude < maior)
-            }
+        // A soma da Frequência simples é igual para todas menos Continua
+        else  funcoesCalculo.calculaFreqSi(dados)
 
-            
-            const [linhas, intervalo] = calculaIntervalo(dados.vetorValores)
+        const [vetorFsPerc, vetorFreAc, vetorFreAcPerc] = funcoesCalculo
+            .calcFreqPercent(dados)
 
-            let inicio = null
-            let fim = null
-        
-            for(let i = 0; i < linhas; i++ ) {
-                !inicio ? inicio = dados.vetorValores[0] : inicio = fim
-                fim = inicio + intervalo
-        
-                const nomeAtributo = `${inicio} |--- ${fim}`
-        
-                dados.vetorValores.forEach(elemento => {
-                    if(elemento >= inicio && elemento < fim) {
-                        !dados.valoresAgrupados[nomeAtributo] ? dados.valoresAgrupados[nomeAtributo] = 1
-                            : dados.valoresAgrupados[nomeAtributo] += 1
-                    }
-                })
-            }
-        }
-        else {
-            dados.vetorValores.forEach(elemento => {
-                dados.valoresAgrupados[elemento] ? dados.valoresAgrupados[elemento] += 1
-                    : dados.valoresAgrupados[elemento] = 1
-            })
-        } 
-
-        // Responsável pelos calculos das frequencias
-        let vetorFsPerc = []
-        let vetorFreAc = []
-        let vetorFreAcPerc = []
-        let x, y = 0 
-        let z = 0
-        let r = -1
-        
-        for (let v in dados.valoresAgrupados){
-            x =((dados.valoresAgrupados[v] / dados.vetorValores.length) * 100).toFixed(2)
-            vetorFsPerc.push(x)
-            y += dados.valoresAgrupados[v]
-            vetorFreAc.push(y)
+        const objFrequencias = {
+            'vetorFsPerc': vetorFsPerc,
+            'vetorFreAc': vetorFreAc,
+            'vetorFreAcPerc': vetorFreAcPerc
         }
 
-        for (let t in dados.valoresAgrupados){
-            r += 1
-            z = ((vetorFreAc[r] / dados.vetorValores.length) * 100).toFixed(2)
-            vetorFreAcPerc.push(z)
-        }
+        dados.vetorObjetos = tratarDados.agrupaValoresEmObjeto(
+            dados.valoresAgrupados,
+            objFrequencias
+        )
 
-        let vet =[]
-        let i = -1
-        for (let data in dados.valoresAgrupados){
-            let obj = {}
-            i += 1 
-            obj[data] = dados.valoresAgrupados[data]
-            obj['freqSimpPerc']= vetorFsPerc[i]
-            obj['freqAc']= vetorFreAc[i]
-            obj['freqAcPerc'] = vetorFreAcPerc[i]
-            vet.push(obj)
-        }
-        dados.vetorObjetos = vet 
+        executaFuncoes(dados, objFrequencias)
         
-        const sectionTabela = document.querySelector('.sectionTabela')
-
-        const criaTabela = (dadosTratados,perc, ac, acP) => {
-
-            const novaTabela = document.createElement('table')
-            const variavel = document.createElement('th')
-            const freqSimples = document.createElement('th')
-            const freqPerc = document.createElement('th')
-            const freqAc = document.createElement('th')
-            const freqAcPerc = document.createElement('th')
-
-            variavel.innerText = dados.nome
-            freqSimples.innerText = 'Freq Si'
-            freqPerc.innerText = 'Freq Si Perc'
-            freqAc.innerText = 'Freq Ac'
-            freqAcPerc.innerText = 'Freq Ac Perc'
-
-            novaTabela.appendChild(variavel)
-            novaTabela.appendChild(freqSimples)
-            novaTabela.appendChild(freqPerc)
-            novaTabela.appendChild(freqAc)
-            novaTabela.appendChild(freqAcPerc)
-
-            let i = -1
-
-            for(const chave in dadosTratados){
-                i +=1
-                const linha = document.createElement('tr')
-                const nomeVariavel = document.createElement('td')
-                const valorVariavel = document.createElement('td')
-                const valorperc = document.createElement('td')
-                const valorac = document.createElement('td')
-                const valorAcP = document.createElement('td')
-
-                nomeVariavel.innerText = chave
-                valorVariavel.innerText = dadosTratados[chave]
-                valorperc.innerText = `${perc[i]}%`
-                valorac.innerText = ac [i]
-                valorAcP.innerText = `${acP[i]}%`
-
-                if(dados.tipoVar == 'ordinal') {
-                    linha.draggable = true
-                    linha.classList.add('arrastavel')
-                }
-
-                linha.appendChild(nomeVariavel)
-                linha.appendChild(valorVariavel)
-                linha.appendChild(valorperc)
-                linha.appendChild(valorac)
-                linha.appendChild(valorAcP)
-
-                novaTabela.appendChild(linha)
-            }
-            
-            if(sectionTabela.classList.contains('esconder')){
-                sectionTabela.classList.remove('esconder')
-            }
-            
-            const filhos = sectionTabela.childNodes
-            if(filhos.length > 1){
-                while (filhos.length != 0) {
-                    sectionTabela.removeChild(filhos[0])
-                }
-            } 
-            sectionTabela.appendChild(novaTabela)
-        }
-
-        criaTabela(dados.valoresAgrupados, vetorFsPerc, vetorFreAc, vetorFreAcPerc)
-
-        let e = []
-        for (let i = 0; i < dados.vetorValores.length; i++){
-            let aux = dados.vetorValores[i]
-            if (isNaN(aux) == true){
-                e = dados.vetorValores.sort()
-            }
-            else{
-                e = dados.vetorValores.sort((a,b) => a-b)
-            }
-        }
         
-        let u = []
-        let w = []
-        let ex = []
-        let ponto = []
-        let fi = []
-        let soma = 0    
-        let fant = 0
-        let fAntMed = 0
-        let fimdMed = 0
-        let fimd = 0
-        let h = 0
-        let f = 0
-        let fMed = 0
-        let med = 0
-        let mediana = null
-        let sep = null
-        let ax = 0
-        let media = 0
-        let moda = null
-        let desvio = 0
-        let cv
-        // let separatriz = 'quartil'
-        let quadrante = 50
+        let separatriz = 'quartil'
+        let quadrante = inputRangeSeparatriz.value
+        outputValorSeparatriz.value = 'Nada Ainda...'
 
-        let se = (quadrante*(vetorFreAc[vetorFreAc.length -1]/100)).toFixed()
-            
-
-        if (dados.tipoVar === 'discreta'){
-            for (let dt in dados.valoresAgrupados){
-                u.push(parseInt(dt))
-                w.push(dados.valoresAgrupados[dt])
-                 
-            }
-            let z =[]
-            for (let o = 0; o < u.length; o++){
-                f = parseInt(w[o]) * parseInt(u[o])
-                ex.push(f)
-            }   
-            soma = ex.reduce((total, currentElement) => total + currentElement)
-            media = (soma/ vetorFreAc[vetorFreAc.length - 1]).toFixed(2)
-            meio = (vetorFreAc[vetorFreAc.length -1]/2).toFixed()
-            e = dados.vetorValores.sort((a,b) => a-b)
-            mediana = e[meio]
-            let au = []
-            for(data in dados.valoresAgrupados){
-                au.push(dados.valoresAgrupados[data])
-            }
-            let a = au.reduce(function(a,b){return Math.max(a,b)})
-            for(dt in dados.valoresAgrupados){
-                if (dados.valoresAgrupados[dt] === a){
-                    moda = dt
-                }
-            }
-            sep = e[se]
-            if (dados.tipoCalc === 'populacao'){
-                for (var o = 0; o < u.length; o++){
-                    ax = (u[o] - media)**2 * w[o]
-                    z.push(ax)
-                }
-                soma = z.reduce((total, currentElement) => total + currentElement)
-                desvio = Math.sqrt(soma/vetorFreAc[vetorFreAc.length - 1]).toFixed(2)
-                cv = ((desvio/media)*100).toFixed(2)
-            }else{
-                for (var o = 0; o < u.length; o++){
-                    ax = (u[o] - media)**2 * w[o]
-                    z.push(ax)
-                }
-                soma = z.reduce((total, currentElement) => total + currentElement)
-                desvio = Math.sqrt(soma/(vetorFreAc[vetorFreAc.length - 1] - 1)).toFixed(2)
-                cv = ((desvio/media)*100).toFixed(2)
-            }
-
-        } else if (dados.tipoVar === 'continua'){
-            for (let dt in dados.valoresAgrupados){
-                ex.push((dt.split(' |--- ')))
-                fi.push(dados.valoresAgrupados[dt])
-            }
-
-            med = Math.trunc(vetorFreAc[vetorFreAc.length -1] /2)
-            
-            let x = e[se]
-            let posicao = e[med]
-            console.log('posicao: ' + posicao);
-
-            for (let num in ex){
-                u.push(parseInt(ex[num][0]))
-                w.push(parseInt(ex[num][1]))   
-            }
-
-            h = w[0] - u[0]
-            console.log('Intervalo' + h);
-
-            for (let i = 0; i <= u.length; i++){
-                if (posicao >= u[i] && posicao < w[i]){
-                    fMed = u[i]
-
-                    if ((i - 1) != -1) fAntMed = dados
-                        .vetorObjetos[i -1]['freqAc']
-                    
-                    else fAntMed = 0
-
-                    fimdMed = fi[i]
-                    break
-                }
-            }
-            mediana = (fMed + (((med - fAntMed)/ fimdMed) * h)).toFixed(2)
-            
-            for (let i = 0; i < u.length; i++){
-                if (x >= u[i] && x < w[i]){
-                    f = u[i]
-
-                    if ((i-1) != -1) fant = dados
-                        .vetorObjetos[i -1]['freqAc']
-                        
-                    else fant = 0
-
-                    fimd = fi[i]
-                    break
-                }
-            }
-            
-            sep = (f + (((se - fant)/fimd)*h)).toFixed(2)
-            for(let q = 0; q < u.length;q++){
-                ponto.push((u[q] + w[q])/2)
-                soma = soma + (ponto[q]*fi[q])
-            }
-            media = (soma / vetorFreAc[vetorFreAc.length - 1]).toFixed(1)
-            let au = []
-            for(let data in dados.valoresAgrupados){
-                au.push(dados.valoresAgrupados[data])
-            }
-            let a = au.reduce(function(a,b){return Math.max(a,b)})
-            let t = au.indexOf(a)
-            moda = ((u[t] + w[t])/2).toFixed(0)
-            let v = []
-            let xi = []
-            for (var p = 0; p < u.length; p++){
-                ax = parseInt((u[p] + w[p])/2).toFixed(0)
-                xi.push(ax)
-                v.push(xi[p] * au[p])
-            }
-            soma = v.reduce((total, currentElement) => total + currentElement)
-            let medDesvio = 0
-            medDesvio = (soma/vetorFreAc[vetorFreAc.length  - 1]).toFixed(2)
-            let z = []
-            for (var o = 0; o < u.length; o++){
-                ax = (xi[o] - medDesvio)**2 * au[o]
-                z.push(ax)
-            }
-            soma = z.reduce((total, currentElement) => total + currentElement)
-            desvio = Math.sqrt(soma/vetorFreAc[vetorFreAc.length - 1]).toFixed(2)
-            cv = ((desvio/media)*100).toFixed(2)
-            
-        }else{
-            media = ['Não Possui média']
-
-            if(e.length % 2 == 0){
-                let esq = 0
-                let dir = e.length - 1
-                let meio = 0 
-                meio = Math.trunc((esq+dir)/2)
-                if (e[meio] == e[meio+1]){
-                mediana =[e[meio]]
-                }else{
-                    mediana = [e[meio],e[meio+1]]
-                }
-                
-            }else{
-                let esq = 0
-                let dir = e.length - 1
-                let meio = 0 
-                meio = Math.trunc((esq+dir)/2)
-                mediana = e[meio]
-                console.log(meio)
-            }
-
-            let au = []
-            for(data in dados.valoresAgrupados){
-                au.push(dados.valoresAgrupados[data])
-            }
-            let a = au.reduce(function(a,b){return Math.max(a,b)})
-                
-            let auxiliar = []
-            for(let dt in dados.valoresAgrupados){
-                if (dados.valoresAgrupados[dt] === a){
-                    auxiliar.push(dt)
-                }
-            }
-                
-            if (auxiliar.length === au.length){
-                moda.push('Estes dados são amodais')
-            }else{
-                moda = auxiliar
-            }
-            sep = e[se]
+        // se = (quadrante*(vetorFreAc[vetorFreAc.length -1]/100)).toFixed()
                
 
+        if (dados.tipoVar === 'discreta'){
+
+        } else if (dados.tipoVar === 'continua'){
+            
+        } else{
+            [mediana, media, moda, sep] = calculos
+                .calculaSeparatrizQualitativa(dados)
         }
         
-        console.log(dados);
-
-        function criaCaixasDeMedias (medias = [null,null,null]) {
-            const textoMedias = ['Média', 'Moda', 'Mediana']
-            const areaCaixas = document.createElement('div')
-
-            areaCaixas.classList.add('areaCaixas')
-            for(let i = 0; i < textoMedias.length; i++) {
-                const divCaixa = document.createElement('div')
-                const texto = document.createElement('p')
-
-                divCaixa.classList.add('caixaMedias')
-                texto.innerText = `${textoMedias[i]}: ${medias[i]}`
-
-                divCaixa.appendChild(texto)
-                areaCaixas.appendChild(divCaixa)
-            }
-            sectionTabela.appendChild(areaCaixas)
-        }
-        criaCaixasDeMedias([media,moda,mediana])
-        console.log('desvio: ' + desvio)
-        console.log('posição: ' + se)
-        console.log('sep: ' + sep)
-        console.log('cv: ' + cv);    
-        
-
-        outputResultadoSeratriz.value = sep
-
-        let vetorNomeCol = []
-        for(let nomeCol in dados.valoresAgrupados) {
-            vetorNomeCol.push(nomeCol)
-        }
-
-        switch (dados.tipoVar){
-            case 'nominal':
-                geraGrafico(areaGrafico, 'pie', vetorNomeCol, vetorFsPerc, 'Qualitativa Nominal', optGraficoPizza())
-                break
-            case 'ordinal':
-                geraGrafico(areaGrafico, 'pie', vetorNomeCol, vetorFsPerc, 'Qualitativa Ordinal', optGraficoPizza())
-                break
-            case 'discreta': 
-                geraGrafico(areaGrafico, 'bar', vetorNomeCol, vetorFsPerc, 'Quantitativa Discreta', optGraficoColuna())
-                break
-            case 'continua': 
-                geraGraficoContinua(areaGrafico, 'bar', vetorNomeCol, vetorFsPerc, 'Quantitativa Contínua', optGraficoColuna())
-                break
-            }
 
         if(dados.tipoVar == 'ordinal') {
             document.querySelector('.popup').classList.remove('esconder')
@@ -857,9 +300,9 @@ btnCalcular.addEventListener('click', () => {
         }
         
         //zerar variaveis
-        vetorValoresArquivo = []
+        vetorValoresInput = []
         dados.nome = ''
-        dados.vetorValores = []
+        dados.vetorDados = []
         dados.tipoVar = ''
         dados.tipoCalc = ''
         dados.valoresAgrupados = {}
