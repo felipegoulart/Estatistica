@@ -1,3 +1,5 @@
+import funcoesTratarDados from './tratarDados.js'
+import funcoesDOM from './tabelas.js'
 const calculaIntervalo = valores => {
     const menor = valores[0], maior = valores[valores.length -1]
     let amplitude = maior - menor
@@ -42,7 +44,7 @@ const calculaContinua = dados => {
         })
     }
     dados.valoresAgrupados = objTemp
-
+    calcFreqPercent(dados)
 }
 
 const calculaFreqSi = dados => {
@@ -50,6 +52,7 @@ const calculaFreqSi = dados => {
         dados.valoresAgrupados[elemento] ? dados.valoresAgrupados[elemento] += 1
             : dados.valoresAgrupados[elemento] = 1
     })
+    calcFreqPercent(dados)
 }
 
 // Responsável pelos calculos das frequencias
@@ -77,19 +80,24 @@ const calcFreqPercent = dados => {
     dados.vetorFsPerc = vetorFsPerc
     dados.vetorFreAc = vetorFreAc
     dados.vetorFreAcPerc = vetorFreAcPerc
+
+    funcoesTratarDados.agrupaValoresEmObjeto(dados)
 }
 
-const calculaMediaModaMediana = obj => {
+const calculaMediaModaMediana = dados => {
     let media, moda, mediana
     let vetLimites = [], vetFreqSimples = [] 
 
-    let meioVet = Math.trunc(obj.vetorDados.length /2)
-    let valorCentral = obj.vetorDados[meioVet]
+    let meioVet = Math.trunc(dados.vetorDados.length /2)
+    let valorCentral = dados.vetorDados[meioVet]
 
-    if(obj.tipoVar === 'continua') {
-        for (let dt in obj.valoresAgrupados){
+    let fiAcc =  dados.vetorFreAc.reduce(
+        (acumulador,valorAtual) => acumulador + valorAtual )
+
+    if(dados.tipoVar === 'continua') {
+        for (let dt in dados.valoresAgrupados){
             vetLimites.push((dt.split(' |--- ')))
-            vetFreqSimples.push(obj.valoresAgrupados[dt])
+            vetFreqSimples.push(dados.valoresAgrupados[dt])
         }
 
         let vetLimiteInferior = [], vetLimiteSuperior = []
@@ -98,7 +106,7 @@ const calculaMediaModaMediana = obj => {
             vetLimiteInferior.push(Number(vetor[0]))
             vetLimiteSuperior.push(Number(vetor[1]))   
         }
-
+        // ----Mediana---- \\
         for (let i = 0; i <= vetLimiteInferior.length; i++) {
             if (valorCentral >= vetLimiteInferior[i] 
                     && valorCentral < vetLimiteSuperior[i]) {
@@ -114,39 +122,38 @@ const calculaMediaModaMediana = obj => {
                 break
             }
         }
-
-        let ponto = []
-        let soma
+        
+        let soma = 0
+        // ----Media---- \\
         for(let i = 0; i < vetLimiteInferior.length; i++){
-            ponto.push((vetLimiteInferior[i] + vetLimiteSuperior[i]) / 2)
-            soma = soma + (ponto[i] * vetFreqSimples[i])
+            soma += ((vetLimiteInferior[i] + vetLimiteSuperior[i]) / 2)
+                * vetFreqSimples[i]
         }
-
-        let media
-        media = (soma / obj.vetorFreAc).toFixed(1)
-        let au = []
-        for(let data in obj.valoresAgrupados){
-            au.push(obj.valoresAgrupados[data])
-        }
-        let a = au.reduce(function(a,b){return Math.max(a,b)})
-        let t = au.indexOf(a)
-        moda = ((vetLimiteInferior[t] + vetLimiteSuperior[t])/2).toFixed(0)
-
+        
+        // ----Moda---- \\
+        
+        debugger
+        let a = vetFreqSimples.reduce((a,b) => Math.max(a,b))
+        let t = vetFreqSimples.indexOf(a)
+        moda = ((vetLimiteInferior[t] + vetLimiteSuperior[t]) / 2).toFixed(0)
+        // resultados
         mediana = (limiteInferior + ((meioVet - fant) / fimd) * intervalo)
+        media = (soma / fiAcc).toFixed(1)
     }
 
     let au = []
-    for(let data in obj.valoresAgrupados){
-        au.push(obj.valoresAgrupados[data])
+    for(let data in dados.valoresAgrupados){
+        au.push(dados.valoresAgrupados[data])
     }
     let a = au.reduce((a,b) => Math.max(a,b))
-    for(let dt in obj.valoresAgrupados){
-        if (obj.valoresAgrupados[dt] === a){
+    for(let dt in dados.valoresAgrupados){
+        if (dados.valoresAgrupados[dt] === a){
             moda = dt
         }
     }
 
-    return [media, moda, mediana]
+    funcoesDOM.criaCaixasDeMedias([media, moda, mediana])
+    // calculaSeparatrizContinua()
 }
 
 //Separatrizes

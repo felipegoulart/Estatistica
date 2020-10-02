@@ -1,3 +1,13 @@
+import funcoesCalculo from './calculos.js'
+import funcoesDOM from './tabelas.js'
+
+const salvarDadosNoObjeto = (dados, nome, valores )=> {
+    dados.nome = nome
+    dados.vetorDados = valores
+    dados.tipoVar = document.querySelector('input[name="tipoVariavel"]:checked').value
+    dados.tipoCalc = document.querySelector('#tipoCalculo').value
+}
+
 const ordenarVetor = (vetor) => {
     const tipoNumerico = vetor.every(elemento => Number(elemento))
     if(tipoNumerico) {
@@ -35,21 +45,23 @@ const agrupaValoresEmObjeto = dados => {
     for (let data in dados.valoresAgrupados){
         let objTemp = {}
 
-        debugger
         objTemp['nome'] = data
         objTemp['freqSimp'] = dados.valoresAgrupados[data]
         objTemp['freqSimpPerc'] = dados.vetorFsPerc[i]
         objTemp['freqAc'] = dados.vetorFreAc[i]
         objTemp['freqAcPerc'] = dados.vetorFreAcPerc[i]
         i++
-        console.log(objTemp);
         vetTemp.push(objTemp)
     }
-    return vetTemp
+    dados.vetorObjetos = vetTemp
+
+    funcoesDOM.criarTabela(dados)
+    funcoesCalculo.calculaMediaModaMediana(dados)
 }
 
 export default {
     capturaDadosInputManual: capturaDadosInputManual,
     separarDadosArquivo: separarDadosArquivo,
+    salvarDadosNoObjeto:salvarDadosNoObjeto,
     agrupaValoresEmObjeto: agrupaValoresEmObjeto,
 }

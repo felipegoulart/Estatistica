@@ -3,71 +3,7 @@ const sectionTabela = document.querySelector('.sectionTabela')
 // ----------Drag N Drop da tabela Ordinal--------- \\
 /* Funções responsáveis por fazer drag n drop da tabela
 e atualizar os seus valores de frequencia acumulada */
-export function editarTabela() {
-    const tabela = document.querySelector('table')
-    const linhasTabela = document.querySelectorAll('tr')
-
-    linhasTabela.forEach(elemento => {
-        elemento.addEventListener('dragstart', () => {
-            elemento.classList.add('arrastando')
-        })
-        elemento.addEventListener('dragend', () => {
-            elemento.classList.remove('arrastando')
-            })
-    })
-
-    tabela.addEventListener('dragover', elemento => {
-        elemento.preventDefault()
-        const elementoPosterior = arrastarProximoElemento(tabela, elemento.clientY)
-        const arrastado = document.querySelector('.arrastando')
-        if (elementoPosterior == null) {
-            tabela.appendChild(arrastado)
-        } else {
-            tabela.insertBefore(arrastado, elementoPosterior)
-        }
-    })
-
-    function arrastarProximoElemento(tabela, y) {
-        const elementosArrastaveis = [...tabela.querySelectorAll('.arrastavel:not(.arrastando)')]
-      
-        return elementosArrastaveis.reduce((maisProximo, filho) => {
-            const box = filho.getBoundingClientRect()
-            const deslocamento = y - box.top - box.height / 2
-            if (deslocamento < 0 && deslocamento > maisProximo.deslocamento) {
-                return { deslocamento: deslocamento, element: filho }
-            } else {
-                return maisProximo
-            }
-        }, { deslocamento: Number.NEGATIVE_INFINITY }).element
-    }
-    atualizarTabela(tabela, linhasTabela)
-}
-
-function atualizarTabela(tabela) {
-    tabela.addEventListener('dragend', () => {
-        const linhasTabela = document.querySelectorAll('tr')
-        let vetorFreqSimples = [] 
-        let vetorFreqAcum = []
-        linhasTabela.forEach(element => {
-            vetorFreqSimples.push(Number(element.children[1].innerText))
-        })
-        let aux = 0
-        for(let i = 0; i < vetorFreqSimples.length; i++){
-            aux += vetorFreqSimples[i]
-            vetorFreqAcum.push(aux)
-        }
-
-        const qtdElementos = vetorFreqSimples.reduce((acumulador, valorAtual) => acumulador + valorAtual)
-
-        linhasTabela.forEach(element => {
-            let valorAtual = vetorFreqAcum.shift()
-            element.children[3].innerText = valorAtual
-            element.children[4].innerText = `${((valorAtual / qtdElementos) * 100).toFixed(2)}%`
-        })
-    })
-}
-
-export const criaTabela = (obj) => {
+const criarTabela = (obj) => {
 
     const novaTabela = document.createElement('table')
     const variavel = document.createElement('th')
@@ -132,7 +68,71 @@ export const criaTabela = (obj) => {
     sectionTabela.appendChild(novaTabela)
 }
 
-export const criaCaixasDeMedias = (medias = [null,null,null]) => {
+function editarTabela() {
+    const tabela = document.querySelector('table')
+    const linhasTabela = document.querySelectorAll('tr')
+
+    linhasTabela.forEach(elemento => {
+        elemento.addEventListener('dragstart', () => {
+            elemento.classList.add('arrastando')
+        })
+        elemento.addEventListener('dragend', () => {
+            elemento.classList.remove('arrastando')
+            })
+    })
+
+    tabela.addEventListener('dragover', elemento => {
+        elemento.preventDefault()
+        const elementoPosterior = arrastarProximoElemento(tabela, elemento.clientY)
+        const arrastado = document.querySelector('.arrastando')
+        if (elementoPosterior == null) {
+            tabela.appendChild(arrastado)
+        } else {
+            tabela.insertBefore(arrastado, elementoPosterior)
+        }
+    })
+
+    function arrastarProximoElemento(tabela, y) {
+        const elementosArrastaveis = [...tabela.querySelectorAll('.arrastavel:not(.arrastando)')]
+      
+        return elementosArrastaveis.reduce((maisProximo, filho) => {
+            const box = filho.getBoundingClientRect()
+            const deslocamento = y - box.top - box.height / 2
+            if (deslocamento < 0 && deslocamento > maisProximo.deslocamento) {
+                return { deslocamento: deslocamento, element: filho }
+            } else {
+                return maisProximo
+            }
+        }, { deslocamento: Number.NEGATIVE_INFINITY }).element
+    }
+    atualizarTabela(tabela, linhasTabela)
+}
+
+function atualizarTabela(tabela) {
+    tabela.addEventListener('dragend', () => {
+        const linhasTabela = document.querySelectorAll('tr')
+        let vetorFreqSimples = [] 
+        let vetorFreqAcum = []
+        linhasTabela.forEach(element => {
+            vetorFreqSimples.push(Number(element.children[1].innerText))
+        })
+        let aux = 0
+        for(let i = 0; i < vetorFreqSimples.length; i++){
+            aux += vetorFreqSimples[i]
+            vetorFreqAcum.push(aux)
+        }
+
+        const qtdElementos = vetorFreqSimples.reduce((acumulador, valorAtual) => acumulador + valorAtual)
+
+        linhasTabela.forEach(element => {
+            let valorAtual = vetorFreqAcum.shift()
+            element.children[3].innerText = valorAtual
+            element.children[4].innerText = `${((valorAtual / qtdElementos) * 100).toFixed(2)}%`
+        })
+    })
+}
+
+const criaCaixasDeMedias = (medias = [null,null,null]) => {
     const textoMedias = ['Média', 'Moda', 'Mediana']
     const areaCaixas = document.createElement('div')
 
@@ -148,4 +148,10 @@ export const criaCaixasDeMedias = (medias = [null,null,null]) => {
         areaCaixas.appendChild(divCaixa)
     }
     sectionTabela.appendChild(areaCaixas)
+}
+
+export default {
+    criarTabela: criarTabela,
+    editarTabela: editarTabela,
+    criaCaixasDeMedias: criaCaixasDeMedias,
 }

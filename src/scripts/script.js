@@ -1,14 +1,7 @@
 import { dropFile } from './dropArquivo.js'
 import funcoesTratarDados from './tratarDados.js'
 import funcoesCalculo from './calculos.js'
-import { 
-    criaTabela, 
-    editarTabela, 
-    criaCaixasDeMedias 
-} from './tabelas.js'
-import graficos from './graficos.js'
-import tratarDados from './tratarDados.js'
-import calculos from './calculos.js'
+import funcoesDOM from './tabelas.js'
 
 const formManual = document.querySelector('.formManual')
 const formArquivo = document.querySelector('.formArquivo')
@@ -192,17 +185,7 @@ inputNumSeparatriz.addEventListener('input', () => {
     inputRangeSeparatriz.value = inputNumSeparatriz.value
 })
 
-const executaFuncoes = (obj, objFreq) => {
-    const vetorMediaModaMediana = funcoesCalculo
-        .calculaMediaModaMediana(obj)
-
-    criaTabela(obj)
-    criaCaixasDeMedias(vetorMediaModaMediana)
-    graficos(obj, objFreq)
-}
-
-// Botão calcular, responsável por realizar os calculos, gerar tabela e gráficos
-btnCalcular.addEventListener('click', () => {
+const validarEntradas = () => {
     if(tipoForm == 'manual') {
         if(!inputNome.value.trim()) {
             inputNome.classList.add('erro')
@@ -241,67 +224,49 @@ btnCalcular.addEventListener('click', () => {
         }
     }
 
-    // Atribuindo os dados limpos capturados anteriormente
-    dados.nome = nome
-    dados.vetorDados = valores
-    dados.tipoVar = document.querySelector('input[name="tipoVariavel"]:checked').value
-    dados.tipoCalc = document.querySelector('#tipoCalculo').value
-    
-    // Caso Todas as entradas estejam validadas ele executa os calculos.
     if (validacao) {
-        if (dados.tipoVar == 'continua') funcoesCalculo
-            .calculaContinua(dados)
-
-        // A soma da Frequência simples é igual para todas menos Continua
-        else  funcoesCalculo.calculaFreqSi(dados)
-
-        funcoesCalculo.calcFreqPercent(dados)
-
+        funcoesTratarDados.salvarDadosNoObjeto(dados, nome, valores)
+        if(dados.tipoVar == 'continua') funcoesCalculo.calculaContinua(dados) 
         
-        dados.vetorObjetos = tratarDados.agrupaValoresEmObjeto(dados)
-
-        executaFuncoes(dados)
-        
-        
-        let separatriz = 'quartil'
-        let quadrante = inputRangeSeparatriz.value
-        outputValorSeparatriz.value = 'Nada Ainda...'
-
-        // se = (quadrante*(vetorFreAc[vetorFreAc.length -1]/100)).toFixed()
-               
-
-        if (dados.tipoVar === 'discreta'){
-
-        } else if (dados.tipoVar === 'continua'){
-            
-        } else{
-            [mediana, media, moda, sep] = calculos
-                .calculaSeparatrizQualitativa(dados)
-        }
-        
-
-        if(dados.tipoVar == 'ordinal') {
-            document.querySelector('.popup').classList.remove('esconder')
-            editarTabela()
-        }
-    
-        if(sectionGrafico.classList.contains('esconder')) {
-            sectionGrafico.classList.remove('esconder')
-        }
-
-        if(document.querySelector('.sectionSeparatrizes').classList.contains('esconder')) {
-            document.querySelector('.sectionSeparatrizes').classList.remove('esconder')
-        }
-        
-        //zerar variaveis
-        vetorValoresInput = []
-        dados.nome = ''
-        dados.vetorDados = []
-        dados.tipoVar = ''
-        dados.tipoCalc = ''
-        dados.valoresAgrupados = {}
-        
-        formDescritiva.reset()
+        else funcoesCalculo.calculaFreqSi(dados)
     }
+}
+
+
+// Botão calcular, responsável por realizar os calculos, gerar tabela e gráficos
+btnCalcular.addEventListener('click', () => {
+    validarEntradas()
+    
+    let quadrante = inputRangeSeparatriz.value
+    outputValorSeparatriz.value = 'Nada Ainda...'
+
+    // se = (quadrante*(vetorFreAc[vetorFreAc.length -1]/100)).toFixed()
+    // [mediana, media, moda, sep] = calculos
+    //     .calculaSeparatrizQualitativa(dados)
+    
+
+    if(dados.tipoVar == 'ordinal') {
+        document.querySelector('.popup').classList.remove('esconder')
+        funcoesDOM.editarTabela()
+    }
+
+    if(sectionGrafico.classList.contains('esconder')) {
+        sectionGrafico.classList.remove('esconder')
+    }
+
+    if(document.querySelector('.sectionSeparatrizes').classList.contains('esconder')) {
+        document.querySelector('.sectionSeparatrizes').classList.remove('esconder')
+    }
+    
+    //zerar variaveis
+    vetorValoresInput = []
+    dados.nome = ''
+    dados.vetorDados = []
+    dados.tipoVar = ''
+    dados.tipoCalc = ''
+    dados.valoresAgrupados = {}
+    
+    formDescritiva.reset()
+    
     excluirThumb()
 })
