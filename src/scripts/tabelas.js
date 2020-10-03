@@ -24,10 +24,7 @@ const criarTabela = (obj) => {
     novaTabela.appendChild(freqAc)
     novaTabela.appendChild(freqAcPerc)
 
-    let i = -1
-
-    for(const objeto of obj.vetorObjetos){
-        i +=1
+    for(const objeto of obj.vetorObjetos) {
         const linha = document.createElement('tr')
         const nomeVariavel = document.createElement('td')
         const valorVariavel = document.createElement('td')

@@ -85,19 +85,26 @@ const calcFreqPercent = dados => {
 }
 
 const calculaMediaModaMediana = dados => {
-    let media, moda, mediana
-    let vetLimites = [], vetFreqSimples = [] 
+    console.log(dados.tipoVar);
+    let media, mediana, moda = ''
+    let soma = 0
+    let vetLimites = [], vetFreqSimples = []
 
-    let meioVet = Math.trunc(dados.vetorDados.length /2)
+    let meioVet = Math.round(dados.vetorDados.length /2)
     let valorCentral = dados.vetorDados[meioVet]
+
+    for(const data in dados.valoresAgrupados) { // cria vetor de frequências simples
+        vetFreqSimples.push(dados.valoresAgrupados[data])
+    }
+
+    let maiorFi = Math.max(...vetFreqSimples) // para usar na moda
 
     let fiAcc =  dados.vetorFreAc.reduce(
         (acumulador,valorAtual) => acumulador + valorAtual )
 
     if(dados.tipoVar === 'continua') {
-        for (let dt in dados.valoresAgrupados){
-            vetLimites.push((dt.split(' |--- ')))
-            vetFreqSimples.push(dados.valoresAgrupados[dt])
+        for (let data in dados.valoresAgrupados){
+            vetLimites.push((data.split(' |--- ')))
         }
 
         let vetLimiteInferior = [], vetLimiteSuperior = []
@@ -106,7 +113,8 @@ const calculaMediaModaMediana = dados => {
             vetLimiteInferior.push(Number(vetor[0]))
             vetLimiteSuperior.push(Number(vetor[1]))   
         }
-        // ----Mediana---- \\
+
+        // ----Mediana Contínua---- \\
         for (let i = 0; i <= vetLimiteInferior.length; i++) {
             if (valorCentral >= vetLimiteInferior[i] 
                     && valorCentral < vetLimiteSuperior[i]) {
@@ -122,35 +130,68 @@ const calculaMediaModaMediana = dados => {
                 break
             }
         }
+        mediana = (limiteInferior + ((meioVet - fant) / fimd) * intervalo)
+
         
-        let soma = 0
-        // ----Media---- \\
+        // ----Media Contínua---- \\
         for(let i = 0; i < vetLimiteInferior.length; i++){
             soma += ((vetLimiteInferior[i] + vetLimiteSuperior[i]) / 2)
                 * vetFreqSimples[i]
         }
-        
-        // ----Moda---- \\
-        
-        debugger
-        let a = vetFreqSimples.reduce((a,b) => Math.max(a,b))
-        let t = vetFreqSimples.indexOf(a)
-        moda = ((vetLimiteInferior[t] + vetLimiteSuperior[t]) / 2).toFixed(0)
-        // resultados
-        mediana = (limiteInferior + ((meioVet - fant) / fimd) * intervalo)
         media = (soma / fiAcc).toFixed(1)
+        
+        // ----Moda Contínua---- \\
+        let indexMaiorFi = vetFreqSimples.indexOf(maiorFi)
+        moda = ((vetLimiteInferior[indexMaiorFi] + vetLimiteSuperior[indexMaiorFi]) / 2)
+            .toFixed(0)
+
+    } else if (dados.tipoVar === 'discreta'){
+        // ----Mediana Discreta---- \\
+        mediana = valorCentral
+        
+        // ----Media Discreta---- \\
+        soma = dados.vetorDados.reduce((acumulador,valorAtual) => 
+             acumulador + valorAtual)   
+        media = (soma / dados.vetorFreAc[dados.vetorFreAc.length -1]).toFixed(2)
+        
+        // ----Moda Discreta---- \\
+        let modaTemp = ''
+        for(let data in dados.valoresAgrupados){
+            if (dados.valoresAgrupados[data] === maiorFi){
+                modaTemp += `${data} `
+            }
+        }
+        moda = modaTemp.trim().replace(/ /g, ', ') // Usando uma RegEx para
+        //substituir todos os espaços em branco
+         
+    } else {
+        // ----Mediana Qualitativa---- \\
+        if(dados.vetorDados.length % 2 == 0){
+            if(dados.vetorDados[meioVet] == dados.vetorDados[meioVet + 1]){
+                mediana = [dados.vetorDados[meioVet]]
+            } else {
+                mediana = [dados.vetorDados[meioVet], dados.vetorDados[meioVet + 1]]
+            }
+            
+        } else mediana = dados.vetorDados[meioVet]
+    
+        // ----Moda Qualitativa---- \\
+        let au = []
+        for(let data in dados.valoresAgrupados){
+            au.push(dados.valoresAgrupados[data])
+        }
+        debugger
+        for(let data in dados.valoresAgrupados){
+            if(dados.valoresAgrupados[data] === maiorFi) auxiliar.push(data)
+        }
+            
+        if(auxiliar.length === au.length) moda.push('Estes dados são amodais')
+        
+        else moda = auxiliar
+        
+        media = ['Não Possui média']
     }
 
-    let au = []
-    for(let data in dados.valoresAgrupados){
-        au.push(dados.valoresAgrupados[data])
-    }
-    let a = au.reduce((a,b) => Math.max(a,b))
-    for(let dt in dados.valoresAgrupados){
-        if (dados.valoresAgrupados[dt] === a){
-            moda = dt
-        }
-    }
 
     funcoesDOM.criaCaixasDeMedias([media, moda, mediana])
     // calculaSeparatrizContinua()
@@ -158,41 +199,24 @@ const calculaMediaModaMediana = dados => {
 
 //Separatrizes
 const calculaSeparatrizDiscreta = () => {
-    let z =[]
-    for (let dt in obj.valoresAgrupados){
-            vetLimiteInferior.push(parseInt(dt))
-            vetLimiteSuperior.push(obj.valoresAgrupados[dt])
-        }
-
-        
-        for (let o = 0; o < vetLimiteInferior.length; o++){
-            f = parseInt(vetLimiteSuperior[o]) * parseInt(vetLimiteInferior[o])
-            ex.push(f)
-        }   
-        soma = ex.reduce((total, currentElement) => total + currentElement)
-        media = (soma/ vetorFreAc[vetorFreAc.length - 1]).toFixed(2)
-        meio = (vetorFreAc[vetorFreAc.length -1]/2).toFixed()
-        e = obj.vetorDados.sort((a,b) => a-b)
-        mediana = e[meio]
-        
-        sep = e[se]
-        if (obj.tipoCalc === 'populacao'){
-            for (var o = 0; o < vetLimiteInferior.length; o++){
-                ax = (vetLimiteInferior[o] - media)**2 * vetLimiteSuperior[o]
-                z.push(ax)
-            }
-            soma = z.reduce((total, currentElement) => total + currentElement)
-            desvio = Math.sqrt(soma/vetorFreAc[vetorFreAc.length - 1]).toFixed(2)
-            cv = ((desvio/media)*100).toFixed(2)
-        }else{
-            for (var o = 0; o < vetLimiteInferior.length; o++){
-                ax = (vetLimiteInferior[o] - media)**2 * vetLimiteSuperior[o]
-                z.push(ax)
-            }
-            soma = z.reduce((total, currentElement) => total + currentElement)
-            desvio = Math.sqrt(soma/(vetorFreAc[vetorFreAc.length - 1] - 1)).toFixed(2)
-            cv = ((desvio/media)*100).toFixed(2)
-    }
+    // sep = e[se]
+        // if (obj.tipoCalc === 'populacao'){
+        //     for (var o = 0; o < vetLimiteInferior.length; o++){
+        //         ax = (vetLimiteInferior[o] - media)**2 * vetLimiteSuperior[o]
+        //         z.push(ax)
+        //     }
+        //     soma = z.reduce((total, currentElement) => total + currentElement)
+        //     desvio = Math.sqrt(soma/vetorFreAc[vetorFreAc.length - 1]).toFixed(2)
+        //     cv = ((desvio/media)*100).toFixed(2)
+        // }else{
+        //     for (var o = 0; o < vetLimiteInferior.length; o++){
+        //         ax = (vetLimiteInferior[o] - media)**2 * vetLimiteSuperior[o]
+        //         z.push(ax)
+        //     }
+        //     soma = z.reduce((total, currentElement) => total + currentElement)
+        //     desvio = Math.sqrt(soma/(vetorFreAc[vetorFreAc.length - 1] - 1)).toFixed(2)
+        //     cv = ((desvio/media)*100).toFixed(2)
+        // }
 }
 
 const calculaSeparatrizContinua = () => {
@@ -229,34 +253,8 @@ const calculaSeparatrizQualitativa = dados => {
     let dir = dados.vetorDados.length - 1
     let meio = Math.trunc((esq + dir) / 2)
 
-    if(dados.vetorDados.length % 2 == 0){
-
-        if(dados.vetorDados[meio] == dados.vetorDados[meio + 1]){
-            mediana = [dados.vetorDados[meio]]
-        } else {
-            mediana = [dados.vetorDados[meio], dados.vetorDados[meio + 1]]
-        }
-        
-    } else mediana = dados.vetorDados[meio]
-
-    for(let data in dados.valoresAgrupados){
-        au.push(dados.valoresAgrupados[data])
-    }
-
-    const a = au.reduce((a,b) => Math.max(a,b))
-        
-    for(let dt in dados.valoresAgrupados){
-        if(dados.valoresAgrupados[dt] === a) auxiliar.push(dt)
-    }
-        
-    if(auxiliar.length === au.length) moda.push('Estes dados são amodais')
-    
-    else moda = auxiliar
     
     sep = dados.vetorDados[se]
-    media = ['Não Possui média']
-
-    return [mediana, media, moda, sep]
 }
 
 export default {
