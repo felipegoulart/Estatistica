@@ -33,16 +33,23 @@ let formAtivado = false
 let validacao = false
 let tipoForm = null
 
-const dados = {
+const dados = { // O objeto vai conter todos os dados dos calculos
     nome: '',
     vetorDados: [],
+    tipoVar: '',
+    tipoCalc: '',
+    maiorFi: '',
+    fiTotal: '',
+    meioVet: '',
+    media: '',
+    moda: '',
+    mediana: '',
+    vetorFi: [],
     vetorFsPerc: [],
     vetorFreAc: [],
     vetorFreAcPerc: [],
-    tipoVar: '',
-    tipoCalc: '',
     valoresAgrupados: {},
-    vetorObjetos: null
+    vetorObjetos: []
 }
 
 let vetorValoresInput = []
@@ -236,14 +243,21 @@ const validarEntradas = () => {
 // Botão calcular, responsável por realizar os calculos, gerar tabela e gráficos
 btnCalcular.addEventListener('click', () => {
     validarEntradas()
-    
-    let quadrante = inputRangeSeparatriz.value
-    outputValorSeparatriz.value = 'Nada Ainda...'
+      
+    inputRangeSeparatriz.addEventListener('input', () => {
+        let quadrante = inputRangeSeparatriz.value
+        let se = (quadrante*(dados.vetorFreAc[dados.vetorFreAc.length -1] / 100))
+            .toFixed()
 
-    // se = (quadrante*(vetorFreAc[vetorFreAc.length -1]/100)).toFixed()
-    // [mediana, media, moda, sep] = calculos
-    //     .calculaSeparatrizQualitativa(dados)
-    
+        if(dados.tipoVar == 'continua'){
+
+        } else if (dados.tipoVar == 'discreta') funcoesCalculo
+            .calculaSeparatrizDiscreta(se)
+
+        else { 
+
+        }
+    })
 
     if(dados.tipoVar == 'ordinal') {
         document.querySelector('.popup').classList.remove('esconder')
