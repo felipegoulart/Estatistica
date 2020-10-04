@@ -5,7 +5,6 @@
     flex-direction: column;
     flex-wrap: wrap;
     align-items: baseline;
-    margin-bottom: 50px;
 }
 
 table {
@@ -71,6 +70,10 @@ tr:hover {
 
 .arrastando {
     opacity: .3;
+}
+
+.sectionMedias {
+    margin: 0 auto 50px auto;
 }
 
 .sectionSeparatrizes {

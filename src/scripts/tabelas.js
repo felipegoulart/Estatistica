@@ -1,6 +1,5 @@
-import funcoesCalculo from './calculos.js'
-
 const sectionTabela = document.querySelector('.sectionTabela')
+const sectionMedias = document.querySelector('.sectionMedias')
 const sectionSeparatrizes = document.querySelector('.sectionSeparatrizes')
 
 // ----------Drag N Drop da tabela Ordinal--------- \\
@@ -132,9 +131,9 @@ function atualizarTabela(tabela) {
     })
 }
 
+const areaCaixas = document.createElement('div')
 const criaCaixasDeMedias = (medias = [null,null,null]) => {
     const textoMedias = ['Média', 'Moda', 'Mediana']
-    const areaCaixas = document.createElement('div')
 
     areaCaixas.classList.add('areaCaixas')
     for(let i = 0; i < textoMedias.length; i++) {
@@ -147,7 +146,7 @@ const criaCaixasDeMedias = (medias = [null,null,null]) => {
         divCaixa.appendChild(texto)
         areaCaixas.appendChild(divCaixa)
     }
-    sectionTabela.appendChild(areaCaixas)
+    sectionMedias.appendChild(areaCaixas)
 }
 
 const criaCaixasDeSeparatrizes = (medias = [null,null,null]) => {
@@ -166,16 +165,24 @@ const criaCaixasDeSeparatrizes = (medias = [null,null,null]) => {
         divCaixa.appendChild(texto)
         areaCaixas.appendChild(divCaixa)
     }
+
+    const filhos = sectionSeparatrizes.childNodes
+    if(filhos.length > 3){
+        while (filhos.length != 0) {
+            sectionSeparatrizes.removeChild(filhos[0])
+        }
+    } 
     sectionSeparatrizes.appendChild(areaCaixas)
 }
 
 const atualizarValorSeparatriz = (separatriz) => {
-    document.querySelector('caixaSeparatriz').innerText = separatriz
+    document.querySelector('#caixaSeparatriz').innerHTML = `<p>Separatriz: ${separatriz}</p>`
 }
 
 export default {
     criarTabela: criarTabela,
     editarTabela: editarTabela,
     criaCaixasDeMedias: criaCaixasDeMedias,
-    criaCaixasDeSeparatrizes: criaCaixasDeSeparatrizes
+    criaCaixasDeSeparatrizes: criaCaixasDeSeparatrizes,
+    atualizarValorSeparatriz: atualizarValorSeparatriz
 }

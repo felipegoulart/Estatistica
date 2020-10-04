@@ -1,5 +1,7 @@
 import funcoesTratarDados from './tratarDados.js'
 import funcoesDOM from './tabelas.js'
+import grafico from './graficos.js'
+
 
 const calculaIntervalo = valores => {
     const menor = valores[0], maior = valores[valores.length -1]
@@ -102,8 +104,7 @@ const calculaMediaModaMediana = dados => {
     let fiTotal =  vetFreqSimples.reduce(
         (acumulador,valorAtual) => acumulador + valorAtual )
 
-    let se = 25 * (dados.fiTotal / 100) // valor inicial para a separatriz
-
+    let se = Math.trunc(25 * (fiTotal / 100)) // valor inicial para a separatriz
     let separatriz, DP, CV
 
     dados.maiorFi = maiorFi
@@ -220,14 +221,31 @@ const calculaMediaModaMediana = dados => {
 
     funcoesDOM.criaCaixasDeMedias([media, moda, mediana])
     funcoesDOM.criaCaixasDeSeparatrizes([separatriz, DP, CV])
+    grafico(dados)
 }
 
 const calculaSeparatrizContinua = (dados, se) => {
-    return (dados.dadosContinua.i + (((se - dados.dadosContinua.fant)
-        / dados.dadosContinua.fimd)
+    const vetorDados = JSON.parse(sessionStorage.getItem('vetorDados'))
+    const posicaoSeparatriz = vetorDados[se - 1]
+    let limiteInferior, fant, fimd
+    for(let i = 0; i < dados.dadosContinua.limiteInferior.length; i++) {
+        if(posicaoSeparatriz >= dados.dadosContinua.limiteInferior[i]
+            && posicaoSeparatriz < dados.dadosContinua.limiteSuperior[i]) {
+            
+            if(i == 0) fant = 0
+            else fant = dados.vetorFreAc[ i-1 ]
+            
+            limiteInferior = dados.dadosContinua.limiteInferior[i]
+            fimd = dados.vetorFi[i]
+            break
+        }
+    }
+
+    return (limiteInferior + (((se - fant)
+        / fimd)
         * dados.dadosContinua.h))
         .toFixed(2)
-    }
+}
         
 const calculaDesvioEVariacaoContinua = (dados, media) => {
     let soma = 0
@@ -255,12 +273,12 @@ const calculaDesvioEVariacaoContinua = (dados, media) => {
     return [desvio, cv]
 }
 
-const calculaSeparatrizDiscreta = (dados, se) => dados.vetorDados[se]
+const calculaSeparatrizDiscreta = (dados, se) => dados.vetorDados[se - 1]
 
 const calculaDesvioEVariacaoDiscreta = (dados, media) => {
     let soma = 0
 
-    for (let i = 0; i < vetLimiteInferior.length; i++){
+    for (let i = 0; i <dados.dadosContinua.limiteInferior.length; i++){
         soma += (dados.dadosContinua.limiteInferior[i] - media)
             ** 2 * dados.dadosContinua.limiteSuperior[i]
     }
@@ -274,7 +292,7 @@ const calculaDesvioEVariacaoDiscreta = (dados, media) => {
     return [desvio, cv]
 }
 
-const calculaSeparatrizQualitativa = (dados, se) => dados.vetorDados[se]
+const calculaSeparatrizQualitativa = (dados, se) => dados.vetorDados[se - 1]
 
 export default {
     calculaContinua: calculaContinua,

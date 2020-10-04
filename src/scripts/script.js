@@ -242,28 +242,36 @@ const validarEntradas = () => {
     
 }
 
+const atualizarValorSeparatriz = () => {
+    const tipoVariavel = JSON.parse(sessionStorage.getItem('tipoVar'))
+        
+        let quadrante = inputRangeSeparatriz.value
+        let se = Math.trunc((quadrante * (dados.fiTotal / 100)))
+        
+        if(tipoVariavel == 'continua') {
+            const separatriz = funcoesCalculo
+                .calculaSeparatrizContinua(dados,se)
+            funcoesDOM.atualizarValorSeparatriz(separatriz)
+            
+        } else if (tipoVariavel == 'discreta') {
+            const separatriz = funcoesCalculo
+                .calculaSeparatrizDiscreta(dados,se)
+            funcoesDOM.atualizarValorSeparatriz(separatriz)
+            
+        } else {
+            const separatriz = funcoesCalculo
+                .calculaSeparatrizQualitativa(dados,se)
+            funcoesDOM.atualizarValorSeparatriz(separatriz)
+        }
+        
+}
 
 // Botão calcular, responsável por realizar os calculos, gerar tabela e gráficos
 btnCalcular.addEventListener('click', () => {
     validarEntradas()
 
-    inputRangeSeparatriz.addEventListener('input', () => {
-        const tipoVariavel = JSON.parse(sessionStorage.getItem('tipoVar'))
-        
-        let quadrante = inputRangeSeparatriz.value
-        let se = (quadrante * (dados.fiTotal / 100))
-        .toFixed()
-        
-        if(tipoVariavel == 'continua') console.log(funcoesCalculo
-            .calculaSeparatrizContinua(dados,se))
-
-        else if (tipoVariavel == 'discreta') funcoesCalculo
-            .calculaSeparatrizDiscreta(dados,se)
-    
-        else funcoesCalculo
-        .calculaSeparatrizQualitativa(dados,se)
-        
-    })
+    inputRangeSeparatriz.addEventListener('input', atualizarValorSeparatriz)
+    inputNumSeparatriz.addEventListener('input', atualizarValorSeparatriz)
       
     if(dados.tipoVar == 'ordinal') {
         document.querySelector('.popup').classList.remove('esconder')
@@ -272,6 +280,10 @@ btnCalcular.addEventListener('click', () => {
 
     if(sectionGrafico.classList.contains('esconder')) {
         sectionGrafico.classList.remove('esconder')
+    }
+
+    if(document.querySelector('.sectionMedias').classList.contains('esconder')) {
+        document.querySelector('.sectionMedias').classList.remove('esconder')
     }
 
     if(document.querySelector('.sectionSeparatrizes').classList.contains('esconder')) {

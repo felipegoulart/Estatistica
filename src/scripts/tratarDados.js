@@ -55,6 +55,7 @@ const agrupaValoresEmObjeto = dados => {
     }
     dados.vetorObjetos = vetTemp
     sessionStorage.setItem('tipoVar', JSON.stringify(dados.tipoVar))
+    sessionStorage.setItem('vetorDados', JSON.stringify(dados.vetorDados))
 
     funcoesDOM.criarTabela(dados)
     funcoesCalculo.calculaMediaModaMediana(dados)
