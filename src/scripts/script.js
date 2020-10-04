@@ -17,7 +17,6 @@ const inputArquivo = document.querySelector('#inputArquivo')
 const selectSeparatriz = document.querySelector('#separatrizes')
 const inputRangeSeparatriz = document.querySelector('#range')
 const inputNumSeparatriz = document.querySelector('#numSeparatriz')
-const outputValorSeparatriz = document.querySelector('#resultSepara')
 const dropzone = document.querySelector('.dropzone')
 let arquivo = null // recebe os arquivos posteriormente
 
@@ -194,6 +193,7 @@ inputNumSeparatriz.addEventListener('input', () => {
     inputRangeSeparatriz.value = inputNumSeparatriz.value
 })
 
+
 const validarEntradas = () => {
     if(tipoForm == 'manual') {
         if(!inputNome.value.trim()) {
@@ -239,28 +239,32 @@ const validarEntradas = () => {
         
         else funcoesCalculo.calculaFreqSi(dados)
     }
+    
 }
 
 
 // Botão calcular, responsável por realizar os calculos, gerar tabela e gráficos
 btnCalcular.addEventListener('click', () => {
     validarEntradas()
-      
+
     inputRangeSeparatriz.addEventListener('input', () => {
+        const tipoVariavel = JSON.parse(sessionStorage.getItem('tipoVar'))
+        
         let quadrante = inputRangeSeparatriz.value
-        let se = (quadrante*(dados.fiTotal / 100))
-            .toFixed()
+        let se = (quadrante * (dados.fiTotal / 100))
+        .toFixed()
+        
+        if(tipoVariavel == 'continua') console.log(funcoesCalculo
+            .calculaSeparatrizContinua(dados,se))
 
-        if(dados.tipoVar == 'continua'){
-
-        } else if (dados.tipoVar == 'discreta') funcoesCalculo
-            .calculaSeparatrizDiscreta(se)
-
-        else { 
-
-        }
+        else if (tipoVariavel == 'discreta') funcoesCalculo
+            .calculaSeparatrizDiscreta(dados,se)
+    
+        else funcoesCalculo
+        .calculaSeparatrizQualitativa(dados,se)
+        
     })
-
+      
     if(dados.tipoVar == 'ordinal') {
         document.querySelector('.popup').classList.remove('esconder')
         funcoesDOM.editarTabela()

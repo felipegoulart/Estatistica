@@ -1,4 +1,7 @@
+import funcoesCalculo from './calculos.js'
+
 const sectionTabela = document.querySelector('.sectionTabela')
+const sectionSeparatrizes = document.querySelector('.sectionSeparatrizes')
 
 // ----------Drag N Drop da tabela Ordinal--------- \\
 /* Funções responsáveis por fazer drag n drop da tabela
@@ -138,7 +141,7 @@ const criaCaixasDeMedias = (medias = [null,null,null]) => {
         const divCaixa = document.createElement('div')
         const texto = document.createElement('p')
 
-        divCaixa.classList.add('caixaMedias')
+        divCaixa.classList.add('caixas')
         texto.innerText = `${textoMedias[i]}: ${medias[i]}`
 
         divCaixa.appendChild(texto)
@@ -147,8 +150,32 @@ const criaCaixasDeMedias = (medias = [null,null,null]) => {
     sectionTabela.appendChild(areaCaixas)
 }
 
+const criaCaixasDeSeparatrizes = (medias = [null,null,null]) => {
+    const textoMedidas = ['Separatriz', 'DP', 'CV']
+    const areaCaixas = document.createElement('div')
+
+    areaCaixas.classList.add('areaCaixas')
+    for(let i = 0; i < textoMedidas.length; i++) {
+        const divCaixa = document.createElement('div')
+        const texto = document.createElement('p')
+
+        divCaixa.classList.add('caixas')
+        texto.innerText = `${textoMedidas[i]}: ${medias[i]}`
+
+        divCaixa.id = `caixa${textoMedidas[i]}`
+        divCaixa.appendChild(texto)
+        areaCaixas.appendChild(divCaixa)
+    }
+    sectionSeparatrizes.appendChild(areaCaixas)
+}
+
+const atualizarValorSeparatriz = (separatriz) => {
+    document.querySelector('caixaSeparatriz').innerText = separatriz
+}
+
 export default {
     criarTabela: criarTabela,
     editarTabela: editarTabela,
     criaCaixasDeMedias: criaCaixasDeMedias,
+    criaCaixasDeSeparatrizes: criaCaixasDeSeparatrizes
 }

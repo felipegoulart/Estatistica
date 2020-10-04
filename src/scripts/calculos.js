@@ -1,5 +1,6 @@
 import funcoesTratarDados from './tratarDados.js'
 import funcoesDOM from './tabelas.js'
+
 const calculaIntervalo = valores => {
     const menor = valores[0], maior = valores[valores.length -1]
     let amplitude = maior - menor
@@ -85,7 +86,6 @@ const calcFreqPercent = dados => {
 }
 
 const calculaMediaModaMediana = dados => {
-    console.log(dados.tipoVar);
     let media, mediana, moda = ''
     let soma = 0
     let vetLimites = [], vetFreqSimples = []
@@ -98,11 +98,18 @@ const calculaMediaModaMediana = dados => {
     }
 
     let maiorFi = Math.max(...vetFreqSimples) // para usar na moda
-
-    let fiTotal =  dados.vetorFreAc.reduce(
+    
+    let fiTotal =  vetFreqSimples.reduce(
         (acumulador,valorAtual) => acumulador + valorAtual )
 
     let se = 25 * (dados.fiTotal / 100) // valor inicial para a separatriz
+
+    let separatriz, DP, CV
+
+    dados.maiorFi = maiorFi
+    dados.fiTotal = fiTotal
+    dados.meioVet = meioVet
+    dados.vetorFi = vetFreqSimples
 
     if(dados.tipoVar === 'continua') {
         for (let data in dados.valoresAgrupados){
@@ -149,13 +156,15 @@ const calculaMediaModaMediana = dados => {
             + vetLimiteSuperior[indexMaiorFi]) / 2).toFixed(0)
 
         dados.dadosContinua = {
-            limiteInferior: limiteInferior,
+            limiteInferior: vetLimiteInferior,
+            limiteSuperior: vetLimiteSuperior,
             fant: fant,
             fimd: fimd,
-            intervalo: intervalo
+            h: intervalo
         }
 
-        console.log(calculaSeparatrizContinua(se));
+        separatriz = calculaSeparatrizContinua(dados, se);
+        [DP, CV] = calculaDesvioEVariacaoContinua(dados, media)
 
     } else if (dados.tipoVar === 'discreta'){
         // ----Mediana Discreta---- \\
@@ -175,7 +184,9 @@ const calculaMediaModaMediana = dados => {
         }
         moda = modaTemp.trim().replace(/ /g, ', ') // Usando uma RegEx para
         //substituir todos os espaços em branco
-        console.log(calculaSeparatrizDiscreta(se));
+
+        separatriz = calculaSeparatrizDiscreta(dados, se);
+        [DP, CV] = calculaDesvioEVariacaoDiscreta(dados, media)
 
     } else {
         // ----Mediana Qualitativa---- \\
@@ -199,68 +210,71 @@ const calculaMediaModaMediana = dados => {
         // ----Moda Qualitativa---- \\
         media = ['Não Possui média']
 
-        console.log(calculaSeparatrizQualitativa(se));
+        separatriz = calculaSeparatrizQualitativa(dados, se)
+        DP = ['Não Possui']
+        CV = ['Não Possui']
     }
-
-    funcoesDOM.criaCaixasDeMedias([media, moda, mediana])
-
-    dados.maiorFi = maiorFi
-    dados.fiTotal = fiTotal
-    dados.meioVet = meioVet
     dados.media = media
     dados.moda = moda
     dados.mediana = mediana
-    dados.vetorFi = vetFreqSimples
+
+    funcoesDOM.criaCaixasDeMedias([media, moda, mediana])
+    funcoesDOM.criaCaixasDeSeparatrizes([separatriz, DP, CV])
 }
 
-const calculaSeparatrizContinua = se => {
-    sep = (f + (((se - fant)/fimd)*h)).toFixed(2)
-
-    let v = []
+const calculaSeparatrizContinua = (dados, se) => {
+    return (dados.dadosContinua.i + (((se - dados.dadosContinua.fant)
+        / dados.dadosContinua.fimd)
+        * dados.dadosContinua.h))
+        .toFixed(2)
+    }
+        
+const calculaDesvioEVariacaoContinua = (dados, media) => {
+    let soma = 0
+    let somaDesvio = 0
     let xi = []
-    for (var p = 0; p < vetLimiteInferior.length; p++){
-        let ax = Number((vetLimiteInferior[p] + vetLimiteSuperior[p])/2).toFixed(0)
-        xi.push(ax)
-        v.push(xi[p] * au[p])
-    }
-    soma = v.reduce((acumulador,valorAtual) => acumulador + valorAtual)
     let medDesvio = 0
-    medDesvio = (soma/vetorFreAc[vetorFreAc.length  - 1]).toFixed(2)
-    let z = []
-    for (var o = 0; o < vetLimiteInferior.length; o++){
-        ax = (xi[o] - medDesvio)**2 * au[o]
-        z.push(ax)
+
+    for (let i = 0; i < dados.dadosContinua.limiteInferior.length; i++){
+        const auxiliar = Number((dados.dadosContinua.limiteInferior[i]
+            + dados.dadosContinua.limiteSuperior[i]) / 2)
+                        
+        xi.push(auxiliar)
+        soma += xi[i] * dados.vetorFi[i]
     }
 
-    soma = z.reduce((acumulador, valorAtual) => acumulador + valorAtual)
-    desvio = Math.sqrt(soma/vetorFreAc[vetorFreAc.length - 1]).toFixed(2)
-    cv = ((desvio/media)*100).toFixed(2)
+    medDesvio = (soma / dados.fiTotal).toFixed(2)
+
+    for (let i = 0; i < dados.dadosContinua.limiteInferior.length; i++){
+        somaDesvio += ((xi[i] - medDesvio) ** 2) * dados.vetorFi[i]
+    }
+
+    let desvio = Math.sqrt(somaDesvio / dados.fiTotal).toFixed(2)
+    let cv = ((Number(desvio) / Number(media)) * 100).toFixed(2)
+
+    return [desvio, cv]
 }
 
-const calculaSeparatrizDiscreta = (dados, se) => {
-    let sep = e[se]
-        if (dados.tipoCalc === 'populacao'){
-            for (var o = 0; o < vetLimiteInferior.length; o++){
-                ax = (vetLimiteInferior[o] - media)**2 * vetLimiteSuperior[o]
-                z.push(ax)
-            }
-            soma = z.reduce((total, currentElement) => total + currentElement)
-            desvio = Math.sqrt(soma/vetorFreAc[vetorFreAc.length - 1]).toFixed(2)
-            cv = ((desvio/media)*100).toFixed(2)
-        } else{
-            for (var o = 0; o < vetLimiteInferior.length; o++){
-                ax = (vetLimiteInferior[o] - media)**2 * vetLimiteSuperior[o]
-                z.push(ax)
-            }
-            soma = z.reduce((total, currentElement) => total + currentElement)
+const calculaSeparatrizDiscreta = (dados, se) => dados.vetorDados[se]
 
-            desvio = Math.sqrt(soma/(dados.vetorFreAc[dados.vetorFreAc.length - 1]
-                 - 1)).toFixed(2)
-            cv = ((desvio/media)*100).toFixed(2)
-        }
+const calculaDesvioEVariacaoDiscreta = (dados, media) => {
+    let soma = 0
+
+    for (let i = 0; i < vetLimiteInferior.length; i++){
+        soma += (dados.dadosContinua.limiteInferior[i] - media)
+            ** 2 * dados.dadosContinua.limiteSuperior[i]
+    }
+    if(dados.tipoCalc === 'populacao') {
+        desvio = Math.sqrt(soma / dados.fiTotal).toFixed(2)
+        cv = ((desvio / media) * 100).toFixed(2)
+    } else { // amostra
+        desvio = Math.sqrt(soma / (dados.dados.fiTotal - 1)).toFixed(2)
+        cv = ((desvio / media) * 100).toFixed(2)
+    }
+    return [desvio, cv]
 }
 
-const calculaSeparatrizQualitativa = (dados, se) => sep = dados.vetorDados[se]
+const calculaSeparatrizQualitativa = (dados, se) => dados.vetorDados[se]
 
 export default {
     calculaContinua: calculaContinua,
