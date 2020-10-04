@@ -737,6 +737,7 @@ btnCalcular.addEventListener('click', () => {
                 xi.push(ax)
                 v.push(xi[p] * au[p])
             }
+            
             soma = v.reduce((total, currentElement) => total + currentElement)
             let medDesvio = 0
             medDesvio = (soma/vetorFreAc[vetorFreAc.length  - 1]).toFixed(2)
