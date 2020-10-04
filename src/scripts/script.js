@@ -44,12 +44,14 @@ const dados = { // O objeto vai conter todos os dados dos calculos
     media: '',
     moda: '',
     mediana: '',
+    se: '',
     vetorFi: [],
     vetorFsPerc: [],
     vetorFreAc: [],
     vetorFreAcPerc: [],
     valoresAgrupados: {},
-    vetorObjetos: []
+    vetorObjetos: [],
+    dadosContinua: {}
 }
 
 let vetorValoresInput = []
@@ -246,7 +248,7 @@ btnCalcular.addEventListener('click', () => {
       
     inputRangeSeparatriz.addEventListener('input', () => {
         let quadrante = inputRangeSeparatriz.value
-        let se = (quadrante*(dados.vetorFreAc[dados.vetorFreAc.length -1] / 100))
+        let se = (quadrante*(dados.fiTotal / 100))
             .toFixed()
 
         if(dados.tipoVar == 'continua'){

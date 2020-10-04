@@ -102,6 +102,8 @@ const calculaMediaModaMediana = dados => {
     let fiTotal =  dados.vetorFreAc.reduce(
         (acumulador,valorAtual) => acumulador + valorAtual )
 
+    let se = 25 * (dados.fiTotal / 100) // valor inicial para a separatriz
+
     if(dados.tipoVar === 'continua') {
         for (let data in dados.valoresAgrupados){
             vetLimites.push((data.split(' |--- ')))
@@ -131,7 +133,8 @@ const calculaMediaModaMediana = dados => {
             }
         }
         mediana = (limiteInferior + ((meioVet - fant) / fimd) * intervalo)
-
+        
+        
         
         // ----Media Contínua---- \\
         for(let i = 0; i < vetLimiteInferior.length; i++){
@@ -142,8 +145,17 @@ const calculaMediaModaMediana = dados => {
         
         // ----Moda Contínua---- \\
         let indexMaiorFi = vetFreqSimples.indexOf(maiorFi)
-        moda = ((vetLimiteInferior[indexMaiorFi] + vetLimiteSuperior[indexMaiorFi]) / 2)
-            .toFixed(0)
+        moda = ((vetLimiteInferior[indexMaiorFi]
+            + vetLimiteSuperior[indexMaiorFi]) / 2).toFixed(0)
+
+        dados.dadosContinua = {
+            limiteInferior: limiteInferior,
+            fant: fant,
+            fimd: fimd,
+            intervalo: intervalo
+        }
+
+        console.log(calculaSeparatrizContinua(se));
 
     } else if (dados.tipoVar === 'discreta'){
         // ----Mediana Discreta---- \\
@@ -152,7 +164,7 @@ const calculaMediaModaMediana = dados => {
         // ----Media Discreta---- \\
         soma = dados.vetorDados.reduce((acumulador,valorAtual) => 
              acumulador + valorAtual)   
-        media = (soma / dados.vetorFreAc[dados.vetorFreAc.length -1]).toFixed(2)
+        media = (soma / dados.fiTotal).toFixed(2)
         
         // ----Moda Discreta---- \\
         let modaTemp = ''
@@ -163,7 +175,8 @@ const calculaMediaModaMediana = dados => {
         }
         moda = modaTemp.trim().replace(/ /g, ', ') // Usando uma RegEx para
         //substituir todos os espaços em branco
-        calculaSeparatrizDiscreta()
+        console.log(calculaSeparatrizDiscreta(se));
+
     } else {
         // ----Mediana Qualitativa---- \\
         if(dados.vetorDados.length % 2 == 0){
@@ -186,9 +199,9 @@ const calculaMediaModaMediana = dados => {
         // ----Moda Qualitativa---- \\
         media = ['Não Possui média']
 
-        calculaSeparatrizDiscreta()
+        console.log(calculaSeparatrizQualitativa(se));
     }
-    
+
     funcoesDOM.criaCaixasDeMedias([media, moda, mediana])
 
     dados.maiorFi = maiorFi
@@ -206,11 +219,11 @@ const calculaSeparatrizContinua = se => {
     let v = []
     let xi = []
     for (var p = 0; p < vetLimiteInferior.length; p++){
-        ax = parseInt((vetLimiteInferior[p] + vetLimiteSuperior[p])/2).toFixed(0)
+        let ax = Number((vetLimiteInferior[p] + vetLimiteSuperior[p])/2).toFixed(0)
         xi.push(ax)
         v.push(xi[p] * au[p])
     }
-    soma = v.reduce((total, currentElement) => total + currentElement)
+    soma = v.reduce((acumulador,valorAtual) => acumulador + valorAtual)
     let medDesvio = 0
     medDesvio = (soma/vetorFreAc[vetorFreAc.length  - 1]).toFixed(2)
     let z = []
@@ -218,7 +231,8 @@ const calculaSeparatrizContinua = se => {
         ax = (xi[o] - medDesvio)**2 * au[o]
         z.push(ax)
     }
-    soma = z.reduce((total, currentElement) => total + currentElement)
+
+    soma = z.reduce((acumulador, valorAtual) => acumulador + valorAtual)
     desvio = Math.sqrt(soma/vetorFreAc[vetorFreAc.length - 1]).toFixed(2)
     cv = ((desvio/media)*100).toFixed(2)
 }
