@@ -5,7 +5,6 @@
     flex-direction: column;
     flex-wrap: wrap;
     align-items: baseline;
-    margin-bottom: 50px;
 }
 
 table {
@@ -52,7 +51,7 @@ tr:hover {
     margin: 0 auto;
 }
 
-.caixaMedias {
+.caixas {
     margin: 5px;
     padding: 10px;
     border-radius: 5px;
@@ -60,7 +59,7 @@ tr:hover {
     background-color: #fff;
     box-shadow: 3px 2px 5px #00000035;
 }
-.caixaMedias > p {
+.caixas > p {
     font-size: 12pt;
 }
 
@@ -73,46 +72,35 @@ tr:hover {
     opacity: .3;
 }
 
+.sectionMedias {
+    margin: 0 auto 50px auto;
+}
+
 .sectionSeparatrizes {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
     min-width: 30%;
     max-width: 500px;
     margin: 0 auto 50px auto;
-    justify-content: space-around;    
 }
 
-.resultadoSeparatriz {
-    display: block;
-    width: 110px;
-    position: relative;
+.entradaSeparatrizes {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 10px;
+    background-color: #fff;
+    box-shadow: 3px 2px 5px #00000035 inset;
+    justify-content: space-around;  
 }
 
-#resultSepara {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-}
-
-.resultadoSeparatriz input ~ label {
-    top: -2px;
-    left: 10px;
-    position: absolute;
-
-    color: #444;
-
-    font-weight: bold;
-}
-
-
-.sectionSeparatrizes input {
+.entradaSeparatrizes input {
     max-width: 100px;
     margin: 0 10px;
     outline: none;
 }
 
-.sectionSeparatrizes #numSeparatriz {
+.entradaSeparatrizes #numSeparatriz {
     width: 51px;
 }
 
