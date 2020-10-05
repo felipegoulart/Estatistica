@@ -54,6 +54,7 @@ const agrupaValoresEmObjeto = dados => {
         vetTemp.push(objTemp)
     }
     dados.vetorObjetos = vetTemp
+    
     sessionStorage.setItem('tipoVar', JSON.stringify(dados.tipoVar))
     sessionStorage.setItem('vetorDados', JSON.stringify(dados.vetorDados))
 

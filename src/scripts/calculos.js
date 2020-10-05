@@ -273,20 +273,23 @@ const calculaDesvioEVariacaoContinua = (dados, media) => {
     return [desvio, cv]
 }
 
-const calculaSeparatrizDiscreta = (dados, se) => dados.vetorDados[se - 1]
+const calculaSeparatrizDiscreta = (dados, se) => {
+    const vetorDados = JSON.parse(sessionStorage.getItem('vetorDados'))
+    return vetorDados[se - 1]
+}
 
 const calculaDesvioEVariacaoDiscreta = (dados, media) => {
     let soma = 0
-
-    for (let i = 0; i <dados.dadosContinua.limiteInferior.length; i++){
-        soma += (dados.dadosContinua.limiteInferior[i] - media)
-            ** 2 * dados.dadosContinua.limiteSuperior[i]
+    let desvio, cv
+    for (let i = 0; i <dados.vetorFi.length; i++){
+        soma += (dados.vetorObjetos[i]['nome'] - media)
+            ** 2 * dados.vetorFi[i]
     }
     if(dados.tipoCalc === 'populacao') {
         desvio = Math.sqrt(soma / dados.fiTotal).toFixed(2)
         cv = ((desvio / media) * 100).toFixed(2)
     } else { // amostra
-        desvio = Math.sqrt(soma / (dados.dados.fiTotal - 1)).toFixed(2)
+        desvio = Math.sqrt(soma / (dados.fiTotal - 1)).toFixed(2)
         cv = ((desvio / media) * 100).toFixed(2)
     }
     return [desvio, cv]
