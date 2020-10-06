@@ -146,6 +146,13 @@ const criaCaixasDeMedias = (medias = [null,null,null]) => {
         divCaixa.appendChild(texto)
         areaCaixas.appendChild(divCaixa)
     }
+    debugger
+    const filhos = areaCaixas.children
+    if(filhos.length > 3){
+        for(let i = 0; i < 3; i++){
+            areaCaixas.removeChild(filhos[0])
+        }
+    }
     sectionMedias.appendChild(areaCaixas)
 }
 
@@ -165,12 +172,9 @@ const criaCaixasDeSeparatrizes = (medias = [null,null,null]) => {
         divCaixa.appendChild(texto)
         areaCaixas.appendChild(divCaixa)
     }
-
-    const filhos = sectionSeparatrizes.childNodes
-    if(filhos.length > 3){
-        while (filhos.length != 0) {
-            sectionSeparatrizes.removeChild(filhos[0])
-        }
+    const filhos = sectionSeparatrizes.children
+    if(filhos.length == 2){
+        sectionSeparatrizes.removeChild(filhos[1])
     } 
     sectionSeparatrizes.appendChild(areaCaixas)
 }

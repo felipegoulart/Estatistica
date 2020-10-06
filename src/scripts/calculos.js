@@ -186,7 +186,7 @@ const calculaMediaModaMediana = dados => {
         moda = modaTemp.trim().replace(/ /g, ', ') // Usando uma RegEx para
         //substituir todos os espaços em branco
 
-        separatriz = calculaSeparatrizDiscreta(dados, se);
+        separatriz = calculaSeparatrizDiscreta(se);
         [DP, CV] = calculaDesvioEVariacaoDiscreta(dados, media)
 
     } else {
@@ -211,7 +211,7 @@ const calculaMediaModaMediana = dados => {
         // ----Moda Qualitativa---- \\
         media = ['Não Possui média']
 
-        separatriz = calculaSeparatrizQualitativa(dados, se)
+        separatriz = calculaSeparatrizQualitativa(se)
         DP = ['Não Possui']
         CV = ['Não Possui']
     }
@@ -273,7 +273,7 @@ const calculaDesvioEVariacaoContinua = (dados, media) => {
     return [desvio, cv]
 }
 
-const calculaSeparatrizDiscreta = (dados, se) => {
+const calculaSeparatrizDiscreta = (se) => {
     const vetorDados = JSON.parse(sessionStorage.getItem('vetorDados'))
     return vetorDados[se - 1]
 }
@@ -295,7 +295,11 @@ const calculaDesvioEVariacaoDiscreta = (dados, media) => {
     return [desvio, cv]
 }
 
-const calculaSeparatrizQualitativa = (dados, se) => dados.vetorDados[se - 1]
+const calculaSeparatrizQualitativa = (se) => {
+    debugger
+    const vetorDados = JSON.parse(sessionStorage.getItem('vetorDados'))
+    return vetorDados[se - 1]
+}
 
 export default {
     calculaContinua: calculaContinua,

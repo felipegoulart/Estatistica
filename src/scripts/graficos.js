@@ -126,22 +126,28 @@ const geraGraficoContinua = (areaGrafico, tipoGraf = 'bar', nomesCol, valores, n
     })
 }
 
-const renderizaGraficos = (obj) => {
-    const vetorNomeCol = geraNomesLabel(obj)
-    const graficos = {
-        nominal: geraGrafico(areaGrafico, 'pie', vetorNomeCol, 
-            obj.vetorFsPerc, 'Qualitativa Nominal', optGraficoPizza()),
+const renderizaGraficos = (dados) => {
+    const vetorNomeCol = geraNomesLabel(dados)
+    switch(dados.tipoVar) {
+        case 'nominal': 
+            geraGrafico(areaGrafico, 'pie', vetorNomeCol, 
+            dados.vetorFsPerc, 'Qualitativa Nominal', optGraficoPizza())
+        break
 
-        ordinal: geraGrafico(areaGrafico, 'pie', vetorNomeCol, 
-            obj.vetorFsPerc, 'Qualitativa Ordinal', optGraficoPizza()),
+        case 'ordinal': 
+    geraGrafico(areaGrafico, 'pie', vetorNomeCol, 
+        dados.vetorFsPerc, 'Qualitativa Ordinal', optGraficoPizza())
+        break
 
-        discreta: geraGrafico(areaGrafico, 'bar', vetorNomeCol, 
-            obj.vetorFsPerc, 'Quantitativa Discreta', optGraficoColuna()),
+        case 'discreta': 
+            geraGrafico(areaGrafico, 'bar', vetorNomeCol, 
+            dados.vetorFsPerc, 'Quantitativa Discreta', optGraficoColuna())
+        break
 
-        continua: geraGraficoContinua(areaGrafico, 'bar', vetorNomeCol, 
-            obj.vetorFsPerc, 'Quantitativa Contínua', optGraficoColuna())
+        case 'continua': 
+            geraGraficoContinua(areaGrafico, 'bar', vetorNomeCol, 
+            dados.vetorFsPerc, 'Quantitativa Contínua', optGraficoColuna())
     }
-    graficos[obj.tipoVar]
 }
 
 export default renderizaGraficos

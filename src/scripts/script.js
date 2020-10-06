@@ -251,17 +251,17 @@ const atualizarValorSeparatriz = () => {
         
         if(tipoVariavel == 'continua') {
             const separatriz = funcoesCalculo
-                .calculaSeparatrizContinua(dados,se)
+                .calculaSeparatrizContinua(dados, se)
             funcoesDOM.atualizarValorSeparatriz(separatriz)
             
         } else if (tipoVariavel == 'discreta') {
             const separatriz = funcoesCalculo
-                .calculaSeparatrizDiscreta(dados,se)
+                .calculaSeparatrizDiscreta(se)
             funcoesDOM.atualizarValorSeparatriz(separatriz)
             
         } else {
             const separatriz = funcoesCalculo
-                .calculaSeparatrizQualitativa(dados,se)
+                .calculaSeparatrizQualitativa(se)
             funcoesDOM.atualizarValorSeparatriz(separatriz)
         }
         
