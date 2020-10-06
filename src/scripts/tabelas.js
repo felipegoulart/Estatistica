@@ -58,8 +58,8 @@ const criarTabela = (obj) => {
         sectionTabela.classList.remove('esconder')
     }
     
-    const filhos = sectionTabela.childNodes
-    if(filhos.length > 1){
+    const filhos = sectionTabela.children
+    if(filhos.length == 1){
         while (filhos.length != 0) {
             sectionTabela.removeChild(filhos[0])
         }
@@ -146,7 +146,7 @@ const criaCaixasDeMedias = (medias = [null,null,null]) => {
         divCaixa.appendChild(texto)
         areaCaixas.appendChild(divCaixa)
     }
-    debugger
+
     const filhos = areaCaixas.children
     if(filhos.length > 3){
         for(let i = 0; i < 3; i++){
@@ -166,7 +166,8 @@ const criaCaixasDeSeparatrizes = (medias = [null,null,null]) => {
         const texto = document.createElement('p')
 
         divCaixa.classList.add('caixas')
-        texto.innerText = `${textoMedidas[i]}: ${medias[i]}`
+        texto.innerText = textoMedidas[i] == 'CV' ? `${textoMedidas[i]}: ${medias[i]}%`
+            : `${textoMedidas[i]}: ${medias[i]}`
 
         divCaixa.id = `caixa${textoMedidas[i]}`
         divCaixa.appendChild(texto)

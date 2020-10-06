@@ -246,8 +246,8 @@ const validarEntradas = () => {
 const atualizarValorSeparatriz = () => {
     const tipoVariavel = JSON.parse(sessionStorage.getItem('tipoVar'))
         
-        let quadrante = inputRangeSeparatriz.value
-        let se = Math.trunc((quadrante * (dados.fiTotal / 100)))
+        let quadrante = inputRangeSeparatriz.valueAsNumber
+        let se = Math.round(quadrante * (dados.fiTotal -1) / 100)
         
         if(tipoVariavel == 'continua') {
             const separatriz = funcoesCalculo

@@ -9,7 +9,7 @@ const salvarDadosNoObjeto = (dados, nome, valores )=> {
 }
 
 const ordenarVetor = (vetor) => {
-    const tipoNumerico = vetor.every(elemento => Number(elemento))
+    const tipoNumerico = vetor.every(elemento => !isNaN(elemento))
     if(tipoNumerico) {
         vetor = vetor.map(elemento => Number(elemento))
         return vetor.sort((a,b) => a - b)

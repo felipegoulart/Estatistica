@@ -104,7 +104,7 @@ const calculaMediaModaMediana = dados => {
     let fiTotal =  vetFreqSimples.reduce(
         (acumulador,valorAtual) => acumulador + valorAtual )
 
-    let se = Math.trunc(25 * (fiTotal / 100)) // valor inicial para a separatriz
+    let se = Math.trunc(25 * ((fiTotal -1)  / 100)) // valor inicial para a separatriz
     let separatriz, DP, CV
 
     dados.maiorFi = maiorFi
@@ -226,8 +226,9 @@ const calculaMediaModaMediana = dados => {
 
 const calculaSeparatrizContinua = (dados, se) => {
     const vetorDados = JSON.parse(sessionStorage.getItem('vetorDados'))
-    const posicaoSeparatriz = vetorDados[se - 1]
+    const posicaoSeparatriz = vetorDados[se]
     let limiteInferior, fant, fimd
+
     for(let i = 0; i < dados.dadosContinua.limiteInferior.length; i++) {
         if(posicaoSeparatriz >= dados.dadosContinua.limiteInferior[i]
             && posicaoSeparatriz < dados.dadosContinua.limiteSuperior[i]) {
@@ -251,8 +252,7 @@ const calculaDesvioEVariacaoContinua = (dados, media) => {
     let soma = 0
     let somaDesvio = 0
     let xi = []
-    let medDesvio = 0
-
+    
     for (let i = 0; i < dados.dadosContinua.limiteInferior.length; i++){
         const auxiliar = Number((dados.dadosContinua.limiteInferior[i]
             + dados.dadosContinua.limiteSuperior[i]) / 2)
@@ -261,10 +261,8 @@ const calculaDesvioEVariacaoContinua = (dados, media) => {
         soma += xi[i] * dados.vetorFi[i]
     }
 
-    medDesvio = (soma / dados.fiTotal).toFixed(2)
-
     for (let i = 0; i < dados.dadosContinua.limiteInferior.length; i++){
-        somaDesvio += ((xi[i] - medDesvio) ** 2) * dados.vetorFi[i]
+        somaDesvio += ((xi[i] - media) ** 2) * dados.vetorFi[i]
     }
 
     let desvio = Math.sqrt(somaDesvio / dados.fiTotal).toFixed(2)
@@ -275,7 +273,7 @@ const calculaDesvioEVariacaoContinua = (dados, media) => {
 
 const calculaSeparatrizDiscreta = (se) => {
     const vetorDados = JSON.parse(sessionStorage.getItem('vetorDados'))
-    return vetorDados[se - 1]
+    return vetorDados[se]
 }
 
 const calculaDesvioEVariacaoDiscreta = (dados, media) => {
@@ -296,9 +294,8 @@ const calculaDesvioEVariacaoDiscreta = (dados, media) => {
 }
 
 const calculaSeparatrizQualitativa = (se) => {
-    debugger
     const vetorDados = JSON.parse(sessionStorage.getItem('vetorDados'))
-    return vetorDados[se - 1]
+    return vetorDados[se]
 }
 
 export default {
