@@ -131,22 +131,22 @@ const renderizaGraficos = (dados) => {
     switch(dados.tipoVar) {
         case 'nominal': 
             geraGrafico(areaGrafico, 'pie', vetorNomeCol, 
-            dados.vetorFsPerc, 'Qualitativa Nominal', optGraficoPizza())
+                dados.vetorFsPerc, 'Qualitativa Nominal', optGraficoPizza())
         break
 
         case 'ordinal': 
-    geraGrafico(areaGrafico, 'pie', vetorNomeCol, 
-        dados.vetorFsPerc, 'Qualitativa Ordinal', optGraficoPizza())
+            geraGrafico(areaGrafico, 'pie', vetorNomeCol, 
+                dados.vetorFsPerc, 'Qualitativa Ordinal', optGraficoPizza())
         break
 
         case 'discreta': 
             geraGrafico(areaGrafico, 'bar', vetorNomeCol, 
-            dados.vetorFsPerc, 'Quantitativa Discreta', optGraficoColuna())
+                dados.vetorFsPerc, 'Quantitativa Discreta', optGraficoColuna())
         break
 
         case 'continua': 
             geraGraficoContinua(areaGrafico, 'bar', vetorNomeCol, 
-            dados.vetorFsPerc, 'Quantitativa Contínua', optGraficoColuna())
+                dados.vetorFsPerc, 'Quantitativa Contínua', optGraficoColuna())
     }
 }
 

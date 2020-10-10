@@ -5,7 +5,7 @@ const sectionSeparatrizes = document.querySelector('.sectionSeparatrizes')
 // ----------Drag N Drop da tabela Ordinal--------- \\
 /* Funções responsáveis por fazer drag n drop da tabela
 e atualizar os seus valores de frequencia acumulada */
-const criarTabela = (obj) => {
+const criarTabela = obj => {
 
     const novaTabela = document.createElement('table')
     const variavel = document.createElement('th')
@@ -106,7 +106,6 @@ function editarTabela() {
     }
     atualizarTabela(tabela, linhasTabela)
 }
-
 function atualizarTabela(tabela) {
     tabela.addEventListener('dragend', () => {
         const linhasTabela = document.querySelectorAll('tr')

@@ -17,7 +17,6 @@ const inputArquivo = document.querySelector('#inputArquivo')
 const selectSeparatriz = document.querySelector('#separatrizes')
 const inputRangeSeparatriz = document.querySelector('#range')
 const inputNumSeparatriz = document.querySelector('#numSeparatriz')
-const outputResultadoSeratriz = document.querySelector('#resultSepara')
 const dropzone = document.querySelector('.dropzone')
 let arquivo = null // recebe os arquivos posteriormente
 

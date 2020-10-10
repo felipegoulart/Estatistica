@@ -131,7 +131,7 @@ const calculaMediaModaMediana = dados => {
                 limiteInferior = vetLimiteInferior[i]
 
                 // Caso não seja a primeira linha, deve usar Frq acumulada anterior
-                if ((i - 1) != -1) fant = vetFreqSimples[i - 1]
+                if ((i - 1) != -1) fant = dados.vetorFreAc[i - 1]
                 // Caso seja a primeira linha a Frq acumulada anterior será 0
                 else fant = 0
 
@@ -141,8 +141,6 @@ const calculaMediaModaMediana = dados => {
             }
         }
         mediana = (limiteInferior + ((meioVet - fant) / fimd) * intervalo)
-        
-        
         
         // ----Media Contínua---- \\
         for(let i = 0; i < vetLimiteInferior.length; i++){
@@ -178,6 +176,7 @@ const calculaMediaModaMediana = dados => {
         
         // ----Moda Discreta---- \\
         let modaTemp = ''
+
         for(let data in dados.valoresAgrupados){
             if (dados.valoresAgrupados[data] === maiorFi){
                 modaTemp += `${data} `
@@ -188,7 +187,7 @@ const calculaMediaModaMediana = dados => {
 
         separatriz = calculaSeparatrizDiscreta(se);
         [DP, CV] = calculaDesvioEVariacaoDiscreta(dados, media)
-
+        
     } else {
         // ----Mediana Qualitativa---- \\
         if(dados.vetorDados.length % 2 == 0){
@@ -225,6 +224,7 @@ const calculaMediaModaMediana = dados => {
 }
 
 const calculaSeparatrizContinua = (dados, se) => {
+    debugger
     const vetorDados = JSON.parse(sessionStorage.getItem('vetorDados'))
     const posicaoSeparatriz = vetorDados[se]
     let limiteInferior, fant, fimd
@@ -252,7 +252,7 @@ const calculaDesvioEVariacaoContinua = (dados, media) => {
     let soma = 0
     let somaDesvio = 0
     let xi = []
-    
+
     for (let i = 0; i < dados.dadosContinua.limiteInferior.length; i++){
         const auxiliar = Number((dados.dadosContinua.limiteInferior[i]
             + dados.dadosContinua.limiteSuperior[i]) / 2)
@@ -261,7 +261,7 @@ const calculaDesvioEVariacaoContinua = (dados, media) => {
         soma += xi[i] * dados.vetorFi[i]
     }
 
-    for (let i = 0; i < dados.dadosContinua.limiteInferior.length; i++){
+    for (let i = 0; i < dados.dadosContinua.limiteInferior.length; i++) {
         somaDesvio += ((xi[i] - media) ** 2) * dados.vetorFi[i]
     }
 
