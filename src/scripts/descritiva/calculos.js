@@ -242,7 +242,7 @@ const calculaSeparatrizContinua = (dados, se) => {
         }
     }
 
-    return (limiteInferior + (((se - fant)
+    return (limiteInferior + ((((se + 1) - fant)
         / fimd)
         * dados.dadosContinua.h))
         .toFixed(2)
