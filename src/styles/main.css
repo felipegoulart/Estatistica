@@ -19,7 +19,7 @@ body {
 .estatistica {
     min-width: 250px;
     width: 60%;
-    padding: 50px;
+    padding: 30px;
 
     display: flex;
     flex-direction: row;
@@ -52,12 +52,50 @@ body {
     text-align: justify;
     font-size: 12pt;
     font-weight: 500;
-    line-height: 20px;
+    line-height: 25px;
 }
 
 .estatistica img {
     width: 30%;
     margin: auto;
+
+    transition: 200ms;
+}
+
+.estatistica img:hover {
+    transform: translateY(-7px)
+}
+
+@media (max-width: 600px) {
+    .estatistica {
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    .estatistica .textos {
+        width: 80%;
+        margin-left: 20px;
+    }
+
+    .estatistica h1 {
+        margin-left: -5px;
+    }
+
+
+    .estatistica p {
+        margin: 10px 5px;
+    
+        color: var(--text-color);
+    
+        text-align: justify;
+        font-size: 12pt;
+        font-weight: 500;
+        line-height: 25px;
+    }
+
+    .estatistica img {
+        display: none
+    }
 }
 
 .cards {
@@ -113,8 +151,16 @@ body {
     transition: 200ms;
 }
 
+.indutiva {
+    background: linear-gradient(135deg, #00FFCE 5%, #95EF4A 100%) !important;
+}
+
 .card .imagem:hover {
     transform: translateY(-35px);
+}
+
+.card .imagem img {
+    width: 100%;
 }
 
 .card h1 {
@@ -129,6 +175,7 @@ body {
 
     color: #eee;
     font-weight: 500;
+    font-size: 12pt;
 }
 
 .card button {
@@ -148,7 +195,20 @@ body {
     transition: 200ms linear;
 }
 
-.card button:hover {
+.card .btn:hover {
     cursor: pointer;
     background-color: #4E45E1;
+}
+
+.btn-indutiva {
+    background-color: #00FFCE !important;
+}
+
+.btn-indutiva:hover {
+    cursor: pointer;
+    background-color: #00be98 !important;
+}
+
+.emConstrucao {
+    background: linear-gradient(#ddd, #ddd) !important;
 }
