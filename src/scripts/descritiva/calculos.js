@@ -207,7 +207,7 @@ const calculaMediaModaMediana = dados => {
         if(auxiliar.length == vetFreqSimples.length) moda = 'Estes dados são amodais'
         else moda = auxiliar
 
-        // ----Moda Qualitativa---- \\
+        // ----Media Qualitativa---- \\
         media = ['Não Possui média']
 
         separatriz = calculaSeparatrizQualitativa(se)
@@ -224,7 +224,6 @@ const calculaMediaModaMediana = dados => {
 }
 
 const calculaSeparatrizContinua = (dados, se) => {
-    debugger
     const vetorDados = JSON.parse(sessionStorage.getItem('vetorDados'))
     const posicaoSeparatriz = vetorDados[se]
     let limiteInferior, fant, fimd

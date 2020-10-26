@@ -1,7 +1,162 @@
-.entradaDados {
+.container {
+    width: 100vw;
+    height: 100vh;
+
+    padding: 50px 100px;
+    
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.container nav {
+    margin-top: 20px;
+    position: fixed;
+}
+
+.container nav ul {
+    display: flex;
+    flex-direction: row;
+}
+
+.container nav ul li {
+    padding: 0 20px;
+}
+
+.container nav ul li:first-child {
+    border-right: 2px solid #555;
+}
+
+.container nav ul li:hover {
+    cursor: pointer;
+    color: #3ca93c;
+}
+.cards { 
+    padding: 50px;
     margin-top: 80px;
+    
+    align-items: center;
+    box-sizing: border-box;
+    
+    background-color: #fff;
+    box-shadow: 3px 3px 5px rgba(0,0,0,0.1);
+
+}
+
+.entradaDados {
+    min-width: 250px;
+    width: 26%;
+    min-height: 350px;
+    height: 75%;
+   
+}
+
+.entradaDados form {
+    min-height: 300px;
+    height: 300px;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: space-around;
+    align-content: center;
+}
+
+.entradaDados form div {
+    position: relative;
+}
+
+.entradaDados form input {
+    margin: 0 auto;
+    width: 100%;
+    
+    border: none;
+    border-bottom: 2px solid #333;
+    outline: none;
+
+    text-indent: 5px;
+
+    transition: 0.2s;
+}
+.entradaDados form input:active, 
+.entradaDados form input:hover {
+    border-bottom: 2px solid #3ca93c;
+}
+
+.entradaDados form label {
+    position: absolute;
+    top: 0;
+
+    font-size: 1rem;
+    
+    transition: .3s;
+}
+.entradaDados form input:hover~label, 
+.entradaDados form input:focus~label, 
+.entradaDados form input:valid~label {
+    font-size: .9rem;
+    transform: translateY(-13px) ;
+}
+
+.entradaDados form button {
+    width: 50%;
+    padding: 5px;
+
+    align-self: flex-end;
+
+    border: none;
+    background-color: #3ca93c;
+    color: #fff;
+    outline: none;
+
+    transition: 0.5s;
+}
+
+.entradaDados form button:hover {
+    background-color: #2e7a2e;
 }
 
 .resultados {
-    margin-top: 20px;
+    min-width: 200px;
+    width: 23%;
+    min-height: 300px;
+    height: 75%;    
+
+    text-align: center;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.resultados div {
+    display: flex;
+    flex-direction: column;
+}
+
+.resultados div strong {
+    margin-top: -5px;
+    font-size: 1.6rem;
+    font-weight: 900;
+}
+
+.dicas {
+    min-width: 200px;
+    width: 23%;
+    min-height: 300px;
+    height: 50%; 
+}
+
+.dicas header {
+    padding-bottom: 10px;
+    border-bottom: 1px dashed #555;
+}
+
+.dicas p {
+    width: 180px;
+    margin-top: 10px;
+
+    font-size: small;
+    line-height: 18px;
+    text-indent: 10px;
 }

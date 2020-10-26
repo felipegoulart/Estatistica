@@ -76,10 +76,6 @@ button:hover {
     color: #000000;
 }
 
-.esconder {
-    display: none !important;
-}
-
 .inputs{
     margin: 20px 0
 }
