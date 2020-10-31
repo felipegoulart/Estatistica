@@ -19,14 +19,16 @@ body {
 .estatistica {
     min-width: 250px;
     width: 70%;
-    height: 100vh;
+    height: 80vh;
     padding: 30px;
 
+    
     display: flex;
     flex-direction: row;
     box-sizing: border-box;
-
+    
     margin: auto;
+    margin-top: 50px;
     margin-bottom: 20px;
 
     border-radius: 10px;
@@ -103,9 +105,6 @@ body {
     justify-content: space-evenly;
     flex-wrap: wrap;
 
-    background-color: #fff;
-
-    margin-top: 50px;
     padding: 60px 0;
 }
 
