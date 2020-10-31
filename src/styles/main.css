@@ -18,22 +18,22 @@ body {
 
 .estatistica {
     min-width: 250px;
-    width: 60%;
+    width: 70%;
+    height: 100vh;
     padding: 30px;
 
     display: flex;
     flex-direction: row;
     box-sizing: border-box;
 
-    margin: 80px auto;
+    margin: auto;
     margin-bottom: 20px;
-    background-color: var(--background-card);
 
-    /* border: 2px solid #666; */
     border-radius: 10px;
 }
 
 .estatistica .textos {
+    margin: auto 0;
     width: 50%;
     margin-left: 20px;
 }
@@ -81,7 +81,6 @@ body {
         margin-left: -5px;
     }
 
-
     .estatistica p {
         margin: 10px 5px;
     
@@ -104,7 +103,10 @@ body {
     justify-content: space-evenly;
     flex-wrap: wrap;
 
+    background-color: #fff;
+
     margin-top: 50px;
+    padding: 60px 0;
 }
 
 .card {
@@ -156,7 +158,7 @@ body {
 }
 
 .card .imagem:hover {
-    transform: translateY(-35px);
+    transform: translateY(-40px);
 }
 
 .card .imagem img {
