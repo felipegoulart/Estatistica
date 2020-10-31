@@ -297,8 +297,5 @@ btnCalcular.addEventListener('click', () => {
     dados.tipoVar = ''
     dados.tipoCalc = ''
     dados.valoresAgrupados = {}
-    
-    formDescritiva.reset()
-    
-    excluirThumb()
+
 })
