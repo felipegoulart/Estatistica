@@ -118,8 +118,8 @@ body {
     position: relative;
     
     background-color: var(--background-card);
-    
     border-radius: 10px;
+
     transition: 200ms;
 }
 
@@ -189,7 +189,7 @@ body {
     border: none;
     border-radius: 0 0 10px 10px;
 
-    font-size: large;
+    font-size: 15pt;
     color: #efefef;
     background-color: #6C63FF;
 
