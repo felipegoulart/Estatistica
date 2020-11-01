@@ -1,8 +1,8 @@
-.menu ul{
+.menu ul {
     border-color: #6C63FF;
 }
 
-.menu li{
+.menu li {
     color: #555;
 }
 
@@ -74,10 +74,9 @@ button:hover {
 .btnLimpar:focus {
     background-color: #ffffff;
     color: #000000;
-}
-
-.esconder {
-    display: none !important;
+} 
+.btnLimpar:hover {
+    background-color: #ffffff;
 }
 
 .inputs{
