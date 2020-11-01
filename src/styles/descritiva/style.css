@@ -1,19 +1,14 @@
-* {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-}
-/* Cria rolagem suave */
-html{
-    scroll-behavior: smooth;
- }
-
-body {
-    background-color: #efefef;
+.menu ul{
+    border-color: #6C63FF;
 }
 
-p ,h1, h2, h3, h4, input, button, legend, label, option {
-    font-family: sans-serif;
+.menu li{
+    color: #555;
+}
+
+p, input, button, legend, label, option {
+    font-weight: 500;
+    color: #333;
 }
 
 .conteudo {
@@ -46,11 +41,15 @@ form button {
     min-width: 200px;
     height: 40px;
     margin: 10px 5px;
+
     border-radius: 10px;
     border: none;
+
     background-color: #6C63FF;
     box-shadow: 3px 3px 5px #00000035;
     color: #ffffff;
+
+    transition: 500ms;
 }
 
 .botoesTipo {
@@ -65,6 +64,7 @@ button:focus {
 }
 
 button:hover {
+    background-color:#4E45E1;
     cursor: pointer;
     box-shadow: 0 0 5px 5px #6C63FF35,
     0 0 2px 2px #6C63FF25;

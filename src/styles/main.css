@@ -1,0 +1,214 @@
+:root {
+    --background:rgb(15, 15, 15);
+    --background-card: rgb(36, 36, 51);
+    --title-color: #fff;
+    --text-color: #efefef;
+}
+
+body {
+    background-color: var(--background);
+}
+
+.menu ul {
+    border-bottom: 2px solid #eee;
+}
+.menu li {
+    color: #eee;
+}
+
+.estatistica {
+    min-width: 250px;
+    width: 60%;
+    padding: 30px;
+
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
+
+    margin: 80px auto;
+    margin-bottom: 20px;
+    background-color: var(--background-card);
+
+    /* border: 2px solid #666; */
+    border-radius: 10px;
+}
+
+.estatistica .textos {
+    width: 50%;
+    margin-left: 20px;
+}
+
+.estatistica h1 {
+    margin-top: 20px;
+    font-size: 15pt;
+    color: var(--title-color);
+}
+
+.estatistica p {
+    margin: 20px 10px -10px 10px;
+
+    color: var(--text-color);
+
+    text-align: justify;
+    font-size: 12pt;
+    font-weight: 500;
+    line-height: 25px;
+}
+
+.estatistica img {
+    width: 30%;
+    margin: auto;
+
+    transition: 200ms;
+}
+
+.estatistica img:hover {
+    transform: translateY(-7px)
+}
+
+@media (max-width: 800px) {
+    .estatistica {
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    .estatistica .textos {
+        width: 80%;
+        margin-left: 20px;
+    }
+
+    .estatistica h1 {
+        margin-left: -5px;
+    }
+
+
+    .estatistica p {
+        margin: 10px 5px;
+    
+        color: var(--text-color);
+    
+        text-align: justify;
+        font-size: 12pt;
+        font-weight: 500;
+        line-height: 25px;
+    }
+
+    .estatistica img {
+        display: none
+    }
+}
+
+.cards {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+
+    margin-top: 50px;
+}
+
+.card {
+    min-width: 200px;
+    width: 20%;
+    min-height: 300px;
+    height: 400px;
+    margin: 20px 0;
+
+    position: relative;
+    
+    background-color: var(--background-card);
+    
+    border-radius: 10px;
+    transition: 200ms;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+}
+
+.card a {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+}
+
+.card .imagem {
+    width: 80%;
+    padding: 30px;
+    box-sizing: border-box;
+
+    background: linear-gradient(135deg, #6C63FF 5%, #8A10DC 100%);
+
+    transform: translateY(-25px);
+
+    box-shadow: 0 10px 10px #00000044;
+    border-radius: 10px;
+
+    transition: 200ms;
+}
+
+.indutiva {
+    background: linear-gradient(135deg, #00FFCE 5%, #95EF4A 100%) !important;
+}
+
+.card .imagem:hover {
+    transform: translateY(-35px);
+}
+
+.card .imagem img {
+    width: 100%;
+}
+
+.card h1 {
+    margin: -10px;
+    color: #efefef;
+    font-size: 14pt;
+}
+
+.card p {
+    width: 80%;
+    margin-top: 20px;
+
+    color: #eee;
+    font-weight: 500;
+    font-size: 12pt;
+}
+
+.card button {
+    width: 100%;
+    height: 45px;
+
+    position: absolute;
+    bottom: 0;
+
+    border: none;
+    border-radius: 0 0 10px 10px;
+
+    font-size: large;
+    color: #efefef;
+    background-color: #6C63FF;
+
+    transition: 200ms linear;
+}
+
+.card .btn:hover {
+    cursor: pointer;
+    background-color: #4E45E1;
+}
+
+.btn-indutiva {
+    background-color: #00FFCE !important;
+}
+
+.btn-indutiva:hover {
+    cursor: pointer;
+    background-color: #00be98 !important;
+}
+
+.emConstrucao {
+    background: linear-gradient(#ddd, #ddd) !important;
+}
