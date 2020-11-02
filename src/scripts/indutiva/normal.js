@@ -31,11 +31,19 @@ calcularNormal.addEventListener('click', () => {
             p = 0.5000
         }
         
-        if (vetIntervalo[0] < media){
-            probabilidade_int = ((0.5 - p) * 100).toFixed(2)
-        }else{
-            probabilidade_int = ((0.5 + p) * 100).toFixed(2)
-        }  
+        if (opt_intervalo == 'maior') {
+            if (vetIntervalo[0] > media){
+                probabilidade_int = ((0.5 - p) * 100).toFixed(2)
+            }else{
+                probabilidade_int = ((0.5 + p) * 100).toFixed(2)
+            }  
+        } else {
+            if (vetIntervalo[0] <= media){
+                probabilidade_int = ((0.5 - p) * 100).toFixed(2)
+            }else{
+                probabilidade_int = ((0.5 + p) * 100).toFixed(2)
+            }
+        }
 
     } else {
         debugger
@@ -60,7 +68,7 @@ calcularNormal.addEventListener('click', () => {
             }
         }
 
-        if (vetIntervalo[0] > vetIntervalo[1] || vetIntervalo[0] > media){    
+        if (vetIntervalo[0] < vetIntervalo[1] || vetIntervalo[0] < media){    
             probabilidade_int = ((prob.reduce((a,b) => a + b))*100).toFixed(2)
         }else{
             probabilidade_int = ((prob.reduce((a,b) => a - b))*100).toFixed(2)
