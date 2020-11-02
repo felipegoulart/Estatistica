@@ -7,7 +7,6 @@ const formManual = document.querySelector('.formManual')
 const formArquivo = document.querySelector('.formArquivo')
 const textoErroNome = document.querySelector('[data-js=inputNome]')
 const textoErroValor = document.querySelector('[data-js=inputValor]')
-const formDescritiva = document.querySelector('#formDescritiva')
 const sectionGrafico = document.querySelector('.sectGrafico')
 
 const inputNome = document.querySelector('#nomeVariavel')

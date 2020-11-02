@@ -1,10 +1,8 @@
-import tabela from "./tabela.js"
-
 const sectionResultados = document.querySelector('.resultados')
-const calcularIndutiva = document.querySelector('#calcularIndutia')
+const calcularBinomial = document.querySelector('#calcularBinomial')
 let probabilidade = 0, media = 0, dp = 0, analise, fat_n, fat_k, fat_nk, aux
 
-calcularIndutiva.addEventListener('click', () => {
+calcularBinomial.addEventListener('click', () => {
     const amostra = document.querySelector('#amostra').value
     const sucesso = document.querySelector('#sucesso').value
     const fracasso = document.querySelector('#fracasso').value

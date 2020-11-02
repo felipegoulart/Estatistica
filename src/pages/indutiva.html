@@ -16,80 +16,151 @@
 
         <nav>
             <ul>
-                <li>Binomial</li>
-                <li>Normal</li>
+                <li class="tiposDistribuicoes selecionado">Binomial</li>
+                <li class="tiposDistribuicoes">Normal</li>
+                <li class="tiposDistribuicoes">*</li>
             </ul>
         </nav>
-
-        <section class="cards entradaDados">
-            <form method="post">
+        
+        <div class="distribuicao distBinomial">
+            <section class="cards entradaDados">
+                <form method="post">
+                    <div>
+                        <input type="text" id="amostra" required>
+                        <label for="amostra">Amostra</label>
+                        <small>Ex: 10</small>
+                    </div>
+                    
+                    <div>
+                        <input type="text" id="sucesso" required>
+                        <label for="sucesso">Sucesso</label>
+                        <small>Ex: 40</small>
+                    </div>
+                    
+                    <div>
+                        <input type="text" id="fracasso" required>
+                        <label for="fracasso">Fracasso</label>
+                        <small>Ex: 60</small>
+                    </div>
+                    
+                    <div>
+                        <input type="text" id="evento" required>
+                        <label for="evento">Evento</label>
+                        <small>Ex: 0;1;2</small>
+                    </div>
+                    
+                    <button type="button" id="calcularBinomial">Calcular</button>
+                </form>
+            </section>
+        
+            <section class="cards resultados">
                 <div>
-                    <input type="text" id="amostra" required>
-                    <label for="amostra">Amostra</label>
-                    <small>Ex: 10</small>
+                    <span>Probabilidade:</span>
+                    <strong>***</strong>
                 </div>
-                
-                <div>
-                    <input type="text" id="sucesso" required>
-                    <label for="sucesso">Sucesso</label>
-                    <small>Ex: 40</small>
-                </div>
-                
-                <div>
-                    <input type="text" id="fracasso" required>
-                    <label for="fracasso">Fracasso</label>
-                    <small>Ex: 60</small>
-                </div>
-                
-                <div>
-                    <input type="text" id="evento" required>
-                    <label for="evento">Evento</label>
-                    <small>Ex: 0;1;2</small>
-                </div>
-                
-                <button type="button" id="calcularIndutia">Calcular</button>
-            </form>
-        </section>
     
-        <section class="cards resultados">
-            <div>
-                <span>Probabilidade:</span>
-                <strong>***</strong>
-            </div>
+                <div>
+                    <span>Média:</span>
+                    <strong>***</strong>
+                </div>
+    
+                <div>
+                    <span>Desvio padrão:</span>
+                    <strong>***</strong>
+                </div>
+            </section>
 
-            <div>
-                <span>Média:</span>
-                <strong>***</strong>
-            </div>
+            <section class="cards dicas">
+                <div class="dicaBinomial">
+                    <header>
+                        <h1>Distribuição Binomial</h1>
+                    </header>
+    
+                    <p>
+                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ea unde obcaecati deserunt? Excepturi animi nisi rerum ratione minus nostrum adipisci molestias aperiam.
+                    </p>
+                </div>
+                
+                <div class="dicaNormal esconder">
+                    <header>
+                        <h1>Distribuição Binomial</h1>
+                    </header>
+    
+                    <p>
+                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ea unde obcaecati deserunt? Excepturi animi nisi rerum ratione minus nostrum adipisci molestias aperiam.
+                    </p>
+                </div>
+            </section>
+        </div>
 
-            <div>
-                <span>Desvio padrão:</span>
-                <strong>***</strong>
-            </div>
-        </section>
+        <div class="distribuicao distNormal esconder">
+            <section class="cards entradaDados">
+                <form method="post">
+                    <div>
+                        <input type="number" id="media" required>
+                        <label for="media">Média</label>
+                        <small>Ex: 300</small>
+                    </div>
+                    
+                    <div>
+                        <input type="number" id="desv" required>
+                        <label for="desv">Desvio Padrão</label>
+                        <small>Ex: 20</small>
+                    </div>
+                    
+                    <div>
+                        <input type="text" id="intervalo" required>
+                        <label for="intervalo">Intervalo</label>
+                        <small>Ex: 280;300</small>
+                    </div>
+                    
+                    <div>
+                        <select name="selectIntervalo" id="selectIntervalo">
+                            <option selected disabled >Selecione o tipo de intervalo</option>
+                            <option value="maior">Maior que</option>
+                            <option value="entre">Entre dois números</option>
+                            <option value="menor">Menor que</option>
+                        </select>
+                    </div>
+                    
+                    <button type="button" id="calcularNormal">Calcular</button>
+                </form>
+            </section>
+        
+            <section class="cards resultados resultNormal">
+                <div>
+                    <span>Probabilidade:</span>
+                    <strong>***</strong>
+                </div>
 
-        <section class="cards dicas">
-            <div class="binomial">
-                <header>
-                    <h1>Distribuição Binomial</h1>
-                </header>
+            </section>
 
-                <p>
-                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ea unde obcaecati deserunt? Excepturi animi nisi rerum ratione minus nostrum adipisci molestias aperiam.
-                </p>
-            </div>
-            
-            <div class="normal esconder">
-                <header>
-                    <h1>Distribuição Binomial</h1>
-                </header>
+            <section class="cards dicas">
+                <div class="binomial">
+                    <header>
+                        <h1>Distribuição Binomial</h1>
+                    </header>
+    
+                    <p>
+                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ea unde obcaecati deserunt? Excepturi animi nisi rerum ratione minus nostrum adipisci molestias aperiam.
+                    </p>
+                </div>
+                
+                <div class="normal esconder">
+                    <header>
+                        <h1>Distribuição Binomial</h1>
+                    </header>
+    
+                    <p>
+                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ea unde obcaecati deserunt? Excepturi animi nisi rerum ratione minus nostrum adipisci molestias aperiam.
+                    </p>
+                </div>
+            </section>
+        </div>
 
-                <p>
-                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ea unde obcaecati deserunt? Excepturi animi nisi rerum ratione minus nostrum adipisci molestias aperiam.
-                </p>
-            </div>
-        </section>
+        
     </div>
+    <script src="../scripts/indutiva/script.js" type="module"></script>
     <script src="../scripts/indutiva/binomial.js" type="module"></script>
     <script src="../scripts/indutiva/normal.js" type="module"></script>
     <script src="../scripts/indutiva/tabela.js" type="module"></script>
