@@ -12,158 +12,164 @@
     <title>Descritiva</title>
 </head>
 <body>
-    <script src="../scripts/menu.js"></script>
-<section class="conteudo">
+  <script src="../scripts/menu.js"></script>
+  <section class="conteudo">
     <form autocomplete="off" id="formDescritiva" class="formDescritiva">
-        <div class="divBotoes">
-            <button type="button" id="btnManual" class="botoesTipo">Manual</button>
-            <button type="button" id="btnArquivo" class="botoesTipo">Arquivo</button>
-        </div>
-        <div class="formularios esconder">
-            <div class="formManual esconder">
-                
-                <div class="inputs">
-                    <label for="nomeVariavel" class="labelValores">
-                        Nome da Variável
-                    </label>
-                    <input type="text" 
-                    name="nomeVariavel"
-                    id="nomeVariavel"
-                    class="inputValores"
-                    placeholder="Variável">
-                    <small data-js="inputNome" class="erro"></small>
-
-                </div>
-                
-                <div class="inputs">
-                    <label for="valores">
-                        Valores
-                    </label>
-                    <input 
-                        name="valores"
-                        id="valores"
-                        class="inputValores"
-                        placeholder="Separe por ;">
-                        <small data-js="inputValor" class="erro"></small>
-                    </div>
-                </div>
+      <div class="divBotoes">
+        <button type="button" id="btnManual" class="botoesTipo">Manual</button>
+        <button type="button" id="btnArquivo" class="botoesTipo">Arquivo</button>
+      </div>
+      
+      <div class="formularios esconder">
+        <div class="formManual esconder">
             
-            <div class="formArquivo esconder">
-                <div class="dropzone">
-                    <span class="textoDropzone">
-                        Arraste um arquivo<br>ou 
-                        <label for="inputArquivo">Clique aqui</label>
-                    </span>
-                    <input type="file" name="inputArquivo" id="inputArquivo" accept=".csv">
-                    <div class="thumbnail esconder">
-                        <span class="nomeArquivo--thumb"></span>
-                        <input type="button" class="btnExcluir btnThumb" value="x">
-                    </div>
-                </div>
-                
-            </div>
+          <div class="inputs">
+              <label for="nomeVariavel" class="labelValores">
+                  Nome da Variável
+              </label>
+              <input type="text" 
+              name="nomeVariavel"
+              id="nomeVariavel"
+              class="inputValores"
+              placeholder="Variável">
+              <small data-js="inputNome" class="erro"></small>
 
-            <div class="tiposVariaveis">
-                <fieldset>
-                    <legend>Qualitativa</legend>
-                    <input type="radio"
-                            name="tipoVariavel"
-                            id="nominal"
-                            value="nominal"
-                            checked>
-                    <label for="nominal">
-                        Nominal
-                    </label>
-
-                    <input type="radio"
-                            name="tipoVariavel"
-                            id="ordinal"
-                            value="ordinal">
-                    <label for="ordinal">
-                        Ordinal
-                    </label>
-                </fieldset>
-                
-                <fieldset>
-                    <legend>Quantitativa</legend>
-                    <input type="radio"
-                            name="tipoVariavel"
-                            id="discreta"
-                            value="discreta">
-                    <label for="discreta">
-                        Discreta
-                    </label>
-
-                    <input type="radio"
-                            name="tipoVariavel"
-                            id="continua"
-                            value="continua">
-                    <label for="continua">
-                        Contínua
-                    </label>
-                </fieldset>
-
-                <select name="tipoCalculo" id="tipoCalculo">
-                    <option value="amostra" selected>Amostra</option>
-                    <option value="populacao">População</option>
-                </select>
-            </div>
-
-            <div class="divBotoes btnInferior">
-                <button type="reset" class="btnLimpar">Limpar</button>
-                <button type="button" id="calcular">Calcular</button>
-            </div>
+          </div>
+            
+          <div class="inputs">
+              <label for="valores">
+                  Valores
+              </label>
+              <input 
+                  name="valores"
+                  id="valores"
+                  class="inputValores"
+                  placeholder="Separe por ;">
+                  <small data-js="inputValor" class="erro"></small>
+              </div>
         </div>
+          
+        <div class="formArquivo esconder">
+          <div class="dropzone">
+            <span class="textoDropzone">
+              Arraste um arquivo<br>ou 
+              <label for="inputArquivo">Clique aqui</label>
+            </span>
+
+            <input type="file" name="inputArquivo" id="inputArquivo" accept=".csv">
+            
+            <div class="thumbnail esconder">
+              <span class="nomeArquivo--thumb"></span>
+              <input type="button" class="btnExcluir btnThumb" value="x">
+            </div>
+          </div>
+              
+        </div>
+
+        <div class="tiposVariaveis">
+          <fieldset>
+            <legend>Qualitativa</legend>
+            <input 
+              type="radio"
+              name="tipoVariavel"
+              id="nominal"
+              value="nominal"
+              checked
+            >
+            <label for="nominal">Nominal</label>
+
+            <input 
+              type="radio"
+              name="tipoVariavel"
+              id="ordinal"
+              value="ordinal"
+            >
+
+            <label for="ordinal">Ordinal</label>
+          </fieldset>
+          
+          <fieldset>
+            <legend>Quantitativa</legend>
+
+            <input 
+              type="radio"
+              name="tipoVariavel"
+              id="discreta"
+              value="discreta"
+            >
+
+            <label for="discreta">Discreta</label>
+
+            <input 
+              type="radio"
+              name="tipoVariavel"
+              id="continua"
+              value="continua"
+            >
+
+            <label for="continua">Contínua</label>
+          </fieldset>
+
+          <select name="tipoCalculo" id="tipoCalculo">
+            <option value="amostra" selected>Amostra</option>
+            <option value="populacao">População</option>
+          </select>
+        </div>
+
+        <div class="divBotoes btnInferior">
+          <button type="reset" class="btnLimpar">Limpar</button>
+          <button type="button" id="calcular">Calcular</button>
+        </div>
+      </div>
     </form>
     
     <div class="sectionTabela esconder" id="tabela">
     </div>
 
-    <div class="sectionMedias esconder">
-        
+    <div class="sectionMedias esconder"> 
     </div>
 
     <div class="sectionSeparatrizes esconder">
-        <section class="entradaSeparatrizes">
-            <select name="separatrizes" id="separatrizes">
-                <option value="quartil" selected>Quartil</option>
-                <option value="quintil">Quintil</option>
-                <option value="decil">Decil</option>
-                <option value="percentil">Percentil</option>
-            </select>
+      <section class="entradaSeparatrizes">
+        <select name="separatrizes" id="separatrizes">
+          <option value="quartil" selected>Quartil</option>
+          <option value="quintil">Quintil</option>
+          <option value="decil">Decil</option>
+          <option value="percentil">Percentil</option>
+        </select>
 
-            <input 
-                type="range" 
-                name="range" 
-                id="range"
-                min="25"
-                max="100"
-                step="25"
-                value="25"
-            >
+        <input 
+          type="range" 
+          name="range" 
+          id="range"
+          min="25"
+          max="100"
+          step="25"
+          value="25"
+        >
 
-            <input
-                class="inputValores"
-                id="numSeparatriz"
-                type="number"
-                name="range"
-                min="25"
-                max="100"
-                step="25"
-                value="25"
-            >
-        </section>
+        <input
+          class="inputValores"
+          id="numSeparatriz"
+          type="number"
+          name="range"
+          min="25"
+          max="100"
+          step="25"
+          value="25"
+        >
+      </section>
     </div>
 
     <div class="sectGrafico esconder">
-        <canvas id="grafico"></canvas>
+      <canvas id="grafico"></canvas>
     </div>
-</section>
+  </section>
 
-<div class="popup esconder">
+  <div class="popup esconder">
     <input type="button" class="btnExcluir btnPopup" value="x">
     <span>Arraste as linhas da <span class="destaque">TABELA</span> para ordena-las</span>
-</div>
+  </div>
 
 <script src="../scripts/descritiva/script.js" type="module"></script>
 <script src="../scripts/descritiva/dropArquivo.js" type="module"></script>

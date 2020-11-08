@@ -1,7 +1,14 @@
 import tabela from "./tabela.js"
+import search from '../lib/search.js'
 
 const calcularNormal = document.querySelector('#calcularNormal')
 const resultNormal = document.querySelector('.resultNormal')
+
+const fncComparacao = (tabela, linha) => {
+  if (tabela.linha == linha) return 0
+  else if (tabela.linha > linha) return -1
+  else return 1
+}
 
 calcularNormal.addEventListener('click', () => {
   let media = document.querySelector('#media').value
@@ -18,7 +25,7 @@ calcularNormal.addEventListener('click', () => {
   
   let vetIntervalo = intervalo.split(';').map(num => Number(num))
     
-  if (opt_intervalo == 'maior' || opt_intervalo == 'menor'){   
+  if (opt_intervalo == 'maior' || opt_intervalo == 'menor') {   
       
     z = (vetIntervalo[0]-media) / desv
     if (z < 0) z *= -1 // se o número for negativo, ele passa para positivo
@@ -26,13 +33,15 @@ calcularNormal.addEventListener('click', () => {
     i = z.toFixed(2)
     y = [...i]
 
-    linha = parseFloat(y[0] + y[2])
-    coluna = parseInt(i[3])
-
-    if(linha <= 39) p = tabela[linha][coluna]
-        
+    linha = y[0] + y[2]
+    coluna = Number(i[3])
+    
+    if(linha <= 39)  {
+      const vetArea = search(fncComparacao, tabela, linha)
+      p = vetArea.coluna[coluna]
+    }  
     else p = 0.5000
-        
+    
     if (opt_intervalo == 'maior') { // maior
       if (vetIntervalo[0] > media) probabilidade_int = ((0.5 - p) * 100).toFixed(2)
           
