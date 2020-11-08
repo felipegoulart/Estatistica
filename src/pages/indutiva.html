@@ -18,7 +18,7 @@
             <ul>
                 <li class="tiposDistribuicoes selecionado">Binomial</li>
                 <li class="tiposDistribuicoes">Normal</li>
-                <li class="tiposDistribuicoes">*</li>
+                <li class="tiposDistribuicoes">Uniforme</li>
             </ul>
         </nav>
         
@@ -97,13 +97,13 @@
             <section class="cards entradaDados">
                 <form method="post">
                     <div>
-                        <input type="number" id="media" required>
+                        <input type="text" id="media" required>
                         <label for="media">Média</label>
                         <small>Ex: 300</small>
                     </div>
                     
                     <div>
-                        <input type="number" id="desv" required>
+                        <input type="text" id="desv" required>
                         <label for="desv">Desvio Padrão</label>
                         <small>Ex: 20</small>
                     </div>
@@ -148,7 +148,62 @@
             </section>
         </div>
 
+        <div class="distribuicao distUniforme esconder">
+            <div class="cards"> <h1>Tá pronto não!</h1></div>
+            <!-- <section class="cards entradaDados">
+                <form method="post">
+                    <div>
+                        <input type="text" id="media" required>
+                        <label for="media">Média</label>
+                        <small>Ex: 300</small>
+                    </div>
+                    
+                    <div>
+                        <input type="text" id="desv" required>
+                        <label for="desv">Desvio Padrão</label>
+                        <small>Ex: 20</small>
+                    </div>
+                    
+                    <div>
+                        <select name="selectIntervalo" id="selectIntervalo">
+                            <option selected disabled >Selecione o tipo de intervalo</option>
+                            <option value="maior">Maior que</option>
+                            <option value="entre">Entre</option>
+                            <option value="menor">Menor que</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <input type="text" id="intervalo" required>
+                        <label for="intervalo">Intervalo</label>
+                        <small>Ex: 280;300</small>
+                    </div>
+                    
+                    <button type="button" id="calcularNormal">Calcular</button>
+                </form>
+            </section>
         
+            <section class="cards resultados resultNormal">
+                <div>
+                    <span>Probabilidade:</span>
+                    <strong>***</strong>
+                </div>
+
+            </section>
+
+            <section class="cards dicas">               
+                <div class="normal">
+                    <header>
+                        <h1>Distribuição Uniforme</h1>
+                    </header>
+    
+                    <p>
+                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ea unde obcaecati deserunt? Excepturi animi nisi rerum ratione minus nostrum adipisci molestias aperiam.
+                    </p>
+                </div> 
+            </section> -->
+        </div>
+
     </div>
     <script src="../scripts/indutiva/script.js" type="module"></script>
     <script src="../scripts/indutiva/binomial.js" type="module"></script>

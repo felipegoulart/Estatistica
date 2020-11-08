@@ -1,5 +1,6 @@
 import funcoesCalculo from './calculos.js'
 import funcoesDOM from './tabelas.js'
+import sort from '../lib/sort.js'
 
 const salvarDadosNoObjeto = (dados, nome, valores )=> {
     dados.nome = nome
@@ -12,9 +13,9 @@ const ordenarVetor = (vetor) => {
     const tipoNumerico = vetor.every(elemento => !isNaN(elemento))
     if(tipoNumerico) {
         vetor = vetor.map(elemento => Number(elemento))
-        return vetor.sort((a,b) => a - b)
+        return sort((a,b) => a > b, vetor)
     } else {
-        return vetor.sort()
+        return sort((a,b) => a > b, vetor)
     }
 }
 
