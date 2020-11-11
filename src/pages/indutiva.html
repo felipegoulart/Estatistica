@@ -149,43 +149,52 @@
     </div>
 
     <div class="distribuicao distUniforme esconder">
-        <div class="cards"> <h1>Tá pronto não!</h1></div>
-        <!-- <section class="cards entradaDados">
-          <form method="post">
-            <div>
-              <input type="text" id="media" required>
-              <label for="media">Média</label>
-              <small>Ex: 300</small>
-            </div>
-            
-            <div>
-              <input type="text" id="desv" required>
-              <label for="desv">Desvio Padrão</label>
-              <small>Ex: 20</small>
-            </div>
-            
-            <div>
-              <select name="selectIntervalo" id="selectIntervalo">
-                <option selected disabled >Selecione o tipo de intervalo</option>
-                <option value="maior">Maior que</option>
-                <option value="entre">Entre</option>
-                <option value="menor">Menor que</option>
-              </select>
-            </div>
-            
-            <div>
-              <input type="text" id="intervalo" required>
-              <label for="intervalo">Intervalo</label>
-              <small>Ex: 280;300</small>
-            </div>
-            
-            <button type="button" id="calcularNormal">Calcular</button>
-          </form>
-        </section>
+      <section class="cards entradaDados">
+        <form method="post">
+          <div>
+            <input type="text" id="minimo" required>
+            <label for="minimo">Mínimo</label>
+            <small>Ex: 800</small>
+          </div>
+          
+          <div>
+            <input type="text" id="desv" required>
+            <label for="desv">Máxímo</label>
+            <small>Ex: 1800</small>
+          </div>
+          
+          <div>
+            <select name="selectIntervalo" id="selectIntervalo">
+              <option selected disabled >Selecione o tipo de intervalo</option>
+              <option value="maior">Maior que</option>
+              <option value="entre">Entre</option>
+              <option value="menor">Menor que</option>
+            </select>
+          </div>
+          
+          <div>
+            <input type="text" id="intervalo" required>
+            <label for="intervalo">Intervalo</label>
+            <small>Ex: 800;1000</small>
+          </div>
+          
+          <button type="button" id="calcularNormal">Calcular</button>
+        </form>
+      </section>
   
-      <section class="cards resultados resultNormal">
+      <section class="cards resultados resultUniforme">
         <div>
           <span>Probabilidade:</span>
+          <strong>***</strong>
+        </div>
+
+        <div>
+          <span>Média:</span>
+          <strong>***</strong>
+        </div>
+
+        <div>
+          <span>Desvio padrão:</span>
           <strong>***</strong>
         </div>
       </section>
@@ -200,7 +209,7 @@
             Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ea unde obcaecati deserunt? Excepturi animi nisi rerum ratione minus nostrum adipisci molestias aperiam.
           </p>
         </div> 
-      </section> -->
+      </section>
     </div>
 
   </div>
