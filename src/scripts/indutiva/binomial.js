@@ -9,13 +9,13 @@ let probabilidade = 0,
   fat_k,
   fat_nk,
   aux
-
+// Captura dos dados fornecidos pelo usuário
 calcularBinomial.addEventListener('click', () => {
   const amostra = document.querySelector('#amostra').value
   const sucesso = document.querySelector('#sucesso').value
   const fracasso = document.querySelector('#fracasso').value
   const evento = document.querySelector('#evento').value
-
+// Função para o calculo fatorial
   function fatorial(valor) {
     // para valores negativos
     if (valor < 0) return 'Valor deve ser maior ou igual a zero';
@@ -36,7 +36,7 @@ calcularBinomial.addEventListener('click', () => {
   let au = evento.split(';')
 
   for (let i = 0; i < au.length; i++)   evento_tratado.push(parseInt(au[i]))
-// Calculos das probabilidades com base na quantidade eventos listtados 
+// Calculos das probabilidades com base na quantidade eventos listados 
   if (evento_tratado.length == 1){
     aux = amostra - evento
     fat_k = fatorial(evento)
@@ -90,6 +90,7 @@ calcularBinomial.addEventListener('click', () => {
   `
 
   sectionResultados.innerHTML = resultados    
+
 })
 
 
