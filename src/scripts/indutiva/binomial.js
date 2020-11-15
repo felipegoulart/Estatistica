@@ -31,12 +31,12 @@ calcularBinomial.addEventListener('click', () => {
       return acumula;
     } 
   }
-
+// Tratamento dos dados inseridos dos eventos a serem calculados
   let evento_tratado = []
   let au = evento.split(';')
 
   for (let i = 0; i < au.length; i++)   evento_tratado.push(parseInt(au[i]))
-  
+// Calculos das probabilidades com base na quantidade eventos listtados 
   if (evento_tratado.length == 1){
     aux = amostra - evento
     fat_k = fatorial(evento)
@@ -68,10 +68,10 @@ calcularBinomial.addEventListener('click', () => {
 
     }
   }
-  
+// Calculos da média e do desvio padrão  
   media = amostra*(sucesso/100)
   dp = (((amostra*(sucesso/100)*(fracasso/100))**(1/2))).toFixed(2)
-
+// mostrando os resultado na tela
   const resultados = `
   <div>
     <span>Probabilidade:</span>

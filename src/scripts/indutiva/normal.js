@@ -9,7 +9,7 @@ const fncComparacao = (tabela, linha) => {
   else if (tabela.linha > linha) return -1
   else return 1
 }
-
+// Captura dos dados fornecidos pelo usuário
 calcularNormal.addEventListener('click', () => {
   let media = document.querySelector('#media').value
   let desv = document.querySelector('#desv').value
@@ -18,15 +18,15 @@ calcularNormal.addEventListener('click', () => {
 
   let i, y, z, coluna, linha, p, probabilidade_int
   let prob = []
-
+// Tratamento dos dados 
   media = media.replace(',', '.')
   desv = desv.replace(',', '.')
   intervalo = intervalo.replace(',', '.')
   
   let vetIntervalo = intervalo.split(';').map(num => Number(num))
-    
+// Teste condicional para determiner como serão feitos os calculos     
   if (opt_intervalo == 'maior' || opt_intervalo == 'menor') {   
-      
+    // Calculo para a busca da linha e coluna na tabela da Distribuição Normal  
     z = (vetIntervalo[0]-media) / desv
     if (z < 0) z *= -1 // se o número for negativo, ele passa para positivo
 
@@ -41,7 +41,7 @@ calcularNormal.addEventListener('click', () => {
       p = vetArea.coluna[coluna]
     }  
     else p = 0.5000
-    
+    // Teste condicional para determinar o calculo da probabilidade 
     if (opt_intervalo == 'maior') { // maior
       if (vetIntervalo[0] > media) probabilidade_int = ((0.5 - p) * 100).toFixed(2)
           
@@ -55,6 +55,7 @@ calcularNormal.addEventListener('click', () => {
 
   } else {
     for (let int of vetIntervalo) {
+      // Calculo para a busca da linha e coluna na tabela da Distribuição normal
       if (int != media) {
         
         z = (int-media)/desv
@@ -74,7 +75,7 @@ calcularNormal.addEventListener('click', () => {
         prob.push(p)   
       }
     }
-    
+    //Teste condicional para determinar o calculo da probabilidade
     if (vetIntervalo[0] < media && vetIntervalo[1] > media) 
       probabilidade_int = ((prob.reduce((a,b) => a + b))*100).toFixed(2)
 
@@ -84,7 +85,7 @@ calcularNormal.addEventListener('click', () => {
     else probabilidade_int = ((prob.reduce((a,b) => b - a))*100).toFixed(2)
     
   }
-
+//Impressão dos resultados
   resultNormal.innerHTML = `
     <div>
       <span>Probabilidade:</span>
