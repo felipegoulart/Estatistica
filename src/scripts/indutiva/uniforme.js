@@ -22,5 +22,5 @@ if (limites[0] > a && limites[1] < b ){
 //Calculo da Média
 media = ((b + a) / 2).toFixed(2)
 //Calculo do Devio Padrão 
-desvio = ((((b - a)**2) / 12)**1/2).toFixed(2)
+desvio = ((((b - a)**2) / 12)**(1/2)).toFixed(2)
   
