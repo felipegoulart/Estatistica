@@ -1,7 +1,7 @@
 let a, b, probbabilidade, limite_inferior, limite_superior, media, desvio
 let soma = []
 //Captura dos dados 
-a = null
+a = null 
 b = null
 limite_inferior = null
 limite_superior = null
@@ -10,7 +10,7 @@ let limites = [limite_inferior,limite_superior]
   
 //Teste condicional para a definição do calculo da probabilidade 
 if (limites[0] > a && limites[1] < b ){
-    for(let s = 0; s < limites.length; s++ ){
+    for(let s = 0; s < limites.length; s++){
         d = ((limites[s] - a) / (b - a)).toFixed(4)
         soma.push(d)
     }

@@ -90,52 +90,6 @@ calcularBinomial.addEventListener('click', () => {
   `
 
   sectionResultados.innerHTML = resultados   
-  
-  let x = [3,2,-1,4]
-  let y = [7,5,-1,9]
-  let auxliar_x = []
-  let auxiliar_y = []
-  let auxiliar_xy = []
-  let soma_x, soma_y, soma_x2, soma_y2, soma_xy, n, r, correlacao, a, b
-
-  soma_x = x.reduce((a,b) => a + b)
-  soma_y = y.reduce((a,b) => a + b)
-
-  for(let c = 0; c < x.length; c++){
-    auxliar_x.push(x[c]**2)
-    auxiliar_y.push(y[c]**2)
-    auxiliar_xy.push(x[c] * y[c])
-  }
-  soma_x2 = auxliar_x.reduce((a,b) => a + b)
-  soma_y2 = auxiliar_y.reduce((a,b) => a + b)
-  soma_xy = auxiliar_xy.reduce((a,b) => a + b)
-  n = x.length
-  
-  r = ((n * soma_xy) - (soma_x * soma_y)) / ((((n * soma_x2) - (soma_x**2))**(1/2)) * (((n * soma_y2) - (soma_y**2))**(1/2)))
-  
-  if (r == 1){
-    correlacao = 'Perfeita positiva'
-  }else if (r == -1){
-    correlacao = 'Perfeita negativa'
-  }else if (r == 0){
-    correlacao = 'Variéveis não correlacionadas'
-  }else if (r > 0 && r < 0.30){
-    correlacao= 'Fraca positiva'
-  }else if (r < 0 && r > -0.30){
-    correlacao = 'Fraca negativa'
-  }else if (r > 0.3 && r < 0.7){
-    correlacao = 'Moderada positiva'
-  }else if (r < -0.3 && r > - 0.7){
-    correlacao = "Moderada negativa"
-  }else if (r > 0.7 && r < 1){
-    correlacao = 'Forte positiva'
-  }else{
-    correlacao = 'Forte negativa'
-  }
-
-  a = (((n*soma_xy) - (soma_x*soma_y))/((n*soma_x2) - soma_x**2)) 
-  console.log(r)
-  console.log(correlacao)
 })
 
 
