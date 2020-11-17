@@ -90,6 +90,9 @@ calcularBinomial.addEventListener('click', () => {
   `
 
   sectionResultados.innerHTML = resultados   
+  
+  
+
 })
 
 

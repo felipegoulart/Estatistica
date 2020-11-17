@@ -13,9 +13,9 @@ const ordenarVetor = (vetor) => {
     const tipoNumerico = vetor.every(elemento => !isNaN(elemento))
     if(tipoNumerico) {
         vetor = vetor.map(elemento => Number(elemento))
-        return sort((a,b) => a > b, vetor)
+        return sort((a,b) => a < b, vetor)
     } else {
-        return sort((a,b) => a > b, vetor)
+        return sort((a,b) => a < b, vetor)
     }
 }
 
