@@ -1,4 +1,5 @@
 const tiposDistribuicoes = document.querySelectorAll('.tiposDistribuicoes')
+console.log(tiposDistribuicoes)
 const distribuicoes = document.querySelectorAll('.distribuicao')
 
 tiposDistribuicoes.forEach(li => {

@@ -15,7 +15,7 @@ calcularBinomial.addEventListener('click', () => {
   const sucesso = document.querySelector('#sucesso').value
   const fracasso = document.querySelector('#fracasso').value
   const evento = document.querySelector('#evento').value
-
+  debugger
   function fatorial(valor) {
     // para valores negativos
     if (valor < 0) return 'Valor deve ser maior ou igual a zero';
@@ -35,7 +35,7 @@ calcularBinomial.addEventListener('click', () => {
   let evento_tratado = []
   let au = evento.split(';')
 
-  for (let i = 0; i < au.length; i++)   evento_tratado.push(parseInt(au[i]))
+  for (let i = 0; i < au.length; i++) evento_tratado.push(parseInt(au[i]))
   
   if (evento_tratado.length == 1){
     aux = amostra - evento
@@ -75,7 +75,7 @@ calcularBinomial.addEventListener('click', () => {
   const resultados = `
   <div>
     <span>Probabilidade:</span>
-    <strong>${probabilidade}</strong>
+    <strong>${probabilidade}%</strong>
   </div>
 
   <div>

@@ -1,4 +1,4 @@
-export default (callback, vetor, inicio = 0, fim = vetor.length - 1) => {
+function quickSort (callback, vetor, inicio = 0, fim = vetor.length - 1) {
 
   if(fim > inicio) {
       let posDiv = inicio - 1
@@ -17,3 +17,5 @@ export default (callback, vetor, inicio = 0, fim = vetor.length - 1) => {
   }
   return vetor
 }
+
+export default quickSort
