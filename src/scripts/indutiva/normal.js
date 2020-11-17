@@ -75,6 +75,7 @@ calcularNormal.addEventListener('click', () => {
         prob.push(p)   
       }
     }
+    
     //Teste condicional para determinar o calculo da probabilidade
     if (vetIntervalo[0] < media && vetIntervalo[1] > media) 
       probabilidade_int = ((prob.reduce((a,b) => a + b))*100).toFixed(2)
