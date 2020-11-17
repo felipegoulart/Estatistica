@@ -14,7 +14,7 @@ calcularNormal.addEventListener('click', () => {
   let media = document.querySelector('#media').value
   let desv = document.querySelector('#desv').value
   let intervalo = document.querySelector('#intervalo').value
-  const opt_intervalo = document.querySelector('#selectIntervalo').value
+  const opt_intervalo = document.querySelector('#selectIntervaloNormal').value
 
   let i, y, z, coluna, linha, p, probabilidade_int
   let prob = []
@@ -35,12 +35,12 @@ calcularNormal.addEventListener('click', () => {
 
     linha = y[0] + y[2]
     coluna = Number(i[3])
-    
     if(linha <= 39)  {
       const vetArea = search(fncComparacao, tabela, linha)
       p = vetArea.coluna[coluna]
     }  
     else p = 0.5000
+    
     // Teste condicional para determinar o calculo da probabilidade 
     if (opt_intervalo == 'maior') { // maior
       if (vetIntervalo[0] > media) probabilidade_int = ((0.5 - p) * 100).toFixed(2)
@@ -54,6 +54,8 @@ calcularNormal.addEventListener('click', () => {
     }
 
   } else {
+    debugger
+
     for (let int of vetIntervalo) {
       // Calculo para a busca da linha e coluna na tabela da Distribuição normal
       if (int != media) {
@@ -68,14 +70,16 @@ calcularNormal.addEventListener('click', () => {
         linha = parseFloat(y[0] + y[2])
         coluna = parseInt(i[3])
 
-        if(linha <= 39) p = tabela[linha][coluna]
-            
+        if(linha <= 39)  {
+          const vetArea = search(fncComparacao, tabela, linha)
+          p = vetArea.coluna[coluna]
+        }  
         else p = 0.5000
             
         prob.push(p)   
       }
     }
-    
+
     //Teste condicional para determinar o calculo da probabilidade
     if (vetIntervalo[0] < media && vetIntervalo[1] > media) 
       probabilidade_int = ((prob.reduce((a,b) => a + b))*100).toFixed(2)
