@@ -34,7 +34,7 @@ calcularBinomial.addEventListener('click', () => {
 // Tratamento dos dados inseridos dos eventos a serem calculados
   let evento_tratado = []
   let au = evento.split(';')
-
+  debugger
   for (let i = 0; i < au.length; i++)   evento_tratado.push(parseInt(au[i]))
 // Calculos das probabilidades com base na quantidade eventos listados 
   if (evento_tratado.length == 1){
@@ -52,6 +52,7 @@ calcularBinomial.addEventListener('click', () => {
     probabilidade = ((analise*((sucesso/100)**evento)*((fracasso/100)**aux))*100).toFixed(2)
 
   } else {
+    let e = []
     for (let x = 0; x< evento_tratado.length; x++){
       aux = amostra - evento_tratado[x]
       fat_k = fatorial(evento_tratado[x])
@@ -64,9 +65,10 @@ calcularBinomial.addEventListener('click', () => {
         
       else analise = (fat_n/(fat_nk * fat_k))
 
-      probabilidade += ((analise*((sucesso/100)**evento_tratado[x])*((fracasso/100)**aux))*100).toFixed(2)
-
+      e.push(parseFloat(((analise*((sucesso/100)**evento_tratado[x])*((fracasso/100)**aux))*100).toFixed(2)))
+  
     }
+    probabilidade = e.reduce((a,b) => a + b).toFixed(2)
   }
 // Calculos da média e do desvio padrão  
   media = amostra*(sucesso/100)
