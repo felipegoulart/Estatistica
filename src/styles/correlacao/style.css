@@ -1,0 +1,85 @@
+.menu ul {
+    border-color: #2984E6;
+}
+
+.menu li {
+    color: #555;
+}
+
+.conteudo {
+    min-height: 100vh;
+    max-width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    background-color: #efefef;
+}
+
+form {
+    display: block;
+    align-self: center;
+    margin: 50px;
+}
+.entradaDados input:active, 
+.entradaDados input:valid, 
+.entradaDados input:hover {
+  border-bottom: 2px solid #2984E6;
+}
+
+.divBotoes {
+    display: flex;
+    justify-content: space-around;
+}
+
+.btnInferior {
+    margin-top: 15px;
+}
+
+form button {
+    width: 100%;
+    min-width: 200px;
+    height: 40px;
+    margin: 10px 5px;
+
+    border-radius: 10px;
+    border: none;
+
+    background-color: #2984E6;
+    box-shadow: 3px 3px 5px #00000035;
+    color: #ffffff;
+
+    transition: 500ms;
+}
+
+.botoesTipo {
+    height: 70px;
+}
+
+button:focus {
+    background-color:#245E9C;
+    outline: none;
+    box-shadow: 0 0 5px 5px #2984E635,
+    0 0 2px 2px #2984E615;
+}
+
+button:hover {
+    background-color:#245E9C;
+    cursor: pointer;
+    box-shadow: 0 0 5px 5px #2984E635,
+    0 0 2px 2px #2984E625;
+}
+
+.btnLimpar,
+.btnLimpar:focus {
+    background-color: #ffffff;
+    color: #000000;
+} 
+.btnLimpar:hover {
+    background-color: #ffffff;
+}
+
+.inputs{
+    margin: 20px 0
+}
+

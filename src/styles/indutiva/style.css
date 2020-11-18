@@ -1,3 +1,7 @@
+.menu ul {
+  border-color: #3ca93c;
+}
+
 .container {
     width: 98vw;
     height: 100vh;
@@ -64,7 +68,6 @@
     width: 26%;
     min-height: 350px;
     height: 75%;
-
 }
 
 .entradaDados form {

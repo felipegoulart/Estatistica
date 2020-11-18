@@ -25,20 +25,21 @@ const editarLabelComPorcent = (tooltipItem, data) => {
 
 // Funções de tipos de gráfico
 const optGraficoPizza = () => {
-  return {tooltips: {
-    backgroundColor: '#fff',
-    cornerRadius: 10, 
+  return { 
+    tooltips: {
+      backgroundColor: '#fff',
+      cornerRadius: 10, 
 
-    bodyFontColor: '#222',
-    bodyFontSize: 13,
-    bodyFontStyle: 'bold',
+      bodyFontColor: '#222',
+      bodyFontSize: 13,
+      bodyFontStyle: 'bold',
 
-    xPadding: 12,
-    yPadding: 15,
+      xPadding: 12,
+      yPadding: 15,
 
-    callbacks: {
-      label: editarLabelComPorcent
-    }
+      callbacks: {
+        label: editarLabelComPorcent
+      }
   }}
 }
 

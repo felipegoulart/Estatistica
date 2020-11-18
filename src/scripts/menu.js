@@ -6,7 +6,7 @@ const html =
     <a href="../../index.html"><li>Início</li></a>
     <a href="../../src/pages/descritiva.html"><li>Descritiva</li></a>
     <a href="../../src/pages/indutiva.html"><li>Indutiva</li></a>
-    <a href="../../src/pages/descritiva.html"><li>Correlação</li></a>
+    <a href="../../src/pages/correlacao.html"><li>Correlação</li></a>
   </ul>
 </nav>`
 

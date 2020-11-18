@@ -202,14 +202,23 @@ body {
 }
 
 .btn-indutiva {
-    background-color: #00FFCE !important;
+    background-color: #3ca93c !important;
 }
 
 .btn-indutiva:hover {
     cursor: pointer;
-    background-color: #00be98 !important;
+    background-color: #2e7a2e !important;
+}
+
+.btn-correlacao {
+  background-color: #2984E6 !important;
+}
+
+.btn-correlacao:hover {
+  cursor: pointer;
+  background-color: #245E9C !important;
 }
 
 .emConstrucao {
-    background: linear-gradient(#ddd, #ddd) !important;
+    background: linear-gradient(#2984E6, #245E9C) !important;
 }

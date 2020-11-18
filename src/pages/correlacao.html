@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles/global.css">
+    <link rel="stylesheet" href="../styles/menu.css">
+    <link rel="stylesheet" href="../styles/correlacao/style.css">
+    <link rel="stylesheet" href="../styles/correlacao/dragNDrop.css">
+    <link rel="stylesheet" href="../styles/correlacao/popup.css">
+    <title>Correlação</title>
+</head>
+<body>
+  <script src="../scripts/menu.js"></script>
+  <section class="conteudo">
+    <form autocomplete="off" id="formDescritiva" class="formDescritiva">
+      <div class="divBotoes">
+        <button type="button" id="btnManual" class="botoesTipo">Manual</button>
+        <button type="button" id="btnArquivo" class="botoesTipo">Arquivo</button>
+      </div>
+      
+      <div class="formularios esconder">
+        <div class="formManual esconder">
+          <section class="entradaDados">
+              <div>
+                <input type="text" id="valoresX" required>
+                <label for="valoresX">Eixo X</label>
+                <small>Separe por ;</small>
+                
+                <small data-js="inputY" class="erro"></small>
+              </div>
+              
+              <div>
+                <input type="text" id="valoresY" required>
+                <label for="valoresY">Eixo Y</label>
+                <small>Separe por ;</small>
+  
+                <small data-js="inputY" class="erro"></small>
+              </div>
+          </section>
+        </div>
+          
+        <div class="formArquivo esconder">
+          <div class="dropzone">
+            <span class="textoDropzone">
+              Arraste um arquivo<br>ou 
+              <label for="inputArquivo">Clique aqui</label>
+            </span>
+
+            <input type="file" name="inputArquivo" id="inputArquivo" accept=".csv">
+            
+            <div class="thumbnail esconder">
+              <span class="nomeArquivo--thumb"></span>
+              <input type="button" class="btnExcluir btnThumb" value="x">
+            </div>
+          </div>
+              
+        </div>
+
+        <div class="divBotoes btnInferior">
+          <button type="reset" class="btnLimpar">Limpar</button>
+          <button type="button" id="calcular">Calcular</button>
+        </div>
+      </div>
+    </form>
+
+
+    <div class="sectionSeparatrizes esconder">
+      <section class="entradaSeparatrizes">
+        <section class="entradaSeparatrizes">
+          <select name="separatrizes" id="separatrizes">
+            <option value="quartil" selected>Quartil</option>
+            <option value="quintil">Quintil</option>
+            <option value="decil">Decil</option>
+            <option value="percentil">Percentil</option>
+          </select>
+  
+          <input 
+            type="range" 
+            name="range" 
+            id="range"
+            min="25"
+            max="100"
+            step="25"
+            value="25"
+          >
+  
+          <input
+            class="inputValores"
+            id="numSeparatriz"
+            type="number"
+            name="range"
+            min="25"
+            max="100"
+            step="25"
+            value="25"
+          >
+        </section>
+      </section>
+    </div>
+
+    <div class="sectGrafico esconder">
+      <canvas id="grafico"></canvas>
+    </div>
+  </section>
+
+<script src="../scripts/descritiva/script.js" type="module"></script>
+<script src="../scripts/descritiva/dropArquivo.js" type="module"></script>
+<script src="../scripts/descritiva/calculos.js" type="module"></script>
+<script src="../scripts/descritiva/tabelas.js" type="module"></script>
+<script src="../scripts/descritiva/graficos.js" type="module"></script>
+<script src="../scripts/descritiva/tratarDados.js" type="module"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script> 
+</body>
+</html>

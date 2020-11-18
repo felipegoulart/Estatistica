@@ -23,6 +23,50 @@ p ,h1, h2, h3, h4, input, button, legend, label, option, a, li ,small, span, str
     list-style: none;
 }
 
+.entradaDados div {
+  margin: 24px 0;
+  position: relative;
+}
+
+.entradaDados input {
+  margin: auto;
+  width: 100%;
+  background: none;
+  
+  border: none;
+  border-bottom: 2px solid #333;
+  outline: none;
+
+  text-indent: 5px;
+  font-size: 1rem;
+
+  transition: 0.2s;
+}
+
+.entradaDados label {
+  position: absolute;
+  top: 0;
+
+  font-size: 1rem;
+  
+  transition: .3s;
+}
+.entradaDados  input:hover~label, 
+.entradaDados  input:focus~label, 
+.entradaDados  input:valid~label {
+  font-size: .9rem;
+  transform: translateY(-20px) ;
+}
+
+small.erro {
+  font-family: sans-serif;
+  color: red;
+}
+
+input.erro {
+  border-bottom-color: #ff0000
+}
+
 .esconder {
     display: none !important;
 }
