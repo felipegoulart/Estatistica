@@ -71,7 +71,7 @@ calcularBinomial.addEventListener('click', () => {
     probabilidade = e.reduce((a,b) => a + b).toFixed(2)
   }
 // Calculos da média e do desvio padrão  
-  media = amostra*(sucesso/100)
+  media = (amostra*(sucesso/100)).toFixed(2)
   dp = (((amostra*(sucesso/100)*(fracasso/100))**(1/2))).toFixed(2)
 // mostrando os resultado na tela
   const resultados = `
@@ -92,9 +92,6 @@ calcularBinomial.addEventListener('click', () => {
   `
 
   sectionResultados.innerHTML = resultados   
-  
-  
-
 })
 
 
