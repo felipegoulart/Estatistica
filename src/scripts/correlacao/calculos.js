@@ -1,55 +1,82 @@
-// Declaração de variaveis
-let x = [] // Entrada de dados 
-let y = [] // Entrada de dados 
-let coef_angular = null // Coeficiente angular usado no calculo da equação da reta, ele é fornecido pelo usuário
-let auxliar_x = []
-let auxiliar_y = []
-let auxiliar_xy = []
-let soma_x, soma_y, soma_x2, soma_y2, soma_xy, n, r, correlacao, a, b, regressao
-
-//Calculo do somatório das colunas x e y
-soma_x = x.reduce((a,b) => a + b)
-soma_y = y.reduce((a,b) => a + b)
-
-//Calculo das outras colunas necessárias para a resolução
-for(let c = 0; c < x.length; c++){
-    auxliar_x.push(x[c]**2)
-    auxiliar_y.push(y[c]**2)
-    auxiliar_xy.push(x[c] * y[c])
-}
-//Somatório das colunas restantes 
-soma_x2 = auxliar_x.reduce((a,b) => a + b)
-soma_y2 = auxiliar_y.reduce((a,b) => a + b)
-soma_xy = auxiliar_xy.reduce((a,b) => a + b)
-//Definição da quantidade de linhas presentes na tabela
-n = x.length
+export default {
+  // Calcula a somatória da coluna
+  calculoSomatoria(x) {
+    const vetorTratado = x.map(numero => Number(numero))
+    return vetorTratado.reduce((a,b) => a + b)
+  },
   
-r = ((n * soma_xy) - (soma_x * soma_y))
-  / ((((n * soma_x2) - (soma_x**2))**(1/2))
-  * (((n * soma_y2) - (soma_y**2))**(1/2)))
+  // Calcula as colunas xy, x^2 e y^2
+  calculoDemaisColunas(x,y) {
+    // variaveis auxiliares
+    let auxiliar_x2 = []
+    let auxiliar_y2 = []
+    let auxiliar_xy = []
 
-//Definição da correlação entre as variaveis   
-if (r == 1){
-    correlacao = 'Perfeita positiva'
-}else if (r == -1){
-    correlacao = 'Perfeita negativa'
-}else if (r == 0){
-    correlacao = 'Variéveis não correlacionadas'
-}else if (r > 0 && r < 0.30){
-    correlacao= 'Fraca positiva'
-}else if (r < 0 && r > -0.30){
-    correlacao = 'Fraca negativa'
-}else if (r > 0.3 && r < 0.7){
-    correlacao = 'Moderada positiva'
-}else if (r < -0.3 && r > - 0.7){
-    correlacao = "Moderada negativa"
-}else if (r > 0.7 && r < 1){
-    correlacao = 'Forte positiva'
-}else{
-    correlacao = 'Forte negativa'
+    //faz os calculos para as demais colunas da correlação
+    for(let i = 0; i < x.length; i++){
+      auxiliar_xy.push(x[i] * y[i])
+      auxiliar_x2.push(x[i]**2)
+      auxiliar_y2.push(y[i]**2)
+    }
+    
+    // calcula a somatória das demais colunas
+    const soma_xy = this.calculoSomatoria(auxiliar_xy)
+    const soma_x2 = this.calculoSomatoria(auxiliar_x2)
+    const soma_y2 = this.calculoSomatoria(auxiliar_y2)
+    
+    return [soma_xy, soma_x2, soma_y2]
+  },
+
+  calculoCorrelacao(vetor_x, soma_x, soma_y, soma_xy, soma_x2, soma_y2) {
+    const n = vetor_x.length //Definição da quantidade de linhas presentes na tabela
+
+    // Calculo da correlação 
+    const r = ((n * soma_xy) - (soma_x * soma_y))
+      / ((((n * soma_x2) - (soma_x**2))**(1/2))
+      * (((n * soma_y2) - (soma_y**2))**(1/2)))
+
+    return r
+  },
+
+  tipoCorrelacao(r) { //Verifica o tipo de Correlação
+    if (r == 1) return 'Perfeita Positiva'
+    
+    else if (r == -1) return 'Perfeita Negativa'
+    
+    else if (r == 0) return 'Variéveis não correlacionadas'
+    
+    else if (r > 0 && r < 0.30) return 'Fraca Positiva'
+    
+    else if (r < 0 && r > -0.30) return 'Fraca Negativa'
+    
+    else if (r > 0.3 && r < 0.7) return 'Moderada Positiva'
+    
+    else if (r < -0.3 && r > - 0.7) return "Moderada Negativa"
+    
+    else if (r > 0.7 && r < 1) return 'Forte Positiva'
+    
+    else return 'Forte Negativa'
+  },
+
+  //Calculos de regrassão linear simples 
+  calculoRegressao(coef_angular, vetor_x, soma_x, soma_y, soma_xy, soma_x2) {
+    const n = vetor_x.length //Definição da quantidade de linhas presentes na tabela
+    
+    let coefiente // declara a variavel para o calculo da regressão
+     // Substitui a virgula se necessário 
+    if (typeof(coef_angular) == 'string') coefiente = coef_angular.replace(',', '.')
+
+    // calculo para achar o A para realizar a regressão
+    const a = (((n*soma_xy) - (soma_x*soma_y))/((n*soma_x2) - soma_x**2))
+    // calculo para achar o B para realizar a regressão
+    const b = (soma_y - a * soma_x) / n
+    const regressao = (a * Number(coefiente)) + b
+
+    return {
+      a: a,
+      b: b,
+      resultadoRegressao: regressao
+    }
+  }
 }
 
-//Calculos de regrassão linear simples 
-a = (((n*soma_xy) - (soma_x*soma_y))/((n*soma_x2) - soma_x**2))
-b = (soma_y - a * soma_x) / n
-regressao = (a * coef_angular) + b

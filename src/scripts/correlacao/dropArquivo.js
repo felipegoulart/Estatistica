@@ -1,4 +1,4 @@
-export const dropFile = (dropzone, fncArquivo) => {
+export default (dropzone, fncArquivo) => {
   dropzone.addEventListener('dragover', e => {
     e.preventDefault()
     dropzone.classList.add('dragging')

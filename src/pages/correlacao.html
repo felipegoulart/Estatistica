@@ -44,10 +44,10 @@
           <div class="dropzone">
             <span class="textoDropzone">
               Arraste um arquivo<br>ou 
-              <label for="inputArquivo">Clique aqui</label>
+              <label for="inputArquivoCorrelacao">Clique aqui</label>
             </span>
 
-            <input type="file" name="inputArquivo" id="inputArquivo" accept=".csv">
+            <input type="file" name="inputArquivoCorrelacao" id="inputArquivoCorrelacao" accept=".csv">
             
             <div class="thumbnail esconder">
               <span class="nomeArquivo--thumb"></span>
@@ -64,38 +64,42 @@
       </div>
     </form>
 
+    <div class="sectionCorrelacao esconder">
+      <div class="areaCaixas">
+        <div class="caixas">
+          <p class="textoCorrelacao-js"></p>
+        </div>
+      </div>
+    </div>
 
-    <div class="sectionSeparatrizes esconder">
-      <section class="entradaSeparatrizes">
-        <section class="entradaSeparatrizes">
-          <select name="separatrizes" id="separatrizes">
-            <option value="quartil" selected>Quartil</option>
-            <option value="quintil">Quintil</option>
-            <option value="decil">Decil</option>
-            <option value="percentil">Percentil</option>
-          </select>
-  
-          <input 
-            type="range" 
-            name="range" 
-            id="range"
-            min="25"
-            max="100"
-            step="25"
-            value="25"
-          >
-  
-          <input
-            class="inputValores"
-            id="numSeparatriz"
-            type="number"
-            name="range"
-            min="25"
-            max="100"
-            step="25"
-            value="25"
-          >
-        </section>
+    <div class="sectionRegressao esconder">
+      <section class="entradaRegressao">
+        <span class="valorRegressaoA">
+          1.50
+        </span>
+
+        <span class="operadores">x</span>
+
+        <input
+          class="inputValores"
+          id="valorRegressaoX"
+          type="text"
+          placeholder="X"
+        >
+        <span class="operadores">+</span>
+
+        <span class="valorRegressaoB">
+          1055.69
+        </span>
+
+        <span class="operadores">=</span>
+
+        <input
+          class="inputValores"
+          id="valorRegressaoY"
+          type="text"
+          placeholder="Y"
+        >
       </section>
     </div>
 
@@ -104,11 +108,11 @@
     </div>
   </section>
 
-<script src="../scripts/correlacao/script.js"></script>
+<script src="../scripts/correlacao/script.js" type="module"></script>
 <script src="../scripts/correlacao/dropArquivo.js" type="module"></script>
-<!-- <script src="../scripts/correlacao/calculos.js" type="module"></script>
-<script src="../scripts/correlacao/graficos.js" type="module"></script>
-<script src="../scripts/correlacao/tratarDados.js" type="module"></script> -->
+<script src="../scripts/correlacao/tratarDados.js" type="module"></script> 
+<script src="../scripts/correlacao/calculos.js" type="module"></script>
+<!-- <script src="../scripts/correlacao/graficos.js" type="module"></script> -->
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script> 
 </body>

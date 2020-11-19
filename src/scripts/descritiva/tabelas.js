@@ -138,7 +138,7 @@ const criaCaixasDeMedias = (medias = [null,null,null]) => {
   for(let i = 0; i < textoMedias.length; i++) {
     const divCaixa = document.createElement('div')
     const texto = document.createElement('p')
-
+    
     divCaixa.classList.add('caixas')
     texto.innerText = `${textoMedias[i]}: ${medias[i]}`
 

@@ -20,6 +20,7 @@ form {
     display: block;
     align-self: center;
     margin: 50px;
+    margin-bottom: 30px;
 }
 .entradaDados input:active, 
 .entradaDados input:valid, 
@@ -83,3 +84,73 @@ button:hover {
     margin: 20px 0
 }
 
+.inputValores{
+  display: block;
+  width: 100%;
+  margin: 5px 5px;
+  border: none;
+  outline: none;
+  border-bottom: 2px solid #777;
+  
+  font-size: 12pt;
+  font-weight: 700;
+  color: #555;
+  text-indent: 5px;
+}
+
+.inputValores:focus,
+.inputValores:active {
+  border-bottom-color:#2984E6;
+}
+
+.sectionCorrelacao {
+  margin: 0 auto 30px auto;
+}
+
+.areaCaixas {
+  display: flex;
+  width: 35vw;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  margin: 0 auto;
+}
+
+.caixas {
+  margin: 5px;
+  padding: 10px;
+  border-radius: 5px;
+  display: inline-block;
+  background-color: #fff;
+  box-shadow: 3px 2px 5px #00000035;
+}
+.caixas > p {
+  font-size: 12pt;
+}
+
+.sectionRegressao {
+  min-width: 30%;
+  max-width: 500px;
+  margin: 0 auto 50px auto;
+}
+
+.entradaRegressao {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 10px;
+  background-color: #fff;
+  box-shadow: 3px 2px 5px #00000035 inset;
+  justify-content: space-around;  
+}
+
+.entradaRegressao input {
+  max-width: 100px;
+  margin: 0 10px;
+  outline: none;
+}
+
+.entradaRegressao #numSeparatriz {
+  width: 51px;
+}
