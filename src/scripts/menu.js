@@ -2,7 +2,6 @@ const body = document.querySelector('body')
 
 const html = 
 `<nav class="menu">
-  <img src="../../src/images/img_menu.svg" alt="">
   <ul>
     <a href="../../index.html"><li>Início</li></a>
     <a href="../../src/pages/descritiva.html"><li>Descritiva</li></a>
