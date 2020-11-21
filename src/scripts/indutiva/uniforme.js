@@ -4,35 +4,61 @@ const resultUniforme = document.querySelector('.resultUniforme')
 calcularUniforme.addEventListener('click', () => {
   debugger
   //Captura dos dados 
-  const a = document.querySelector('#minimo').valueAsNumber
-  const b = document.querySelector('#maximo').valueAsNumber
-  const tipoIntevalo = document.querySelector('#selectIntervaloUniforme').value
-  const dist = document.querySelector('#distancia').value
+  const a = document.querySelector('#minimo')
+  const b = document.querySelector('#maximo')
+  const tipoIntevalo = document.querySelector('#selectIntervaloUniforme')
+  const dist = document.querySelector('#distancia')
+  
+  let evento_tratado = []
+  let au = dist.value.split(';')
+  for (let i = 0; i < au.length; i++)   evento_tratado.push(parseInt(au[i]))
+  //Validação dos dados
+  for (let i = 0; i < evento_tratado.length; i++){
+    if (isNaN(au[i]) == true || au[i] == ''){
+      alert('Dados invalidos')
+      evento.focus()
+      return 
+    }
+  }
+  if (isNaN(a.value) == true || a.value == ''){
+    alert('Dados invalidos')
+    a.focus()
+    return
+  }
+  if (isNaN(b.value) == true || b.value == ''){
+    alert('Dados invalidos')
+    b.focus()
+    return
+  }if (tipoIntevalo == null){
+    alert('Dados invalidos')
+    tipoIntevalo.focus()
+    return
+  }
   // declaração das variaveis
   let probabilidade, media, desvio
 
   //Criação de um vetor para alocar os limtes para o calculo
     
   //Teste condicional para a definição do calculo da probabilidade
-  if(tipoIntevalo === 'maior') probabilidade = ((1 / (b - a) * (b - Number(dist)))
+  if(tipoIntevalo.value === 'maior') probabilidade = ((1 / (b.value - a.value) * (b.value - Number(dist.value)))
     * 100)
     .toFixed(2)
 
-  else if(tipoIntevalo === 'menor') probabilidade = ((1 / (b - a) * (Number(dist) - a))
+  else if(tipoIntevalo.value === 'menor') probabilidade = ((1 / (b.value - a.value) * (Number(dist.value) - a.value))
     * 100)
     .toFixed(2)
   
   else {
-    const vetDist = dist.split(';').map(value => Number(value))
+    const vetDist = dist.value.split(';').map(value => Number(value))
     const [menor, maior] = vetDist.sort((a,b) => a - b)
 
-    probabilidade = ((1 / (b - a) * (maior - menor)) * 100)
+    probabilidade = ((1 / (b.value - a.value) * (maior - menor)) * 100)
     .toFixed(2)
   }
   //Calculo da Média
-  media = ((b + a) / 2).toFixed(2)
+  media = ((b.value + a.value) / 2).toFixed(2)
   //Calculo do Devio Padrão 
-  desvio = ((((b - a)**2) / 12)**(1/2)).toFixed(2)
+  desvio = ((((b.value - a.value)**2) / 12)**(1/2)).toFixed(2)
 
   //Impressão dos resultados
   resultUniforme.innerHTML = `

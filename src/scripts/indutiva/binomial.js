@@ -11,10 +11,37 @@ let probabilidade = 0,
   aux
 // Captura dos dados fornecidos pelo usuário
 calcularBinomial.addEventListener('click', () => {
-  const amostra = document.querySelector('#amostra').value
-  const sucesso = document.querySelector('#sucesso').value
-  const fracasso = document.querySelector('#fracasso').value
-  const evento = document.querySelector('#evento').value
+  const amostra = document.querySelector('#amostra')
+  const sucesso = document.querySelector('#sucesso')
+  const fracasso = document.querySelector('#fracasso')
+  const evento = document.querySelector('#evento')
+  // Tratamento dos dados inseridos dos eventos a serem calculados
+  let evento_tratado = []
+  let au = evento.value.split(';')
+  for (let i = 0; i < au.length; i++)   evento_tratado.push(parseInt(au[i]))
+  //Validação dos dados
+  for (let i = 0; i < evento_tratado.length; i++){
+    if (isNaN(au[i]) == true || au[i] == ''){
+      alert('Dados invalidos')
+      evento.focus()
+      return 
+    }
+  }
+  console.log(au)
+  if (isNaN(amostra.value) == true || amostra.value == ''){
+    alert('Dados invalidos')
+    amostra.focus()
+    return
+  }
+  if (isNaN(sucesso.value) == true || sucesso.value == ''){
+    alert('Dados invalidos')
+    sucesso.focus()
+    return
+  }if (isNaN(fracasso.value) == true || fracasso.value == ''){
+    alert('Dados invalidos')
+    fracasso.focus()
+    return
+  }
 // Função para o calculo fatorial
   function fatorial(valor) {
     // para valores negativos
@@ -31,48 +58,44 @@ calcularBinomial.addEventListener('click', () => {
       return acumula;
     } 
   }
-// Tratamento dos dados inseridos dos eventos a serem calculados
-  let evento_tratado = []
-  let au = evento.split(';')
-  debugger
-  for (let i = 0; i < au.length; i++)   evento_tratado.push(parseInt(au[i]))
+
 // Calculos das probabilidades com base na quantidade eventos listados 
   if (evento_tratado.length == 1){
-    aux = amostra - evento
-    fat_k = fatorial(evento)
-    fat_n = fatorial(amostra)
+    aux = amostra.value - evento.value
+    fat_k = fatorial(evento.value)
+    fat_n = fatorial(amostra.value)
     fat_nk = fatorial(aux)
     
-    if (parseInt(evento) == 0 )  analise = 1
+    if (parseInt(evento.value) == 0 )  analise = 1
     
-    else if (parseInt(evento) == 1)  analise = amostra
+    else if (parseInt(evento.value) == 1)  analise = amostra.value
     
     else  analise = (fat_n/(fat_nk * fat_k))
      
-    probabilidade = ((analise*((sucesso/100)**evento)*((fracasso/100)**aux))*100).toFixed(2)
+    probabilidade = ((analise*((sucesso.value/100)**evento.value)*((fracasso.value/100)**aux))*100).toFixed(2)
 
   } else {
     let e = []
     for (let x = 0; x< evento_tratado.length; x++){
-      aux = amostra - evento_tratado[x]
+      aux = amostra.value - evento_tratado[x]
       fat_k = fatorial(evento_tratado[x])
-      fat_n = fatorial(amostra)
+      fat_n = fatorial(amostra.value)
       fat_nk = fatorial(aux)
     
       if (parseInt(evento_tratado[x]) == 0 ) analise = 1
         
-      else if (parseInt(evento_tratado[x]) == 1) analise = amostra
+      else if (parseInt(evento_tratado[x]) == 1) analise = amostra.value
         
       else analise = (fat_n/(fat_nk * fat_k))
 
-      e.push(parseFloat(((analise*((sucesso/100)**evento_tratado[x])*((fracasso/100)**aux))*100).toFixed(2)))
+      e.push(parseFloat(((analise*((sucesso.value/100)**evento_tratado[x])*((fracasso.value/100)**aux))*100).toFixed(2)))
   
     }
     probabilidade = e.reduce((a,b) => a + b).toFixed(2)
   }
 // Calculos da média e do desvio padrão  
-  media = (amostra*(sucesso/100)).toFixed(2)
-  dp = (((amostra*(sucesso/100)*(fracasso/100))**(1/2))).toFixed(2)
+  media = (amostra.value*(sucesso.value/100)).toFixed(2)
+  dp = (((amostra.value*(sucesso.value/100)*(fracasso.value/100))**(1/2))).toFixed(2)
 // mostrando os resultado na tela
   const resultados = `
   <div>
