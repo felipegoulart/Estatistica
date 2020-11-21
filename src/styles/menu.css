@@ -1,44 +1,47 @@
 :root {
-    --background:#efefef;
-    --background-card: rgb(59, 59, 68);
+  --background:#efefef;
 }
 
 .menu {
-    width: 100vw;
-    height: 50px;
-    padding: 10px;
-    background-color: var(--background);
+  width: 100vw;
+  height: 50px;
+  padding: 10px;
+  background-color: var(--background);
 
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 
-    position: fixed;
-    top: 0;
-    z-index: 999;
+  position: fixed;
+  top: 0;
+  z-index: 999;
 }
 
 .menu ul {
-    width: 80%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    margin-bottom: -5px;
-    border-bottom: 2px solid #888;
+  width: 80%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  margin-bottom: -5px;
 }
 
 .menu a {
-    display: inline;
-    padding: 10px;
-    line-height: 10px;
-
-    transition: 200ms;
+  display: inline;
+  padding: 10px;
+  line-height: 10px;
 }
 
 .menu a:hover {
-    font-size: 14pt;
-    cursor: pointer;
+  cursor: pointer;
 }
 
+.menu li{
+  transition: 200ms;
+}
+
+
+.menu li:hover,
 .ativa {
-    font-size: 14pt;
+  font-size: 14pt;
+  padding-bottom: 5px;
+  border-bottom: 2px solid #fff;
 }

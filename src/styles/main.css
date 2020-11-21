@@ -9,19 +9,23 @@ body {
     background-color: var(--background);
 }
 
-.menu ul {
-    border-bottom: 2px solid #eee;
+.menu {
+    background-color: #efefef;
 }
 .menu li {
-    color: #eee;
+    color: #444;
+}
+
+.menu li:hover,
+.ativa {
+  border-bottom-color: #444;
 }
 
 .estatistica {
     min-width: 250px;
     width: 70%;
-    height: 80vh;
+    height: 90vh;
     padding: 30px;
-
     
     display: flex;
     flex-direction: row;
@@ -142,7 +146,8 @@ body {
     padding: 30px;
     box-sizing: border-box;
 
-    background: linear-gradient(135deg, #6C63FF 5%, #8A10DC 100%);
+    background: #efefef !important;
+    /* background: linear-gradient(135deg, #6C63FF 5%, #8A10DC 100%); */
 
     transform: translateY(-25px);
 
@@ -153,7 +158,8 @@ body {
 }
 
 .indutiva {
-    background: linear-gradient(135deg, #00FFCE 5%, #95EF4A 100%) !important;
+    /* background: linear-gradient(135deg, #00FFCE 5%, #95EF4A 100%) !important; */
+    background: #efefef !important;
 }
 
 .card .imagem:hover {
@@ -219,6 +225,8 @@ body {
   background-color: #245E9C !important;
 }
 
-.emConstrucao {
-    background: linear-gradient(#2984E6, #245E9C) !important;
+.footer {
+  background-color: #efefef;
+  height: 60px;
 }
+

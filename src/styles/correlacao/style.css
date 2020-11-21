@@ -1,9 +1,9 @@
-.menu ul {
-    border-color: #2984E6;
+.menu {
+    background-color: #2984E6;
 }
 
 .menu li {
-    color: #555;
+    color: #fff;
 }
 
 .conteudo {
@@ -146,9 +146,14 @@ button:hover {
 }
 
 .entradaRegressao input {
-  max-width: 100px;
+  max-width: 50px;
   margin: 0 10px;
   outline: none;
+}
+
+.operadores {
+  margin: 0 10px;
+  color: #E6A433;
 }
 
 

@@ -229,13 +229,6 @@ const validarEntradas = () => {
         validacao = true
       }
   }
-
-  if (validacao) {
-    funcoesTratarDados.salvarDadosNoObjeto(dados, nome, valores)
-    if(dados.tipoVar == 'continua') funcoesCalculo.calculaContinua(dados) 
-    
-    else funcoesCalculo.calculaFreqSi(dados)
-  }
   
 }
 
@@ -266,31 +259,39 @@ const atualizarValorSeparatriz = () => {
 btnCalcular.addEventListener('click', () => {
   validarEntradas()
 
-  inputRangeSeparatriz.addEventListener('input', atualizarValorSeparatriz)
-  inputNumSeparatriz.addEventListener('input', atualizarValorSeparatriz)
+  if (validacao) {
+    funcoesTratarDados.salvarDadosNoObjeto(dados, nome, valores)
+    if(dados.tipoVar == 'continua') funcoesCalculo.calculaContinua(dados) 
     
-  if(dados.tipoVar == 'ordinal') {
-    document.querySelector('.popup').classList.remove('esconder')
-    funcoesDOM.editarTabela()
-  }
+    else funcoesCalculo.calculaFreqSi(dados)
 
-  if(sectionGrafico.classList.contains('esconder')) {
-    sectionGrafico.classList.remove('esconder')
-  }
-
-  if(document.querySelector('.sectionMedias').classList.contains('esconder')) {
-    document.querySelector('.sectionMedias').classList.remove('esconder')
-  }
-
-  if(document.querySelector('.sectionSeparatrizes').classList.contains('esconder')) {
-    document.querySelector('.sectionSeparatrizes').classList.remove('esconder')
-  }
+    inputRangeSeparatriz.addEventListener('input', atualizarValorSeparatriz)
+    inputNumSeparatriz.addEventListener('input', atualizarValorSeparatriz)
+      
+    if(dados.tipoVar == 'ordinal') {
+      document.querySelector('.popup').classList.remove('esconder')
+      funcoesDOM.editarTabela()
+    }
   
-  //zerar variaveis
-  vetorValoresInput = []
-  dados.nome = ''
-  dados.vetorDados = []
-  dados.tipoVar = ''
-  dados.tipoCalc = ''
-  dados.valoresAgrupados = {}
+    if(sectionGrafico.classList.contains('esconder')) {
+      sectionGrafico.classList.remove('esconder')
+    }
+  
+    if(document.querySelector('.sectionMedias').classList.contains('esconder')) {
+      document.querySelector('.sectionMedias').classList.remove('esconder')
+    }
+  
+    if(document.querySelector('.sectionSeparatrizes').classList.contains('esconder')) {
+      document.querySelector('.sectionSeparatrizes').classList.remove('esconder')
+    }
+    
+    //zerar variaveis
+    vetorValoresInput = []
+    dados.nome = ''
+    dados.vetorDados = []
+    dados.tipoVar = ''
+    dados.tipoCalc = ''
+    dados.valoresAgrupados = {}
+  }
+
 })

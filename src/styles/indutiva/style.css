@@ -1,5 +1,9 @@
-.menu ul {
-  border-color: #3ca93c;
+.menu {
+  background-color: #3ca93c;
+}
+
+.menu li {
+  color: #fff;
 }
 
 .container {

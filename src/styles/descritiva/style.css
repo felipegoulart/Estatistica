@@ -1,9 +1,9 @@
-.menu ul {
-    border-color: #6C63FF;
+.menu {
+  background-color: #6C63FF;
 }
 
 .menu li {
-    color: #555;
+  color: #fff;
 }
 
 p, input, button, legend, label, option {
