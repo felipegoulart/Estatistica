@@ -61,7 +61,6 @@ export default {
   },
 
   calculoLinhaDeRegressao(value , a, b) {
-    console.log(Number(value) * a + b)
     return Number(value) * a + b 
   },
 
