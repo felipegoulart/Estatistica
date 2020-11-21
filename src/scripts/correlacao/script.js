@@ -109,7 +109,7 @@ function excluirThumb () {
 btnExcluirThumb.addEventListener('click', excluirThumb)
 btnLimpar.addEventListener('click', excluirThumb)
 
-const validarEntradas = () => {
+btnCalcular.addEventListener('click', () => {
   if(tipoForm == 'manual') {
     if(!inputX.value.trim()) {
       inputX.classList.add('erro')
@@ -148,10 +148,7 @@ const validarEntradas = () => {
       validacao = false
     }
     else { // caso todos as verificações passe, ele vai executar a função para captura e limpeza dos dados
-      valorInputX = inputX.value
-      valorInputY = inputY.value
-
-      [vetorX, vetorY] = funcoesTratarDados.capturaDadosInputManual(valorInputX, valorInputY)
+      [vetorX, vetorY] = funcoesTratarDados.capturaDadosInputManual(inputX.value, inputY.value)
 
       validacao = true
     }
@@ -168,10 +165,6 @@ const validarEntradas = () => {
         validacao = true
       }
   }
-}
-
-btnCalcular.addEventListener('click', () => {
-  validarEntradas()
   
   if (validacao) {
     const somaX = funcoesCalculo.calculoSomatoria(vetorX)
