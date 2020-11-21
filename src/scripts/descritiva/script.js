@@ -101,6 +101,47 @@ inputNome.addEventListener('change', () => {
   }
 })
 
+const validarEntradas = () => {
+  if(tipoForm == 'manual') {
+    if(!inputNome.value.trim()) {
+      inputNome.classList.add('erro')
+      inputNome.focus()
+
+      textoErroNome.classList.add('erro')
+      textoErroNome.innerText = 'Preencha o NOME'
+
+      validacao = false
+    }
+    else if (!inputValores.value.trim()) {
+      inputValores.classList.add('erro')
+      inputValores.focus()
+
+      textoErroValor.classList.add('erro')
+      textoErroValor.innerText = 'Preencha os VALORES'
+
+      validacao = false
+    }
+    else { // caso todos as verificações passe, ele vai executar a função para captura e limpeza dos dados
+      [nome, valores] = funcoesTratarDados // Recebe os dados limpos dos inputs 
+          .capturaDadosInputManual(inputValores, inputNome)
+      validacao = true
+    }
+  }
+  else {
+      if(!arquivo) { // Testa se o input tem algum arquivo
+        alert('Insira um arquivo!')
+
+        validacao = false
+      }
+      else {
+        [nome, valores] = funcoesTratarDados // Recebe os dados limpos do arquivo 
+            .separarDadosArquivo(vetorValoresInput)
+        validacao = true
+      }
+  }
+  
+}
+
 const recebeArquivo = inputArquivo => {
   arquivo = inputArquivo
   const nomeArq = arquivo.name
@@ -152,6 +193,7 @@ btnLimpar.addEventListener('click', excluirThumb)
 btnExcluirPopup.addEventListener('click', () => document.querySelector('.popup')
   .classList.add('esconder'))
 
+
 // ----------Controlador Separatrizes--------- \\
 function defineValoresInputSeparatrizes(input, value) {
   input.min = value
@@ -190,47 +232,6 @@ inputNumSeparatriz.addEventListener('input', () => {
   inputRangeSeparatriz.value = inputNumSeparatriz.value
 })
 
-
-const validarEntradas = () => {
-  if(tipoForm == 'manual') {
-    if(!inputNome.value.trim()) {
-      inputNome.classList.add('erro')
-      inputNome.focus()
-
-      textoErroNome.classList.add('erro')
-      textoErroNome.innerText = 'Preencha o NOME'
-
-      validacao = false
-    }
-    else if (!inputValores.value.trim()) {
-      inputValores.classList.add('erro')
-      inputValores.focus()
-
-      textoErroValor.classList.add('erro')
-      textoErroValor.innerText = 'Preencha os VALORES'
-
-      validacao = false
-    }
-    else { // caso todos as verificações passe, ele vai executar a função para captura e limpeza dos dados
-      [nome, valores] = funcoesTratarDados // Recebe os dados limpos dos inputs 
-          .capturaDadosInputManual(inputValores, inputNome)
-      validacao = true
-    }
-  }
-  else {
-      if(!arquivo) { // Testa se o input tem algum arquivo
-        alert('Insira um arquivo!')
-
-        validacao = false
-      }
-      else {
-        [nome, valores] = funcoesTratarDados // Recebe os dados limpos do arquivo 
-            .separarDadosArquivo(vetorValoresInput)
-        validacao = true
-      }
-  }
-  
-}
 
 const atualizarValorSeparatriz = () => {
   const tipoVariavel = JSON.parse(sessionStorage.getItem('tipoVar'))

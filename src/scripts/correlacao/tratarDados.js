@@ -19,8 +19,8 @@ export default {
   },
 
   capturaDadosInputManual (inputX, inputY) {
-    const vetorX = inputX.value.split(';')
-    const vetorY = inputY.value.split(';')
+    const vetorX = inputX.split(';')
+    const vetorY = inputY.split(';')
 
     return this.limparDados(vetorX, vetorY)
   },
