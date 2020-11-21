@@ -9,6 +9,15 @@ export default {
     return  [vetorXLimpo, vetorYLimpo]
   },
 
+  limparDadosArquivo (vetor) {
+    let vetorLimpo = vetor.map(elemento => elemento.trim())
+    while (vetorLimpo.includes('') || vetorLimpo.includes(';')) {
+      vetorLimpo.pop()
+    }
+
+    return  vetorLimpo.map(elemento => elemento.split(';'))
+  },
+
   capturaDadosInputManual (inputX, inputY) {
     const vetorX = inputX.value.split(';')
     const vetorY = inputY.value.split(';')
@@ -17,9 +26,16 @@ export default {
   },
 
   separarDadosArquivo (vetArquivo) {
-    const vetorX = vetArquivo.shift()
-    const vetorY = vetArquivo
+    vetArquivo.shift()
+    const vetLimpo = this.limparDadosArquivo(vetArquivo)
 
-    return this.limparDados(vetorX, vetorY)
+    const vetorX = []
+    const vetorY = []
+    vetLimpo.forEach(vetLinha => {
+      vetorX.push(vetLinha[0])
+      vetorY.push(vetLinha[1])
+    });
+
+    return [vetorX, vetorY]
   }
 }

@@ -151,6 +151,17 @@ button:hover {
   outline: none;
 }
 
-.entradaRegressao #numSeparatriz {
-  width: 51px;
+
+/* Estilos do gráfico */
+.sectGrafico {
+  display: flex;
+  width: 60%;
+  margin: 0 auto;
+  margin-bottom: 50px;
+
+  padding: 20px;
+  border-radius: 15px;
+
+  background-color: #fff;
+  box-shadow: 3px 2px 5px #00000035;
 }

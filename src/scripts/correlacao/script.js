@@ -1,6 +1,7 @@
 import dropFile from './dropArquivo.js'
 import funcoesTratarDados from './tratarDados.js'
 import funcoesCalculo from './calculos.js'
+import funcoesGrafico from './grafico.js'
 
 const areaGrafico = document.querySelector('#graficoCorrelação')
 
@@ -109,10 +110,16 @@ btnLimpar.addEventListener('click', excluirThumb)
 
 
 btnCalcular.addEventListener('click', () => {
-  const inputX = document.querySelector('#valoresX')
-  const InputY = document.querySelector('#valoresY')
+  let vetorX, vetorY
 
-  const [vetorX, vetorY] = funcoesTratarDados.capturaDadosInputManual(inputX, InputY)
+  if(tipoForm == 'manual') {
+    const inputX = document.querySelector('#valoresX')
+    const InputY = document.querySelector('#valoresY')
+  
+    [vetorX, vetorY] = funcoesTratarDados.capturaDadosInputManual(inputX, InputY)
+  } else {
+    [vetorX, vetorY] = funcoesTratarDados.separarDadosArquivo(vetorValoresInput)
+  }
 
   const somaX = funcoesCalculo.calculoSomatoria(vetorX)
   const somaY = funcoesCalculo.calculoSomatoria(vetorY)
@@ -148,6 +155,8 @@ btnCalcular.addEventListener('click', () => {
     valorRegressaoX.value = resultadoRegressao.toFixed(2)
   })
 
+  const [valoresGrafico, Xminimo, Xmaximo] = funcoesGrafico.agrupaValoresObjeto(vetorX,vetorY)
+  funcoesGrafico.geraGrafico(areaGrafico, valoresGrafico, Xminimo, Xmaximo, a ,b)
 
   // Revela as divs ocultas
   if(document.querySelector('.sectionCorrelacao').classList.contains('esconder')) {
@@ -156,6 +165,10 @@ btnCalcular.addEventListener('click', () => {
 
   if(document.querySelector('.sectionRegressao').classList.contains('esconder')) {
     document.querySelector('.sectionRegressao').classList.remove('esconder')
+  }
+
+  if(sectionGrafico.classList.contains('esconder')) {
+    sectionGrafico.classList.remove('esconder')
   }
   
 })

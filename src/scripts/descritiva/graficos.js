@@ -43,8 +43,11 @@ const optGraficoPizza = () => {
   }}
 }
 
-const optGraficoColuna = () => {
+const optGraficoColuna = (tittle) => {
   return {
+    legend: {
+      display: false,
+    },
     scales: {
       yAxes: [{
         ticks: {
