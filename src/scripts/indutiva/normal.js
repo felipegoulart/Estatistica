@@ -15,7 +15,7 @@ calcularNormal.addEventListener('click', () => {
   const desv = document.querySelector('#desv')
   const intervalo = document.querySelector('#intervalo')
   const opt_intervalo = document.querySelector('#selectIntervaloNormal')
-  console.log(au)
+
   if (isNaN(media.value) == true || media.value == ''){
     alert('Dados invalidos')
     media.focus()
@@ -37,15 +37,15 @@ calcularNormal.addEventListener('click', () => {
   let i, y, z, coluna, linha, p, probabilidade_int
   let prob = []
 // Tratamento dos dados 
-  media = media.value.replace(',', '.')
-  desv = desv.value.replace(',', '.')
-  intervalo = intervalo.value.replace(',', '.')
-  
-  let vetIntervalo = intervalo.value.split(';').map(num => Number(num))
+  const valorMedia = media.value.replace(',', '.')
+  const valorDesv = desv.value.replace(',', '.')
+  const valorIntervalo = intervalo.value.replace(',', '.')
+  debugger
+  let vetIntervalo = valorIntervalo.split(';').map(num => Number(num))
 // Teste condicional para determiner como serão feitos os calculos     
   if (opt_intervalo.value == 'maior' || opt_intervalo.value == 'menor') {   
     // Calculo para a busca da linha e coluna na tabela da Distribuição Normal  
-    z = (vetIntervalo[0]-media.value) / desv.value
+    z = (vetIntervalo[0]-valorMedia) / valorDesv
     if (z < 0) z *= -1 // se o número for negativo, ele passa para positivo
 
     i = z.toFixed(2)
@@ -61,24 +61,23 @@ calcularNormal.addEventListener('click', () => {
     
     // Teste condicional para determinar o calculo da probabilidade 
     if (opt_intervalo.value == 'maior') { // maior
-      if (vetIntervalo[0] > media.value) probabilidade_int = ((0.5 - p) * 100).toFixed(2)
+      if (vetIntervalo[0] > valorMedia.value) probabilidade_int = ((0.5 - p) * 100).toFixed(2)
           
       else probabilidade_int = ((0.5 + p) * 100).toFixed(2)
             
     } else { // menor
-      if (vetIntervalo[0] <= media.value)  probabilidade_int = ((0.5 - p) * 100).toFixed(2)
+      if (vetIntervalo[0] <= valorMedia.value)  probabilidade_int = ((0.5 - p) * 100).toFixed(2)
         
       else  probabilidade_int = ((0.5 + p) * 100).toFixed(2)
     }
 
   } else {
-    debugger
 
     for (let int of vetIntervalo) {
       // Calculo para a busca da linha e coluna na tabela da Distribuição normal
-      if (int != media.value) {
+      if (int != valorMedia) {
         
-        z = (int-media.value)/desv.value
+        z = (int-valorMedia)/valorDesv
        
         if (z < 0)  z = z * -1
                
@@ -99,10 +98,10 @@ calcularNormal.addEventListener('click', () => {
     }
 
     //Teste condicional para determinar o calculo da probabilidade
-    if (vetIntervalo[0] < media.value && vetIntervalo[1] > media.value) 
+    if (vetIntervalo[0] < valorMedia.value && vetIntervalo[1] > valorMedia.value) 
       probabilidade_int = ((prob.reduce((a,b) => a + b))*100).toFixed(2)
 
-    else if (vetIntervalo[0] < vetIntervalo[1] && vetIntervalo[0] < media.value) 
+    else if (vetIntervalo[0] < vetIntervalo[1] && vetIntervalo[0] < valorMedia.value) 
       probabilidade_int = ((prob.reduce((a,b) => a - b))*100).toFixed(2)
     
     else probabilidade_int = ((prob.reduce((a,b) => b - a))*100).toFixed(2)
