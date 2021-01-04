@@ -1,4 +1,4 @@
-import dropFile from './dropArquivo.js'
+import dropFile from '../lib/dropArquivo.js'
 import funcoesTratarDados from './tratarDados.js'
 import funcoesCalculo from './calculos.js'
 import funcoesGrafico from './grafico.js'
@@ -172,6 +172,7 @@ btnCalcular.addEventListener('click', () => {
   
     const [somaXY, somaX2, somaY2] = funcoesCalculo.calculoDemaisColunas(vetorX, vetorY)
   
+    debugger
   
     const r = funcoesCalculo.calculoCorrelacao(vetorX, somaX, somaY, somaXY, somaX2, somaY2)
     const tipoCorrelacao = funcoesCalculo.tipoCorrelacao(r)
@@ -188,7 +189,7 @@ btnCalcular.addEventListener('click', () => {
     // realiza o calculo da regressão de acordo com a variavel digitada
     valorRegressaoX.addEventListener('input', () => {
       const regressaoX = valorRegressaoX.value
-      debugger
+
       const {resultadoRegressao} = funcoesCalculo.calculoRegressao(regressaoX, vetorX, somaX, somaY, somaXY, somaX2)
   
       valorRegressaoY.value = resultadoRegressao.toFixed(2)

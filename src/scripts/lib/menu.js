@@ -3,11 +3,11 @@ const body = document.querySelector('body')
 const html = 
 `<nav class="menu">
   <ul>
-    <img src="../../src/images/img_menu.svg" alt="">
-    <a href="../../index.html"><li>Início</li></a>
-    <a href="../../src/pages/descritiva.html"><li>Descritiva</li></a>
-    <a href="../../src/pages/indutiva.html"><li>Indutiva</li></a>
-    <a href="../../src/pages/correlacao.html"><li>Correlação</li></a>
+    <a href="./index.html" class="img-menu"><img src="./src/images/img_menu.svg" alt=""></a>
+    <a href="./index.html"><li>Início</li></a>
+    <a href="./descritiva.html"><li>Descritiva</li></a>
+    <a href="./indutiva.html"><li>Indutiva</li></a>
+    <a href="./correlacao.html"><li>Correlação</li></a>
   </ul>
 </nav>`
 

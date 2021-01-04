@@ -1,4 +1,4 @@
-import tabela from "./tabela.js"
+import tabela from "../lib/tabela.js"
 import search from '../lib/search.js'
 
 const calcularNormal = document.querySelector('#calcularNormal')
@@ -25,11 +25,13 @@ calcularNormal.addEventListener('click', () => {
     alert('Dados invalidos')
     desv.focus()
     return
-  }if (isNaN(intervalo.value) == true || intervalo.value == ''){
+  }
+  if (intervalo.value == ''){
     alert('Dados invalidos')
     intervalo.focus()
     return
-  }if(opt_intervalo == null){
+  }
+  if(opt_intervalo == null){
     alert('Dados invalidos')
     opt_intervalo.focus()
     return

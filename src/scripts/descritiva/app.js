@@ -1,4 +1,4 @@
-import { dropFile } from './dropArquivo.js'
+import dropFile from '../lib/dropArquivo.js'
 import funcoesTratarDados from './tratarDados.js'
 import funcoesCalculo from './calculos.js'
 import funcoesDOM from './tabelas.js'
