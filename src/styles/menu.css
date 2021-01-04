@@ -45,3 +45,13 @@
   padding-bottom: 5px;
   border-bottom: 2px solid #fff;
 }
+
+.menu a.img-menu {
+  height: 35px;
+  padding: 0 ;
+  line-height: 0;
+}
+
+.menu a > img {
+  height: 100%;
+}
